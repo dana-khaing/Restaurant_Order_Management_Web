@@ -19,10 +19,8 @@ public class Customer {
     private String phone;
     private String creditCard;
 
-    public Customer() {
-
-    }
-
+    
+   
 
     public Customer(String name, String email, String username, String password, String address, String phone, String creditCard) {
         this.name = name;
@@ -33,6 +31,15 @@ public class Customer {
         this.phone = phone;
         this.creditCard = creditCard;
     }
+
+    public Customer(String email, String username, String password){
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+
+    
 
     public Long getId() {
         return id;
