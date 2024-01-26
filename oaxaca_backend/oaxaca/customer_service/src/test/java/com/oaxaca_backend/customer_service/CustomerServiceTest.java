@@ -2,7 +2,7 @@ package com.oaxaca_backend.customer_service.service;
 
 import com.oaxaca_backend.customer_service.model.Customer;
 import com.oaxaca_backend.customer_service.repository.CustomerRepository;
-
+import com.oaxaca_backend.customer_service.exception.CustomerCreationFailedException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class CustomerServiceTest {
 
     @Test
     void testSaveCustomerNull() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(null);
         });
     }
@@ -51,7 +51,7 @@ class CustomerServiceTest {
     @Test
     void testSaveCustomerNullUserName() {
         Customer customer = new Customer("name", "email", null, "password", "address", "phone", "creditCard");
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(customer);
         });
     }
@@ -59,7 +59,7 @@ class CustomerServiceTest {
     @Test
     void testSaveCustomerEmptyUserName(){
         Customer customer = new Customer("name", "email", "", "password", "address", "phone", "creditCard");
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(customer);
         });
     }
@@ -67,7 +67,7 @@ class CustomerServiceTest {
     @Test
     void testSaveCustomerNullEmail() {
         Customer customer = new Customer("name", null, "username", "password", "address", "phone", "creditCard");
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(customer);
         });
     }
@@ -75,7 +75,7 @@ class CustomerServiceTest {
     @Test
     void testSaveCustomerEmptyEmail(){
         Customer customer = new Customer("name", "", "username", "password", "address", "phone", "creditCard");
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(customer);
         });
     }
@@ -83,7 +83,7 @@ class CustomerServiceTest {
     @Test
     void testSaveCustomerNullPassword() {
         Customer customer = new Customer("name", "email", "username", null, "address", "phone", "creditCard");
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(customer);
         });
     }
@@ -91,7 +91,7 @@ class CustomerServiceTest {
     @Test
     void testSaveCustomerEmptyPassword(){
         Customer customer = new Customer("name", "email", "username", "", "address", "phone", "creditCard");
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(CustomerCreationFailedException.class, () -> {
             customerService.createCustomer(customer);
         });
     }
@@ -104,6 +104,8 @@ class CustomerServiceTest {
         Customer foundCustomer = customerService.findCustomerById(1L);
         assertEquals(customer, foundCustomer);
     }
+
+   
 
     
 

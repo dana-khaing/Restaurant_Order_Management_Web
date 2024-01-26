@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import com.oaxaca_backend.customer_service.model.Customer;
 import com.oaxaca_backend.customer_service.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.oaxaca_backend.customer_service.exception.CustomerCreationFailedException;
 
 @Service
 public class CustomerService {
@@ -21,11 +22,13 @@ public class CustomerService {
     public Customer createCustomer(Customer customer) {
 
         if (customer == null || customer.getUsername() == null || customer.getUsername().isEmpty() || customer.getPassword() == null || customer.getPassword().isEmpty() || customer.getEmail() == null || customer.getEmail().isEmpty()){
-            throw new IllegalArgumentException("Customer cannot be null");
+            throw new CustomerCreationFailedException("Customer creation failed");
         }
 
         return customerRepository.save(customer);
     }
+
+    
 
     public Customer findCustomerById(Long id) {
         return customerRepository.findById(id).orElse(null);
