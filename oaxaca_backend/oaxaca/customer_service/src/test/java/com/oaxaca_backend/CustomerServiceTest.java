@@ -1,4 +1,4 @@
-package com.oaxaca_backend.customer_service;
+package com.oaxaca_backend.customer_service.service;
 
 import com.oaxaca_backend.customer_service.model.Customer;
 import com.oaxaca_backend.customer_service.repository.CustomerRepository;
@@ -23,6 +23,15 @@ class CustomerServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+
+    void testSaveCustomer() {
+        Customer customer = new Customer("name", "email", "username", "password", "address", "phone", "creditCard");
+        when(customerRepository.save(customer)).thenReturn(customer);
+        Customer savedCustomer = customerService.saveCustomer(customer);
+        assertEquals(customer, savedCustomer);
     }
 
     
