@@ -1,9 +1,0 @@
-{
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.project.sourcePaths": [
-        ".",
-        "oaxaca_backend",
-        "oaxaca_backend/api-gateway/src/main/java/com/oaxaca_backend/oaxaca_backend"
-    ]
-}
