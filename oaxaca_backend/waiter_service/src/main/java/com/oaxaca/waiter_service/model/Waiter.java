@@ -43,6 +43,9 @@ public class Waiter {
     @Column(nullable = false)
     private Long managerId;
 
+    @Column(nullable = false)
+    private String managerName;
+
     public Waiter() {
     }
 
@@ -132,6 +135,14 @@ public class Waiter {
 
     public void setManagerId(Long managerId) {
         this.managerId = managerId;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManager(String managerName) {
+        this.managerName = managerName;
     }
 
     @Override

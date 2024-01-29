@@ -27,7 +27,15 @@ public class WaiterService {
             throw new WaiterCreationFailedException("Waiter creation failed");
         }
 
-        
+        if (waiter.getName() == null || waiter.getName().isEmpty() ||
+                waiter.getLastname() == null || waiter.getLastname().isEmpty() ||
+                waiter.getUsername() == null || waiter.getUsername().isEmpty() ||
+                waiter.getPassword() == null || waiter.getPassword().isEmpty() ||
+                waiter.getEmail() == null || waiter.getEmail().isEmpty() ||
+                waiter.getRestaurantName() == null || waiter.getRestaurantName().isEmpty() ||
+                waiter.getManagerName() == null || waiter.getManagerName().isEmpty()) {
+            throw new WaiterCreationFailedException("Waiter creation failed: missing required fields");
+        }
 
         return waiterRepository.save(waiter);
     }
