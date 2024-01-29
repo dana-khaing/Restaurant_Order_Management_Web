@@ -22,6 +22,14 @@ public class WaiterService {
         this.waiterRepository = waiterRepository;
     }
 
-    
+    public Waiter createWaiter(Waiter waiter) throws IllegalArgumentException, IllegalAccessException {
+        if (waiter == null) {
+            throw new WaiterCreationFailedException("Waiter creation failed");
+        }
+
+        
+
+        return waiterRepository.save(waiter);
+    }
 
 }
