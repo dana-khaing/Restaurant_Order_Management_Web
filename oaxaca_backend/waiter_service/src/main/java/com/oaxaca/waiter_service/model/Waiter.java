@@ -31,16 +31,16 @@ public class Waiter {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column()
     private Long restaurantId;
 
     @Column(nullable = false)
     private String restaurantName;
 
-    @Column(nullable = false)
+    @Column()
     private String restaurantAddress;
 
-    @Column(nullable = false)
+    @Column()
     private Long managerId;
 
     @Column(nullable = false)

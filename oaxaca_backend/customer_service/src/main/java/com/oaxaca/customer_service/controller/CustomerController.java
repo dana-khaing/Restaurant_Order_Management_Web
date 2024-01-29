@@ -22,7 +22,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping("/create")
+    @PostMapping("/register")
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
         if (customer == null || customer.getUsername() == null || customer.getUsername().isEmpty()
                 || customer.getPassword() == null || customer.getPassword().isEmpty() || customer.getEmail() == null
@@ -47,6 +47,25 @@ public class CustomerController {
     @GetMapping("/find/email/{email}")
     public Customer findCustomerByEmail(@PathVariable String email) {
         return customerService.findCustomerByEmail(email);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginCustomer(@RequestBody Customer customer) {
+        if (customer == null || customer.getUsername() == null || customer.getUsername().isEmpty()
+                || customer.getPassword() == null || customer.getPassword().isEmpty()) {
+            return new ResponseEntity<>("Customer login failed. Wrong username or password", HttpStatus.BAD_REQUEST);
+        }
+
+        Customer foundCustomer = customerService.findCustomerByUsername(customer.getUsername());
+        if (foundCustomer == null) {
+            return new ResponseEntity<>("Customer login failed", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!foundCustomer.getPassword().equals(customer.getPassword())) {
+            return new ResponseEntity<>("Customer login failed. Wrong username or password", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(foundCustomer, HttpStatus.OK);
     }
 
 }
