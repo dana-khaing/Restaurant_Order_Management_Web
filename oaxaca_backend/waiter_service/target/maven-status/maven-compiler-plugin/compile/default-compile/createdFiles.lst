@@ -1,0 +1,6 @@
+com/oaxaca/waiter_service/repository/WaiterRepository.class
+com/oaxaca/waiter_service/controller/WaiterController.class
+com/oaxaca/waiter_service/service/WaiterService.class
+com/oaxaca/waiter_service/exception/WaiterCreationFailedException.class
+com/oaxaca/waiter_service/WaiterServiceApplication.class
+com/oaxaca/waiter_service/model/Waiter.class
