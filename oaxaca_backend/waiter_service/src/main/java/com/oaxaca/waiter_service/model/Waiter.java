@@ -49,12 +49,14 @@ public class Waiter {
     public Waiter() {
     }
 
-    public Waiter(String username, String password, String name, String lastname, String email) {
+    public Waiter(String username, String password, String name, String lastname, String email, String managerName, String restaurantName) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
+        this.managerName = managerName;
+        this.restaurantName = restaurantName;
     }
 
     public Long getId() {

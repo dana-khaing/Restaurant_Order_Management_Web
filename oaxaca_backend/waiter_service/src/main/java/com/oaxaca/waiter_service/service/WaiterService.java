@@ -40,4 +40,12 @@ public class WaiterService {
         return waiterRepository.save(waiter);
     }
 
+    public Waiter findWaiterById(Long id) {
+        return waiterRepository.findById(id).orElse(null);
+    }
+
+    public Waiter findWaiterByUsername(String username) {
+        return waiterRepository.findByUsername(username).orElse(null);
+    }
+
 }
