@@ -35,9 +35,7 @@ public class WaiterServiceTest {
         waiter.setEmail("email");
         waiter.setName("Jane");
         waiter.setLastname("Doe");
-        waiter.setManagerId(123L);
         waiter.setManager("manager");
-        waiter.setRestaurantId(123L);
         waiter.setRestaurantName("oaxaca");
 
         when(waiterRepository.save(waiter)).thenReturn(waiter);
@@ -63,9 +61,7 @@ public class WaiterServiceTest {
         waiter.setPassword("ilovepizza");
         waiter.setEmail("email");
         waiter.setLastname("Doe");
-        waiter.setManagerId(123L);
         waiter.setManager("manager");
-        waiter.setRestaurantId(123L);
         waiter.setRestaurantName("oaxaca");
 
         assertThrows(WaiterCreationFailedException.class, () -> {
