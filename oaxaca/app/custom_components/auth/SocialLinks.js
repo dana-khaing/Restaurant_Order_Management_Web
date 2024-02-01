@@ -17,6 +17,7 @@ export default function SocialLinks() {
                         width={20}
                         height={20}
                         className="object-fit aspect-square rounded-2xl"
+                        alt="Google Logo"
                     />
                 </div>
 
@@ -26,6 +27,7 @@ export default function SocialLinks() {
                         width={20}
                         height={20}
                         className="object-fit aspect-square rounded-2xl"
+                        alt="Google Logo"
                     />
                 </div>
 
@@ -35,6 +37,7 @@ export default function SocialLinks() {
                         width={20}
                         height={20}
                         className="object-fit aspect-square rounded-2xl"
+                        alt="Google Logo"
                     />
                 </div>
             </div>

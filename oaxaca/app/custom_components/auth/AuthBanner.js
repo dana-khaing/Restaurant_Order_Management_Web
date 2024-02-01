@@ -9,6 +9,7 @@ export default function AuthBanner(){
                     width={500}
                     height={500}
                     className="object-fit"
+                    alt="Banner for the authentication pages."
                 />
             </section>
     );

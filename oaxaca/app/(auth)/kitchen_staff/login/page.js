@@ -23,6 +23,23 @@ import SocialLinks from "@/app/custom_components/auth/SocialLinks";
 import AuthNav from "@/app/custom_components/auth/AuthNav";
 import AuthHeader from "@/app/custom_components/auth/AuthHeader";
 import AuthBanner from "@/app/custom_components/auth/AuthBanner";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
+import { CalendarIcon } from "@radix-ui/react-icons"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
 
 export default function KitchenStaffLoginPage() {
     const form = useForm({
@@ -32,13 +49,15 @@ export default function KitchenStaffLoginPage() {
             remember_me: false,
             firstName: "",
             lastName: "",
+            role: "Chef",
         },
         resolver: zodResolver(
             z.object({
-                username: z.string().min(4).max(16),
-                password: z.string().min(8).max(32),
-                firstName: z.string().min(8).max(32),
-                lastName: z.string().min(8).max(32),
+                username: z.string({ required_error: "Username should be at least 4 characters" }).min(4).max(16),
+                password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
+                firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(4).max(32),
+                lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(4).max(32),
+                role: z.enum(['Chef', 'Sous Chef', 'Helper']),
                 remember_me: z.boolean().optional(),
             })
         ),
@@ -116,27 +135,7 @@ export default function KitchenStaffLoginPage() {
                             )}
                         />
 
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="shadcn"
-                                            type="password"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your password you used to create
-                                        your account.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+
 
                         <FormField
                             control={form.control}
@@ -171,6 +170,34 @@ export default function KitchenStaffLoginPage() {
                                         />
                                     </FormControl>
 
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+
+                        <FormField
+                            control={form.control}
+                            name="role"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Role</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Chef">Chef</SelectItem>
+                                            <SelectItem value="Sous Chef">Sous Chef</SelectItem>
+                                            <SelectItem value="Helper">Helper</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormDescription>
+                                        This is the role you serve in our kitchen.
+
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
