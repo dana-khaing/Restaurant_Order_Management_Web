@@ -66,7 +66,7 @@ public class WaiterControllerTest {
                 + "\"password\":\"test\","
                 + "\"firstName\":\"test\","
                 + "\"lastName\":\"test\","
-                + "\"dateOfBirth\":\"1990-01-01\""
+                + "\"dob\":\"2024-02-01T00:00:00.000Z\""
                 + "}";
         LocalDate localDate = LocalDate.of(2022, Month.JANUARY, 1);
         java.util.Date utilDate = java.util.Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());

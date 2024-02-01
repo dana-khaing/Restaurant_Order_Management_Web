@@ -6,6 +6,7 @@ import com.oaxaca.waiter_service.service.WaiterService;
 import com.oaxaca.waiter_service.model.*;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +54,12 @@ public class WaiterController {
             String password = (String) loginData.get("password");
             String firstName = (String) loginData.get("firstName");
             String lastName = (String) loginData.get("lastName");
-            String dateOfBirthString = (String) loginData.get("dateOfBirth");
-            Date dateOfBirth = (Date.valueOf(dateOfBirthString));
+            String dobString = (String) loginData.get("dob");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            java.util.Date utilDate = formatter.parse(dobString);
+            java.sql.Date dob = new java.sql.Date(utilDate.getTime());
 
-            if (username == null || password == null || firstName == null || lastName == null || dateOfBirth == null) {
+            if (username == null || password == null || firstName == null || lastName == null || dob == null) {
                 return ResponseEntity.badRequest().body("Login failed. Missing details");
             }
 
