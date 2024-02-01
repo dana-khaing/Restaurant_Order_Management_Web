@@ -19,7 +19,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Label } from "@/components/ui/label";
+import SocialLinks from "@/app/custom_components/auth/SocialLinks";
+import AuthNav from "@/app/custom_components/auth/AuthNav";
+import AuthHeader from "@/app/custom_components/auth/AuthHeader";
+import AuthBanner from "@/app/custom_components/auth/AuthBanner";
 
 export default function CustomerLoginPage() {
     const form = useForm({
@@ -30,8 +33,8 @@ export default function CustomerLoginPage() {
         },
         resolver: zodResolver(
             z.object({
-                username: z.string().min(4).max(16).optional(),
-                password: z.string().min(8).max(32).optional(),
+                username: z.string().min(4).max(16),
+                password: z.string().min(8).max(32),
                 remember_me: z.boolean().optional(),
             })
         ),
@@ -58,25 +61,9 @@ export default function CustomerLoginPage() {
     return (
         <main className="flex flex-col justify-center w-full items-center gap-6 lg:flex-row">
             <section className="flex flex-col justify-center items-center w-full h-full gap-8 text-center lg:items-start p-8">
-                <nav className="w-full flex justify-start items-center">
-                    {" "}
-                    <h2 className="font-bold text-xl text-orange-500">
-                        {" "}
-                        Oaxaca{" "}
-                    </h2>{" "}
-                </nav>
+                <AuthNav />
 
-                <div className="flex flex-col justify-center items-center w-full gap-4 lg:items-start">
-                    <h1 className="text-2xl font-semibold text-orange-500">
-                        {" "}
-                        Login{" "}
-                    </h1>
-
-                    <p className="text-gray-500">
-                        {" "}
-                        Login to access your Oaxaca account{" "}
-                    </p>
-                </div>
+                <AuthHeader text={"Login"}/>
 
                 <Form {...form}>
                     <form
@@ -170,57 +157,15 @@ export default function CustomerLoginPage() {
                                 </FormLabel>
                             </Link>
                         </div>
+
+                        <SocialLinks />
                     </form>
                 </Form>
-                <div className="flex flex-col items-center gap-6">
-                    <div className="flex w-full justify-center items-center">
-                        <div className="h-0.5 w-full bg-gray-500" />
-                        <Label className="mx-6 text-nowrap">
-                            Or Login with
-                        </Label>
-                        <div className="h-0.5 w-full bg-gray-500" />
-                    </div>
-                    <div className="flex justify-evenly items-center gap-6 p-4">
-                        <div className="shadow px-8 py-2 border border-orange-500 flex justify-center items-center">
-                            <Image
-                                src="/images/google_logo.png"
-                                width={20}
-                                height={20}
-                                className="object-fit aspect-square rounded-2xl"
-                            />
-                        </div>
-
-                        <div className="shadow px-8 py-2 border border-orange-500 flex justify-center items-center">
-                            <Image
-                                src="/images/meta_logo.png"
-                                width={20}
-                                height={20}
-                                className="object-fit aspect-square rounded-2xl"
-                            />
-                        </div>
-
-                        <div className="shadow px-8 py-2 border border-orange-500 flex justify-center items-center">
-                            <Image
-                                src="/images/apple_logo.png"
-                                width={20}
-                                height={20}
-                                className="object-fit aspect-square rounded-2xl"
-                            />
-                        </div>
-                    </div>
-                </div>
 
                 <Toaster />
             </section>
 
-            <section className="hidden md:flex justify-center items-center w-full h-full">
-                <Image
-                    src={"/images/auth_banner.jpeg"}
-                    width={500}
-                    height={500}
-                    className="object-fit"
-                />
-            </section>
+            <AuthBanner />
         </main>
     );
 }
