@@ -27,16 +27,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-
 export default function KitchenStaffLoginPage() {
   const form = useForm({
     defaultValues: {
@@ -92,7 +82,7 @@ export default function KitchenStaffLoginPage() {
   const { toast } = useToast();
 
   return (
-    <div>
+    <>
       <AuthHeader text={'Login'} />
 
       <Form {...form}>
@@ -236,6 +226,6 @@ export default function KitchenStaffLoginPage() {
           <SocialLinks />
         </form>
       </Form>
-    </div>
+    </>
   );
 }
