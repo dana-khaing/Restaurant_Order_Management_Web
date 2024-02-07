@@ -1,4 +1,4 @@
-package com.oaxaca.customer_service.config;
+package com.oaxaca.customer_service.config.oauth;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.oaxaca.customer_service.model.AppAuthenticationToken;
+
 import com.oaxaca.customer_service.model.AppUser;
 
 import jakarta.servlet.ServletException;
