@@ -147,7 +147,7 @@ export default function CustomerLoginPage() {
                             </Button>
 
                             <Link
-                                href={"customer/signup"}
+                                href={"/customer/signup"}
                                 className="cursor-pointer"
                             >
                                 <FormLabel>
