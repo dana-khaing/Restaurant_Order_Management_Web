@@ -26,10 +26,9 @@ public class SecurityConfig {
 
     @Bean
     AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
     authenticationProvider.setUserDetailsService(userDetailsService);
-    authenticationProvider.setPasswordEncoder(passwordEncoder);
+    authenticationProvider.setPasswordEncoder(passwordEncoder());
 
     return new ProviderManager(authenticationProvider);
   }
@@ -57,8 +56,7 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    Customer customer = new Customer("user", passwordEncoder.encode("password"), "email");
+    Customer customer = new Customer("user", passwordEncoder().encode("password"), "email");
     UserDetails userDetails = new CustomerDetails(customer);
     return new InMemoryUserDetailsManager(userDetails);
   }
