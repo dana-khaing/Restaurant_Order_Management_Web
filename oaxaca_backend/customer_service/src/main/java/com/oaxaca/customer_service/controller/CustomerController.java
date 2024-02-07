@@ -25,7 +25,11 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    
+    private final AuthenticationManager authenticationManager;
+
+    public CustomerController(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
@@ -41,16 +45,19 @@ public class CustomerController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginCustomer(@RequestBody Customer customer) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                customer.getUsername(), customer.getPassword());
-        try {
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new ResponseEntity<>("Logged in Successfully", HttpStatus.OK);
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
 
+        
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken
+                .unauthenticated(customer.getUsername(), customer.getPassword());
+        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+
+        if (authenticationResponse == null) {
+            return new ResponseEntity<>("Customer Login Failed", HttpStatus.UNAUTHORIZED);
         }
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+
+        return new ResponseEntity<>("Customer Logged in Successfully", HttpStatus.OK);
     }
 
     @GetMapping("/find/id/{id}")
