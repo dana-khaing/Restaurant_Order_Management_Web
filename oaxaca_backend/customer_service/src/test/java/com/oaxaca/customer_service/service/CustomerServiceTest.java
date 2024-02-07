@@ -47,4 +47,25 @@ public class CustomerServiceTest {
 
         assertNull(found);
     }
+
+    @Test
+    public void testFindCustomerByUsername_found() {
+        Customer customer = new Customer();
+        customer.setUsername("username");
+        when(customerRepository.findByUsername("username")).thenReturn(Optional.of(customer));
+
+        Customer found = customerService.findCustomerByUsername("username");
+
+        assertEquals(customer, found);
+    }
+
+
+    @Test
+    public void testFindCustomerByUsername_notFound() {
+        when(customerRepository.findByUsername("username")).thenReturn(Optional.empty());
+
+        Customer found = customerService.findCustomerByUsername("username");
+
+        assertNull(found);
+    }
 }
