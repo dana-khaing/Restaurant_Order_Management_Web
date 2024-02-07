@@ -68,4 +68,25 @@ public class CustomerServiceTest {
 
         assertNull(found);
     }
+
+    @Test
+    public void testFindCustomerByEmail_found() {
+        Customer customer = new Customer();
+        customer.setEmail("email");
+        when(customerRepository.findByEmail("email")).thenReturn(Optional.of(customer));
+
+        Customer found = customerService.findCustomerByEmail("email");
+
+        assertEquals(customer, found);
+    }
+
+
+    @Test
+    public void testFindCustomerByEmail_notFound() {
+        when(customerRepository.findByEmail("email")).thenReturn(Optional.empty());
+
+        Customer found = customerService.findCustomerByEmail("email");
+
+        assertNull(found);
+    }
 }
