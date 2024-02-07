@@ -21,6 +21,8 @@ import com.oaxaca.customer_service.service.CustomerService;
 @RequestMapping("/customer")
 public class CustomerController {
 
+  
+
     @Autowired
     private CustomerService customerService;
 
