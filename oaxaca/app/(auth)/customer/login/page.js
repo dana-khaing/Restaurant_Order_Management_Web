@@ -53,22 +53,32 @@ export default function CustomerLoginPage() {
                 body: JSON.stringify(values),
             });
 
+            console.log(values);
+
+
             if (!response.ok) {
-                throw new Error(response.error);
+
+                toast({
+                    title: "Sign up failed.",
+                    description: "Please try again.",
+                });
+                console.log(response.text)
+                return;
+
             }
 
-            console.log(data);
+            toast({
+                title: "Redirecting to home page",
+                description: "Logged in successfully",
+            });
+
+            router.push("/customer/home");
+
         } catch (error) {
             console.log(error);
         }
 
-        console.log(values);
-        toast({
-            title: "You submitted the following values:",
-            description: "Logged in successfully",
-        });
 
-        router.push("/customer/home");
     }
 
     const { toast } = useToast();

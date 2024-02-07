@@ -22,14 +22,14 @@ public class CustomerService {
 
     public Customer createCustomer(Customer customer) {
 
-        if (customer == null || customer.getUsername() == null || customer.getUsername().isEmpty() || customer.getPassword() == null || customer.getPassword().isEmpty() || customer.getEmail() == null || customer.getEmail().isEmpty()){
+        if (customer == null || customer.getUsername() == null || customer.getUsername().isEmpty()
+                || customer.getPassword() == null || customer.getPassword().isEmpty() || customer.getEmail() == null
+                || customer.getEmail().isEmpty()) {
             throw new CustomerCreationFailedException("Customer creation failed");
         }
 
         return customerRepository.save(customer);
     }
-
-    
 
     public Customer findCustomerById(Long id) {
         return customerRepository.findById(id).orElse(null);
@@ -42,9 +42,5 @@ public class CustomerService {
     public Customer findCustomerByEmail(String email) {
         return customerRepository.findByEmail(email).orElse(null);
     }
-    
 
-  
-
-    
 }

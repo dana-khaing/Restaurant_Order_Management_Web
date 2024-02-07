@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -36,8 +35,10 @@ public class SecurityConfig {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .anyRequest().authenticated())
+            .requestMatchers("/customer/login", "/customer/register").permitAll()
+        )
         .exceptionHandling(exceptionHandlingConfigurer -> {
           exceptionHandlingConfigurer.authenticationEntryPoint(
               new Oauth2AuthenticationEntrypoint());
@@ -56,7 +57,7 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-    Customer customer = new Customer("user", passwordEncoder().encode("password"), "email");
+    Customer customer = new Customer("user", passwordEncoder().encode("password"), "email" );
     UserDetails userDetails = new CustomerDetails(customer);
     return new InMemoryUserDetailsManager(userDetails);
   }

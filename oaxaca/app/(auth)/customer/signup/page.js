@@ -71,14 +71,25 @@ export default function WaiterLoginPage() {
                 body: JSON.stringify(values),
             });
 
-
-            router.push("/customer/login");
+            console.log(response.json())
 
             if (!response.ok) {
-                throw new Error(response.error);
+                toast({
+                    title: "Sign up failed.",
+                    description: "Please try again.",
+                });
+
+
+                return;
+
+
             }
 
-            console.log(data);
+            router.push("/customer/login")
+
+
+
+
         } catch (error) {
         }
 
