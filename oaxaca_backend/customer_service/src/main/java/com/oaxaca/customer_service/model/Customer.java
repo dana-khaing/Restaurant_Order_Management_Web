@@ -133,6 +133,17 @@ public class Customer {
     }
 
 
+
+    public static Object withDefaultPasswordEncoder() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'withDefaultPasswordEncoder'");
+    }
+
+
+
+  
+
+
     
 
     

@@ -25,8 +25,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    
 
     @PostMapping("/register")
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
