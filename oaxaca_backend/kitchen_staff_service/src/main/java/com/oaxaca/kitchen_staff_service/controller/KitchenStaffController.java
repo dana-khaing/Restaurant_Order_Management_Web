@@ -1,5 +1,8 @@
 package com.oaxaca.kitchen_staff_service.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,31 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oaxaca.kitchen_staff_service.model.KitchenStaff;
 import com.oaxaca.kitchen_staff_service.model.KitchenStaffDetails;
-import com.oaxaca.kitchen_staff_service.service.KitchenStaffService;
 
 @RestController
 @RequestMapping("/kitchen_staff")
 public class KitchenStaffController {
 
-    private final KitchenStaffService kitchenStaffService;
-
     private final AuthenticationManager authenticationManager;
 
-    public KitchenStaffController(AuthenticationManager authenticationManager, KitchenStaffService kitchenStaffService) {
+    public KitchenStaffController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        this.kitchenStaffService = kitchenStaffService;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> createKitchenStaff(@RequestBody KitchenStaff kitchenStaff) {
-        if (kitchenStaff == null || kitchenStaff.getFirstName() == null || kitchenStaff.getFirstName().isEmpty()
-                || kitchenStaff.getLastName() == null || kitchenStaff.getLastName().isEmpty()
-                || kitchenStaff.getRole() == null || kitchenStaff.getRole().isEmpty()) {
-            return new ResponseEntity<>("Kitchen Staff creation failed", HttpStatus.BAD_REQUEST);
-        }
-
-        kitchenStaffService.createKitchenStaff(kitchenStaff);
-        return new ResponseEntity<>("Kitchen Staff created.", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -46,8 +33,10 @@ public class KitchenStaffController {
         if (kitchenStaff == null || kitchenStaff.getFirstName() == null || kitchenStaff.getFirstName().isEmpty()
                 || kitchenStaff.getLastName() == null || kitchenStaff.getLastName().isEmpty()
                 || kitchenStaff.getRole() == null || kitchenStaff.getRole().isEmpty()) {
-            return new ResponseEntity<>("Kitchen Staff login failed. Wrong username or password or missing fields.",
-                    HttpStatus.BAD_REQUEST);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Kitchen Staff login failed. Missing fields.");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken
@@ -55,12 +44,16 @@ public class KitchenStaffController {
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
 
         if (authenticationResponse == null) {
-            return new ResponseEntity<>("Customer Login Failed", HttpStatus.UNAUTHORIZED);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Customer Login Failed");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
         SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
 
-        return new ResponseEntity<>("Customer Logged in Successfully", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Customer Logged in Successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
@@ -68,6 +61,9 @@ public class KitchenStaffController {
     public ResponseEntity<?> getKitchenStaff() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         KitchenStaffDetails kitchenStaffDetails = (KitchenStaffDetails) authentication.getPrincipal();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("KitchenStaffDetails", kitchenStaffDetails);
         return new ResponseEntity<>(kitchenStaffDetails, HttpStatus.OK);
     }
 

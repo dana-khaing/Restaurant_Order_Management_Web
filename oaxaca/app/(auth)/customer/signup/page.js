@@ -91,12 +91,15 @@ export default function WaiterLoginPage() {
 
 
         } catch (error) {
+            console.error(error);
+            toast({
+                title: "Sign up failed.",
+                description: "Please try again.",
+            });
+
         }
 
-        toast({
-            title: "You submitted the following values:",
-            description: "Signed up successfully",
-        });
+
     }
 
     return (

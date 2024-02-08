@@ -59,7 +59,7 @@ export default function CustomerLoginPage() {
             if (!response.ok) {
 
                 toast({
-                    title: "Sign up failed.",
+                    title: "Login failed.",
                     description: "Please try again.",
                 });
                 console.log(response.text)
@@ -72,7 +72,7 @@ export default function CustomerLoginPage() {
                 description: "Logged in successfully",
             });
 
-            router.push("/customer/home");
+            router.push("/menus");
 
 
         } catch (error) {

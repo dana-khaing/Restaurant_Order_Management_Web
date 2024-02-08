@@ -15,11 +15,14 @@ import com.oaxaca.kitchen_staff_service.repository.KitchenStaffRepository;
 @Service
 public class KitchenStaffDetailsService implements UserDetailsService{
 
-    private final KitchenStaffRepository kitchenStaffRepository;
+    private KitchenStaffRepository kitchenStaffRepository;
     
     public KitchenStaffDetailsService(KitchenStaffRepository kitchenStaffRepository) {
         this.kitchenStaffRepository = kitchenStaffRepository;
        
+    }
+
+    public KitchenStaffDetailsService() {
     }
 
     @Override

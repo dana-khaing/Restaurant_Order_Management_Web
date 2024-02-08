@@ -29,10 +29,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { useRouter } from "next/navigation";
 
 
 
 export default function KitchenStaffLoginPage() {
+
+    const router = useRouter();
+
+
     const form = useForm({
         defaultValues: {
             username: "",
@@ -48,26 +53,49 @@ export default function KitchenStaffLoginPage() {
                 password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
                 firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(4).max(32),
                 lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(4).max(32),
-                role: z.enum(['Chef', 'Sous Chef', 'Helper']),
+                role: z.enum(['Chef', 'Cook', 'Dishwasher']).transform(role => role.toUpperCase()),
                 remember_me: z.boolean().optional(),
             })
         ),
         mode: "onBlur",
     });
 
-    function onSubmit(values) {
-        // Do something with the form values.
-        console.log(values);
-        toast({
-            title: "You submitted the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">
-                        {JSON.stringify(values, null, 2)}
-                    </code>
-                </pre>
-            ),
-        });
+    async function onSubmit(values) {
+        try {
+            const response = await fetch("/api/auth/kitchen_staff/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values),
+            });
+
+            // First, check if the response is OK
+            if (!response.ok) {
+                const errorText = await response.text(); // Get the error message as text
+                console.error("Error:", errorText);
+                toast({
+                    title: "Sign up failed.",
+                    description: "Please try again.",
+                });
+                return;
+            }
+
+            // Then, safely parse the JSON
+            const data = await response.json();
+            console.log("Success:", data);
+            toast({
+                title: "Logged in successfully",
+                description: "Redirecting to home page.",
+            });
+            router.push("/kitchen_staff/home");
+
+
+        } catch (error) {
+            console.error("An error occurred:", error);
+            toast({
+                title: "Sign up failed.",
+                description: "Please try again.",
+            });
+        }
     }
 
     const { toast } = useToast();
@@ -181,8 +209,8 @@ export default function KitchenStaffLoginPage() {
                                         </FormControl>
                                         <SelectContent>
                                             <SelectItem value="Chef">Chef</SelectItem>
-                                            <SelectItem value="Sous Chef">Sous Chef</SelectItem>
-                                            <SelectItem value="Helper">Helper</SelectItem>
+                                            <SelectItem value="Cook">Cook</SelectItem>
+                                            <SelectItem value="Dishwasher">Dishwasher</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormDescription>

@@ -17,7 +17,6 @@ import com.oaxaca.waiter_service.service.WaiterService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;

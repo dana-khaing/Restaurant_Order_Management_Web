@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.oaxaca.kitchen_staff_service.model.KitchenStaff;
-import com.oaxaca.kitchen_staff_service.service.KitchenStaffService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,44 +16,12 @@ import static org.mockito.Mockito.*;
 
 public class KitchenStaffControllerTest {
 
-    @Test
-    public void testCreateKitchenStaffSuccess() {
-        // Arrange
-        AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-        KitchenStaffService kitchenStaffService = mock(KitchenStaffService.class);
-        KitchenStaffController controller = new KitchenStaffController(authenticationManager, kitchenStaffService);
-        KitchenStaff kitchenStaff = new KitchenStaff("user", "password", "firstName", "lastName", "chef");
-
-        // Act
-        ResponseEntity<?> response = controller.createKitchenStaff(kitchenStaff);
-
-        // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Kitchen Staff created.", response.getBody());
-    }
-
-    @Test
-    public void testCreateKitchenStaffFail() {
-        // Arrange
-        AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-        KitchenStaffService kitchenStaffService = mock(KitchenStaffService.class);
-        KitchenStaffController controller = new KitchenStaffController(authenticationManager, kitchenStaffService);
-        KitchenStaff kitchenStaff = new KitchenStaff();
-
-        // Act
-        ResponseEntity<?> response = controller.createKitchenStaff(kitchenStaff);
-
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Kitchen Staff creation failed", response.getBody());
-    }
 
     @Test
     public void testLoginKitchenStaffSuccess() {
         // Arrange
         AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-        KitchenStaffService kitchenStaffService = mock(KitchenStaffService.class);
-        KitchenStaffController controller = new KitchenStaffController(authenticationManager, kitchenStaffService);
+        KitchenStaffController controller = new KitchenStaffController(authenticationManager);
         Authentication authentication = mock(Authentication.class);
         KitchenStaff kitchenStaff = new KitchenStaff("user", "password", "firstName", "lastName", "chef");
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
@@ -73,8 +40,7 @@ public class KitchenStaffControllerTest {
     public void testLoginKitchenStaffFail() {
         // Arrange
         AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-        KitchenStaffService kitchenStaffService = mock(KitchenStaffService.class);
-        KitchenStaffController controller = new KitchenStaffController(authenticationManager, kitchenStaffService);
+        KitchenStaffController controller = new KitchenStaffController(authenticationManager);
         KitchenStaff kitchenStaff = new KitchenStaff("user", "password", "firstName", "lastName", "chef");
         when(authenticationManager.authenticate(any())).thenReturn(null);
 

@@ -30,8 +30,11 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover"
+import { useRouter } from "next/navigation";
 
 export default function WaiterLoginPage() {
+	const router = useRouter();
+
 	const form = useForm({
 		defaultValues: {
 			username: "",
@@ -54,20 +57,46 @@ export default function WaiterLoginPage() {
 		mode: "onBlur",
 	});
 
-	function onSubmit(values) {
-		// Do something with the form values.
-		console.log(values);
-		toast({
-			title: "You submitted the following values:",
-			description: (
-				<pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(values, null, 2)}
-					</code>
-				</pre>
-			),
-		});
+
+
+	async function onSubmit(values) {
+		try {
+			const response = await fetch("/api/auth/waiter/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(values),
+			});
+
+			// First, check if the response is OK
+			if (!response.ok) {
+				const errorText = await response.text(); // Get the error message as text
+				console.error("Error:", errorText);
+				toast({
+					title: "Sign up failed.",
+					description: "Please try again.",
+				});
+				return;
+			}
+
+			// Then, safely parse the JSON
+			const data = await response.json();
+			console.log("Success:", data);
+			toast({
+				title: "Logged in successfully",
+				description: "Redirecting to home page.",
+			});
+			router.push("/kitchen_staff/home");
+
+
+		} catch (error) {
+			console.error("An error occurred:", error);
+			toast({
+				title: "Sign up failed.",
+				description: "Please try again.",
+			});
+		}
 	}
+
 
 	const { toast } = useToast();
 
