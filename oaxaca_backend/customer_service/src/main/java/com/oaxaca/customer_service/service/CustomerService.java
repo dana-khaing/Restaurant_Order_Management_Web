@@ -4,6 +4,7 @@ import com.oaxaca.customer_service.model.Customer;
 import com.oaxaca.customer_service.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.oaxaca.customer_service.exception.CustomerCreationFailedException;
 
@@ -12,6 +13,9 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public CustomerService() {
     }
@@ -27,6 +31,8 @@ public class CustomerService {
                 || customer.getEmail().isEmpty()) {
             throw new CustomerCreationFailedException("Customer creation failed");
         }
+
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
         return customerRepository.save(customer);
     }

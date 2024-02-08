@@ -25,7 +25,7 @@ public class Customer extends User {
     @Column(name = "username", length = 30, nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password", length = 30 ,nullable = false)
+    @Column(name = "password", length = 255 ,nullable = false)
     private String password;
 
     @Column(name = "address", length = 30)
@@ -137,11 +137,7 @@ public class Customer extends User {
 
 
 
-    public static Object withDefaultPasswordEncoder() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'withDefaultPasswordEncoder'");
-    }
-
+   
 
 
   

@@ -20,7 +20,8 @@ export async function POST(request) {
             });
         }
 
-        const response = await res.json();
+        const response = await res.text();
+        console.log("Response:", response);
 
         return new Response(JSON.stringify(response), {
             status: 200,
@@ -29,6 +30,7 @@ export async function POST(request) {
             },
         });
     } catch (error) {
+        console.error(error);
         return new Response(JSON.stringify({ message: error }), {
             status: 500,
             headers: {

@@ -23,13 +23,18 @@ public class CustomerController {
 
   
 
-    @Autowired
     private CustomerService customerService;
 
     private final AuthenticationManager authenticationManager;
 
     public CustomerController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+    }
+
+    @Autowired
+    public CustomerController(AuthenticationManager authenticationManager, CustomerService customerService) {
+        this.authenticationManager = authenticationManager;
+        this.customerService = customerService;
     }
 
     @PostMapping("/register")

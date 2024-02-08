@@ -1,4 +1,4 @@
-package com.oaxaca.customer_service.config;
+package com.oaxaca.kitchen_staff_service.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,20 +8,17 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.oaxaca.customer_service.config.oauth.Oauth2AuthenticationEntrypoint;
-import com.oaxaca.customer_service.config.oauth.Oauth2LoginSuccessHandler;
-import com.oaxaca.customer_service.service.CustomerDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
   @Autowired
-  private CustomerDetailsService userDetailsService;
+  private UserDetailsService userDetailsService;
 
   @Bean
   AuthenticationManager authenticationManager() {
@@ -33,25 +30,18 @@ public class SecurityConfig {
   }
 
   @Bean
-  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/customer/login", "/customer/register").permitAll())
-        .exceptionHandling(exceptionHandlingConfigurer -> {
-          exceptionHandlingConfigurer.authenticationEntryPoint(
-              new Oauth2AuthenticationEntrypoint());
-        })
-        .oauth2Login(customizer -> {
-          customizer
-              .successHandler(new Oauth2LoginSuccessHandler());
-        });
-    return http.build();
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   @Bean
-  PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/kitchen_staff/login", "/kitchen_staff/register").permitAll()
+            .anyRequest().authenticated());
+    return http.build();
   }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.oaxaca.customer_service.model.Customer;
-
+import com.oaxaca.customer_service.service.CustomerService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,5 +51,38 @@ public class CustomerControllerTest {
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("Customer Login Failed", response.getBody());
         verify(authenticationManager, times(1)).authenticate(any());
+    }
+
+    @Test
+    public void testCreateCustomerSuccess() {
+        // Arrange
+        AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
+        CustomerService customerService = mock(CustomerService.class);
+        CustomerController controller = new CustomerController(authenticationManager, customerService);
+        Customer customer = new Customer("username", "password", "email");
+        when(customerService.createCustomer(any(Customer.class))).thenReturn(customer);
+
+        // Act
+        ResponseEntity<?> response = controller.createCustomer(customer);
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(customer, response.getBody());
+    }
+
+    @Test
+    public void testCreateCustomerFail() {
+        // Arrange
+        AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
+        CustomerService customerService = mock(CustomerService.class);
+        CustomerController controller = new CustomerController(authenticationManager, customerService);
+        Customer customer = new Customer();
+
+        // Act
+        ResponseEntity<?> response = controller.createCustomer(customer);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Customer creation failed", response.getBody());
     }
 }

@@ -1,5 +1,6 @@
 package com.oaxaca.kitchen_staff_service.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,14 +12,26 @@ public class KitchenStaff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
-    private String role;
+
+    @Column(nullable = false)
+    private Role role;
 
     public KitchenStaff() {
     }
 
-    public KitchenStaff(String firstName, String lastName, String role) {
+    public KitchenStaff(String firstName, String lastName, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
@@ -50,10 +63,27 @@ public class KitchenStaff {
     }
 
     public String getRole() {
-        return role;
+        return role.toString();
     }
 
     public void setRole(String role) {
-        this.role = role;
+        this.role = Role.valueOf(role);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
+

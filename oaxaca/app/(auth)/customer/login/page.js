@@ -74,6 +74,7 @@ export default function CustomerLoginPage() {
 
             router.push("/customer/home");
 
+
         } catch (error) {
             console.log(error);
         }
