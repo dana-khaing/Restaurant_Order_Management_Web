@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -29,10 +29,8 @@ public class Waiter {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
-
-  
 
     @Column(nullable = false)
     private String restaurantName;
@@ -40,21 +38,17 @@ public class Waiter {
     @Column(nullable = false)
     private String restaurantAddress;
 
- 
-
     @Column(nullable = false)
     private String managerName;
 
     @Column(nullable = false)
-    private Date dateOfBirth;
-
+    private LocalDate dateOfBirth;
 
     public Waiter() {
     }
 
-
-
-    public Waiter(String username, String password, String name, String lastname, String email, String managerName, String restaurantName, String restaurantAddress, Date dateOfBirth) {
+    public Waiter(String username, String password, String name, String lastname, String email, String managerName,
+            String restaurantName, String restaurantAddress, LocalDate dateOfBirth) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -114,8 +108,6 @@ public class Waiter {
     public void setEmail(String email) {
         this.email = email;
     }
-
-   
 
     public String getRestaurantName() {
         return restaurantName;

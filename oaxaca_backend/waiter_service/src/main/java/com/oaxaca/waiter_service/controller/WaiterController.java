@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.oaxaca.waiter_service.service.WaiterService;
 import com.oaxaca.waiter_service.model.*;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,7 @@ public class WaiterController {
         String restaurantName = (String) waiterData.get("restaurantName");
         String managerName = (String) waiterData.get("managerName");
         String restaurantAddress = (String) waiterData.get("restaurantAddress");
-        String dateOfBirthString = (String) waiterData.get("dateOfBirth");
-        Date dateOfBirth = (Date.valueOf(dateOfBirthString));
+        LocalDate dateOfBirth = LocalDate.parse((String) waiterData.get("dateOfBirth"));
 
         Waiter waiter = new Waiter(name, lastname, username, password, email, restaurantName, managerName,
                 restaurantAddress, dateOfBirth);
