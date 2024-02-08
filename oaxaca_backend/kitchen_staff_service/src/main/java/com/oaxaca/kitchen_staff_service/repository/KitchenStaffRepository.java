@@ -13,7 +13,6 @@ public interface KitchenStaffRepository extends JpaRepository<KitchenStaff, Long
 
     Optional<KitchenStaff> findByLastName(String lastName);
 
-    Optional<KitchenStaff> findByRole(String role);
 
     Optional<KitchenStaff> findByFirstNameAndLastName(String firstName, String lastName);
 

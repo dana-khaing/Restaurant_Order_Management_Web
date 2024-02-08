@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.oaxaca.kitchen_staff_service.model.KitchenStaff;
 import com.oaxaca.kitchen_staff_service.model.KitchenStaffDetails;
 import com.oaxaca.kitchen_staff_service.repository.KitchenStaffRepository;
 
+
+@Service
 public class KitchenStaffDetailsService implements UserDetailsService{
 
     private final KitchenStaffRepository kitchenStaffRepository;

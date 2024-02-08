@@ -31,10 +31,12 @@ public class KitchenStaff {
     public KitchenStaff() {
     }
 
-    public KitchenStaff(String firstName, String lastName, Role role) {
+    public KitchenStaff(String username, String password, String firstName, String lastName, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
+        this.role = Role.valueOf(role.toUpperCase());
+        this.username = username;
+        this.password = password;
     }
 
     // Getters and Setters
