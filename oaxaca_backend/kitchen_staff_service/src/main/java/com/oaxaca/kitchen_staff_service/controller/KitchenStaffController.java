@@ -3,6 +3,8 @@ package com.oaxaca.kitchen_staff_service.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,12 @@ public class KitchenStaffController {
     @Autowired
     private KitchenStaffService kitchenStaffService;
 
+    private final AuthenticationManager authenticationManager;
+
+    public KitchenStaffController(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> createKitchenStaff(@RequestBody KitchenStaff kitchenStaff) {
         if (kitchenStaff == null || kitchenStaff.getFirstName() == null || kitchenStaff.getFirstName().isEmpty()
@@ -39,17 +47,22 @@ public class KitchenStaffController {
         if (kitchenStaff == null || kitchenStaff.getFirstName() == null || kitchenStaff.getFirstName().isEmpty()
                 || kitchenStaff.getLastName() == null || kitchenStaff.getLastName().isEmpty()
                 || kitchenStaff.getRole() == null || kitchenStaff.getRole().isEmpty()) {
-            return new ResponseEntity<>("Kitchen Staff login failed. Wrong username or password",
+            return new ResponseEntity<>("Kitchen Staff login failed. Wrong username or password or missing fields.",
                     HttpStatus.BAD_REQUEST);
         }
 
-        KitchenStaff foundKitchenStaff = kitchenStaffService
-                .findKitchenStaffByFirstNameAndLastName(kitchenStaff.getFirstName(), kitchenStaff.getLastName());
-        if (foundKitchenStaff == null) {
-            return new ResponseEntity<>("Kitchen Staff login failed", HttpStatus.BAD_REQUEST);
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken
+                .unauthenticated(kitchenStaff.getUsername(), kitchenStaff.getPassword());
+        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+
+        if (authenticationResponse == null) {
+            return new ResponseEntity<>("Customer Login Failed", HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>("Kitchen Staff logged in.", HttpStatus.OK);
+        SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+
+        return new ResponseEntity<>("Customer Logged in Successfully", HttpStatus.OK);
+
     }
 
     @GetMapping("/me")
@@ -58,7 +71,5 @@ public class KitchenStaffController {
         KitchenStaffDetails kitchenStaffDetails = (KitchenStaffDetails) authentication.getPrincipal();
         return new ResponseEntity<>(kitchenStaffDetails, HttpStatus.OK);
     }
-
-    
 
 }
