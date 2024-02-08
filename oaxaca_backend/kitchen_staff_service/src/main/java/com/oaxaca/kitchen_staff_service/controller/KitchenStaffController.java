@@ -1,6 +1,5 @@
 package com.oaxaca.kitchen_staff_service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,13 +20,13 @@ import com.oaxaca.kitchen_staff_service.service.KitchenStaffService;
 @RequestMapping("/kitchen_staff")
 public class KitchenStaffController {
 
-    @Autowired
-    private KitchenStaffService kitchenStaffService;
+    private final KitchenStaffService kitchenStaffService;
 
     private final AuthenticationManager authenticationManager;
 
-    public KitchenStaffController(AuthenticationManager authenticationManager) {
+    public KitchenStaffController(AuthenticationManager authenticationManager, KitchenStaffService kitchenStaffService) {
         this.authenticationManager = authenticationManager;
+        this.kitchenStaffService = kitchenStaffService;
     }
 
     @PostMapping("/register")
