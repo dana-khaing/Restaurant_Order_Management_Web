@@ -1,15 +1,34 @@
 package com.oaxaca.kitchen_staff_service.service;
 
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.oaxaca.kitchen_staff_service.model.KitchenStaff;
+import com.oaxaca.kitchen_staff_service.model.KitchenStaffDetails;
+import com.oaxaca.kitchen_staff_service.repository.KitchenStaffRepository;
+
 public class KitchenStaffDetailsService implements UserDetailsService{
+
+    private final KitchenStaffRepository kitchenStaffRepository;
+    
+    public KitchenStaffDetailsService(KitchenStaffRepository kitchenStaffRepository) {
+        this.kitchenStaffRepository = kitchenStaffRepository;
+       
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+        
+        Optional<KitchenStaff> optionalUser = kitchenStaffRepository.findByUsername(username);
+
+        if(optionalUser.isPresent()) {
+            return new KitchenStaffDetails(optionalUser.get());
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
     }
     
 }
