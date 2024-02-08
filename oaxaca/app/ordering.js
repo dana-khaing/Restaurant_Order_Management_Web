@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 
 const OrderingUI = () => {
- const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
 
- const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
+    const addToCart = (item) => {
+        setCartItems([...cartItems, item]);
     };
-  const removeFromCart = (itemId) => {
-    setCartItems(cartItems.filter((item) => item.id !== itemId));
+    const removeFromCart = (itemId) => {
+        setCartItems(cartItems.filter((item) => item.id !== itemId));
     };
+    const getCartTotal = () => {
+        return cartItems.reduce((total, item) => total + item.price, 0);
+     };
 }
