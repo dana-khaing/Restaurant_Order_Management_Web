@@ -44,6 +44,9 @@ public class Waiter {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
+    @Column
+    private Boolean rememberMe;
+
     public Waiter() {
     }
 
@@ -85,19 +88,19 @@ public class Waiter {
         this.password = password;
     }
 
-    public String getName() {
+    public String getFirstName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setFirstName(String name) {
         this.name = name;
     }
 
-    public String getLastname() {
+    public String getLastName() {
         return this.lastname;
     }
 
-    public void setLastname(String lastname) {
+    public void setLastName(String lastname) {
         this.lastname = lastname;
     }
 
@@ -133,14 +136,26 @@ public class Waiter {
         this.managerName = managerName;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Boolean getRememberMe() {
+        return rememberMe;
+    }
+
     @Override
     public String toString() {
         return "{" +
                 " id='" + getId() + "'" +
                 ", username='" + getUsername() + "'" +
                 ", password='" + getPassword() + "'" +
-                ", name='" + getName() + "'" +
-                ", lastname='" + getLastname() + "'" +
+                ", name='" + getFirstName() + "'" +
+                ", lastname='" + getLastName() + "'" +
                 ", email='" + getEmail() + "'" +
                 "}";
     }

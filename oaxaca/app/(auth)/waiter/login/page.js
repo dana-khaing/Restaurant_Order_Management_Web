@@ -17,19 +17,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import SocialLinks from "@/app/custom_components/auth/SocialLinks";
 import AuthNav from "@/app/custom_components/auth/AuthNav";
 import AuthHeader from "@/app/custom_components/auth/AuthHeader";
 import AuthBanner from "@/app/custom_components/auth/AuthBanner";
-import { CalendarIcon } from "@radix-ui/react-icons"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover"
+
 import { useRouter } from "next/navigation";
 
 export default function WaiterLoginPage() {
@@ -42,15 +33,13 @@ export default function WaiterLoginPage() {
 			remember_me: false,
 			firstName: "",
 			lastName: "",
-			role: "Chef",
 		},
 		resolver: zodResolver(
 			z.object({
 				username: z.string({ required_error: "Username should be at least 4 characters" }).min(4).max(16),
 				password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
-				firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(4).max(32),
-				lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(4).max(32),
-				dob: z.date({ required_error: "Date of birth is required" }),
+				firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(1).max(32),
+				lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(1).max(32),
 				remember_me: z.boolean().optional(),
 			})
 		),
@@ -85,7 +74,7 @@ export default function WaiterLoginPage() {
 				title: "Logged in successfully",
 				description: "Redirecting to home page.",
 			});
-			router.push("/kitchen_staff/home");
+			router.push("/waiter/home");
 
 
 		} catch (error) {
@@ -193,52 +182,6 @@ export default function WaiterLoginPage() {
 								</FormItem>
 							)}
 						/>
-
-						<FormField
-							control={form.control}
-							name="dob"
-							render={({ field }) => (
-								<FormItem className="flex flex-col">
-									<FormLabel>Date of birth</FormLabel>
-									<Popover>
-										<PopoverTrigger asChild>
-											<FormControl>
-												<Button
-													variant={"outline"}
-													className={cn(
-														"w-[240px] pl-3 text-left font-normal",
-														!field.value && "text-muted-foreground"
-													)}
-												>
-													{field.value ? (
-														format(field.value, "PPP")
-													) : (
-														<span>Pick a date</span>
-													)}
-													<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-												</Button>
-											</FormControl>
-										</PopoverTrigger>
-										<PopoverContent className="w-auto p-0" align="start">
-											<Calendar
-												mode="single"
-												selected={field.value}
-												onSelect={field.onChange}
-												disabled={(date) =>
-													date > new Date() || date < new Date("1900-01-01")
-												}
-												initialFocus
-											/>
-										</PopoverContent>
-									</Popover>
-									<FormDescription>
-										Your date of birth is used to calculate your age.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
 
 						<FormField
 							control={form.control}

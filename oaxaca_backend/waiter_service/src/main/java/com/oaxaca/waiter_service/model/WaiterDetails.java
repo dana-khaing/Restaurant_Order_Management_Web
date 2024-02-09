@@ -31,11 +31,11 @@ public class WaiterDetails implements UserDetails {
     }
 
     public String getFirstName() {
-        return waiter.getName();
+        return waiter.getFirstName();
     }
 
     public String getLastName() {
-        return waiter.getLastname();
+        return waiter.getLastName();
     }
 
     public String getRestaurantAddress() {
