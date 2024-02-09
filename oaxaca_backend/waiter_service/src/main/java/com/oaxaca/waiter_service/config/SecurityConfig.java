@@ -57,13 +57,11 @@ public class SecurityConfig {
     @Bean
     RememberMeServices rememberMeServices() {
         RememberMeTokenAlgorithm encodingAlgorithm = RememberMeTokenAlgorithm.SHA256;
-
         TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices(
                 rememberMeKey, userDetailsService(waiterRepository), encodingAlgorithm);
         rememberMeServices.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
-        rememberMeServices.setCookieName("rememberMe");
         rememberMeServices.setTokenValiditySeconds(1209600);
-        rememberMeServices.setAlwaysRemember(true);
+
 
         return rememberMeServices;
 
@@ -93,10 +91,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/waiter/login", "/waiter/register").permitAll()
+                        .requestMatchers("/waiter/login", "/waiter/register", "/waiter/validate-remember-me")
+                        .permitAll()
                         .anyRequest().authenticated())
+
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)
-                .addFilterBefore(rememberMeFilter(), RememberMeAuthenticationFilter.class);
+                .addFilterAfter(rememberMeFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
         return http.build();
     }
 

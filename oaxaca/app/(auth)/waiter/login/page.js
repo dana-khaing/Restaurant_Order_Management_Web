@@ -22,6 +22,7 @@ import AuthHeader from "@/app/custom_components/auth/AuthHeader";
 import AuthBanner from "@/app/custom_components/auth/AuthBanner";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function WaiterLoginPage() {
 	const router = useRouter();
@@ -30,7 +31,7 @@ export default function WaiterLoginPage() {
 		defaultValues: {
 			username: "",
 			password: "",
-			rememberMe: false,
+			"remember-me": false,
 			firstName: "",
 			lastName: "",
 		},
@@ -40,17 +41,73 @@ export default function WaiterLoginPage() {
 				password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
 				firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(1).max(32),
 				lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(1).max(32),
-				rememberMe: z.boolean().optional(),
+				"remember-me": z.boolean().optional(),
 			})
 		),
 		mode: "onBlur",
 	});
 
+	useEffect(() => {
+
+		async function validateRememberMeToken() {
+
+			try {
+
+				const response = await fetch("/api/auth/waiter/login/remember-me/validate", {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				});
+
+				// First, check if the response is OK
+				if (!response.ok) {
+					const errorText = await response.text(); // Get the error message as text
+					console.error("Error:", errorText);
+					toast({
+						title: "Sign up failed.",
+						description: "Please try again.",
+					});
+					return;
+				}
+
+				// Then, safely parse the JSON
+				const data = await response.json();
+				console.log("Success:", data);
+				toast({
+					title: "Logged in successfully",
+					description: "Redirecting to home page.",
+				});
+				router.push("/waiter/home");
+
+
+
+
+
+
+			} catch (error) {
+
+				console.error("An error occurred:", error);
+				toast({
+					title: "Sign up failed.",
+					description: "Please try again.",
+				});
+			}
+
+		}
+
+
+		validateRememberMeToken();
+
+
+	}, [])
+
 
 
 	async function onSubmit(values) {
+
+		const endpoint = "/api/auth/waiter/login";
+
 		try {
-			const response = await fetch("/api/auth/waiter/login", {
+			const response = await fetch(endpoint, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(values),
@@ -74,7 +131,7 @@ export default function WaiterLoginPage() {
 				title: "Logged in successfully",
 				description: "Redirecting to home page.",
 			});
-		//	router.push("/waiter/home");
+			//	router.push("/waiter/home");
 
 
 		} catch (error) {
@@ -185,7 +242,7 @@ export default function WaiterLoginPage() {
 
 						<FormField
 							control={form.control}
-							name="rememberMe"
+							name="remember-me"
 							render={({ field }) => (
 								<FormItem className="flex flex-row items-center w-full justify-between space-x-3 space-y-0 rounded-md border p-4 shadow">
 									<div className="flex justify-center items-center gap-2">

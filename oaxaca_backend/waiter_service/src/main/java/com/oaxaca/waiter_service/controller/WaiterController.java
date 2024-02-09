@@ -16,11 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,14 +82,9 @@ public class WaiterController {
         }
 
         try {
-            
+
             Authentication authentication = attemptAuthentication(waiter.getUsername(), waiter.getPassword());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            if (waiter.getRememberMe() != null && waiter.getRememberMe()) {
-                rememberMeServices.loginSuccess(request, response, authentication);
-            }
-
 
             Map<String, String> result = new HashMap<>();
             result.put("message", "Waiter Logged in Successfully");
@@ -119,6 +116,18 @@ public class WaiterController {
     private Authentication attemptAuthentication(String username, String password) throws AuthenticationException {
         Authentication request = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(request);
+    }
+
+    @GetMapping("/validate-remember-me")
+    public ResponseEntity<String> validateRememberMe(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = rememberMeServices.autoLogin(request, response);
+
+        if (authentication != null && authentication instanceof RememberMeAuthenticationToken) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return ResponseEntity.ok("User authenticated with remember-me token");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing remember-me token");
+        }
     }
 
 }
