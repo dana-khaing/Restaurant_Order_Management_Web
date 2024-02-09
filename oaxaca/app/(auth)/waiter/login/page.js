@@ -30,7 +30,7 @@ export default function WaiterLoginPage() {
 		defaultValues: {
 			username: "",
 			password: "",
-			remember_me: false,
+			rememberMe: false,
 			firstName: "",
 			lastName: "",
 		},
@@ -40,7 +40,7 @@ export default function WaiterLoginPage() {
 				password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
 				firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(1).max(32),
 				lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(1).max(32),
-				remember_me: z.boolean().optional(),
+				rememberMe: z.boolean().optional(),
 			})
 		),
 		mode: "onBlur",
@@ -74,7 +74,7 @@ export default function WaiterLoginPage() {
 				title: "Logged in successfully",
 				description: "Redirecting to home page.",
 			});
-			router.push("/waiter/home");
+		//	router.push("/waiter/home");
 
 
 		} catch (error) {
@@ -185,7 +185,7 @@ export default function WaiterLoginPage() {
 
 						<FormField
 							control={form.control}
-							name="remember_me"
+							name="rememberMe"
 							render={({ field }) => (
 								<FormItem className="flex flex-row items-center w-full justify-between space-x-3 space-y-0 rounded-md border p-4 shadow">
 									<div className="flex justify-center items-center gap-2">

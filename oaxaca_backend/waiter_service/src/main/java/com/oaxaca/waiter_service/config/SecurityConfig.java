@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,7 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices.RememberMeTokenAlgorithm;
 
 import com.oaxaca.waiter_service.model.Waiter;
 import com.oaxaca.waiter_service.repository.WaiterRepository;
@@ -42,16 +46,41 @@ public class SecurityConfig {
     }
 
     @Bean
-    RememberMeServices rememberMeServices(UserDetailsService userDetailsService) {
+    UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() {
+        UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter();
+        usernamePasswordAuthenticationFilter
+                .setAuthenticationManager(authenticationManager(userDetailsService(waiterRepository)));
+        usernamePasswordAuthenticationFilter.setRememberMeServices(rememberMeServices());
+        return usernamePasswordAuthenticationFilter;
+    }
+
+    @Bean
+    RememberMeServices rememberMeServices() {
+        RememberMeTokenAlgorithm encodingAlgorithm = RememberMeTokenAlgorithm.SHA256;
 
         TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices(
-                rememberMeKey, userDetailsService);
-        rememberMeServices.setCookieName("remember-me");
-        rememberMeServices.setParameter("remember-me-param");
+                rememberMeKey, userDetailsService(waiterRepository), encodingAlgorithm);
+        rememberMeServices.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
+        rememberMeServices.setCookieName("rememberMe");
         rememberMeServices.setTokenValiditySeconds(1209600);
+        rememberMeServices.setAlwaysRemember(true);
 
         return rememberMeServices;
 
+    }
+
+    @Bean
+    RememberMeAuthenticationFilter rememberMeFilter() {
+        RememberMeAuthenticationFilter rememberMeFilter = new RememberMeAuthenticationFilter(
+                authenticationManager(userDetailsService(waiterRepository)), rememberMeServices());
+        return rememberMeFilter;
+    }
+
+    @Bean
+    RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
+        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = new RememberMeAuthenticationProvider(
+                rememberMeKey);
+        return rememberMeAuthenticationProvider;
     }
 
     @Bean
@@ -60,13 +89,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/waiter/login", "/waiter/register").permitAll()
                         .anyRequest().authenticated())
-                .rememberMe(me -> me.rememberMeServices(rememberMeServices(userDetailsService(waiterRepository))).key(rememberMeKey));
+                .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)
+                .addFilterBefore(rememberMeFilter(), RememberMeAuthenticationFilter.class);
         return http.build();
     }
 
