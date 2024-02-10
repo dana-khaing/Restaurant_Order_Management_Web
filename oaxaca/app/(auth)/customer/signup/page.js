@@ -76,14 +76,15 @@ export default function WaiterLoginPage() {
             if (!response.ok) {
                 toast({
                     title: "Sign up failed.",
-                    description: "Please try again.",
+                    description: "The email or username may already be in use",
                 });
-
-
                 return;
-
-
             }
+             toast({
+                title: "Sign up success.",
+                description: "Logging you in.",
+            });
+
 
             router.push("/customer/login")
 

@@ -44,8 +44,10 @@ export default function CustomerLoginPage() {
     });
 
     async function onSubmit(values) {
+
+        const endpoint = values.remember_me ? "/api/auth/customer/login/remember-me" : "/api/auth/customer/login";
         try {
-            const response = await fetch("/api/auth/customer/login", {
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

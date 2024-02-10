@@ -2,13 +2,22 @@ package com.oaxaca.customer_service.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +26,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.oaxaca.customer_service.model.Customer;
 import com.oaxaca.customer_service.service.CustomerService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
 
-  
-
+    @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    RememberMeServices rememberMeServices;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+
 
     private final AuthenticationManager authenticationManager;
 
@@ -38,20 +58,24 @@ public class CustomerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer, HttpServletRequest request,
+            HttpServletResponse response) {
         if (customer == null || customer.getUsername() == null || customer.getUsername().isEmpty()
                 || customer.getPassword() == null || customer.getPassword().isEmpty() || customer.getEmail() == null
                 || customer.getEmail().isEmpty()) {
             return new ResponseEntity<>("Customer creation failed", HttpStatus.BAD_REQUEST);
         }
 
-        Customer createdCustomer = customerService.createCustomer(customer);
-        return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+        customerService.createCustomer(customer);
+    
+        Map<String, String> res = new HashMap<>();
+        res.put("message", "Customer created successfully");
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginCustomer(@RequestBody Customer customer) {
-
+    public ResponseEntity<?> loginCustomer(@RequestBody Customer customer, HttpServletRequest request,
+            HttpServletResponse res) {
 
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken
                 .unauthenticated(customer.getUsername(), customer.getPassword());
@@ -61,9 +85,27 @@ public class CustomerController {
             return new ResponseEntity<>("Customer Login Failed", HttpStatus.UNAUTHORIZED);
         }
 
-        SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+        rememberMeServices.loginSuccess(request, res, authenticationResponse);
 
-        return new ResponseEntity<>("Customer Logged in Successfully", HttpStatus.OK);
+        SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Customer Logged in Successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("validate-remember-me")
+    public ResponseEntity<?> validateRememberMe(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = rememberMeServices.autoLogin(request, response);
+
+        if (authentication != null && authentication instanceof RememberMeAuthenticationToken) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Map<String, String> result = new HashMap<>();
+            result.put("message", "User authenticated with remember-me token");
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body("User not authenticated with remember-me token");
+        }
     }
 
     @GetMapping("/find/id/{id}")

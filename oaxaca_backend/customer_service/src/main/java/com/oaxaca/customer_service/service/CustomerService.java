@@ -3,6 +3,7 @@ package com.oaxaca.customer_service.service;
 import com.oaxaca.customer_service.model.Customer;
 import com.oaxaca.customer_service.repository.CustomerRepository;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class CustomerService {
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
+
+   
 
     public Customer createCustomer(Customer customer) {
 
