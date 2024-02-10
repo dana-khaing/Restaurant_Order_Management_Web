@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 
@@ -47,7 +46,6 @@ public class Waiter {
     private LocalDate dateOfBirth;
 
     @Column
-    @JsonProperty("remember-me")
     private Boolean rememberMe;
 
     public Waiter() {

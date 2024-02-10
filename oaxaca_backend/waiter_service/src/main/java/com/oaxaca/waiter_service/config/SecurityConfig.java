@@ -10,6 +10,7 @@ import org.springframework.security.authentication.RememberMeAuthenticationProvi
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,12 +20,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices.RememberMeTokenAlgorithm;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.oaxaca.waiter_service.model.Waiter;
 import com.oaxaca.waiter_service.repository.WaiterRepository;
 import com.oaxaca.waiter_service.service.WaiterDetailsService;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -46,6 +51,21 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // replace "*" with your frontend's
+                                                                                 // origin
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true); // this allows cookies to be sent cross-origin
+        configuration.setExposedHeaders(Arrays.asList("Set-Cookie")); // this includes the Set-Cookie header in the
+                                                                      // response
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() {
         UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter();
         usernamePasswordAuthenticationFilter
@@ -61,7 +81,7 @@ public class SecurityConfig {
                 rememberMeKey, userDetailsService(waiterRepository), encodingAlgorithm);
         rememberMeServices.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
         rememberMeServices.setTokenValiditySeconds(1209600);
-
+        rememberMeServices.setUseSecureCookie(false);
 
         return rememberMeServices;
 
@@ -91,13 +111,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/waiter/login", "/waiter/register", "/waiter/validate-remember-me")
+                        .requestMatchers("/waiter/login", "/waiter/register", "/waiter/validate-remember-me",
+                                "waiter/login/remember-me")
                         .permitAll()
                         .anyRequest().authenticated())
-
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)
                 .addFilterAfter(rememberMeFilter(), UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

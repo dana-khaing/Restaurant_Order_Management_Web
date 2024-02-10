@@ -31,7 +31,7 @@ export default function WaiterLoginPage() {
 		defaultValues: {
 			username: "",
 			password: "",
-			"remember-me": false,
+			rememberMe: false,
 			firstName: "",
 			lastName: "",
 		},
@@ -41,7 +41,7 @@ export default function WaiterLoginPage() {
 				password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
 				firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(1).max(32),
 				lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(1).max(32),
-				"remember-me": z.boolean().optional(),
+				rememberMe: z.boolean().optional(),
 			})
 		),
 		mode: "onBlur",
@@ -53,7 +53,8 @@ export default function WaiterLoginPage() {
 
 			try {
 
-				const response = await fetch("/api/auth/waiter/login/remember-me/validate", {
+				const response = await fetch("/api/auth/waiter/login/validate", {
+
 					method: "GET",
 					headers: { "Content-Type": "application/json" },
 				});
@@ -104,7 +105,7 @@ export default function WaiterLoginPage() {
 
 	async function onSubmit(values) {
 
-		const endpoint = "/api/auth/waiter/login";
+		const endpoint = !values.rememberMe ? "/api/auth/waiter/login" : "/api/auth/waiter/login/remember-me";
 
 		try {
 			const response = await fetch(endpoint, {
@@ -242,7 +243,7 @@ export default function WaiterLoginPage() {
 
 						<FormField
 							control={form.control}
-							name="remember-me"
+							name="rememberMe"
 							render={({ field }) => (
 								<FormItem className="flex flex-row items-center w-full justify-between space-x-3 space-y-0 rounded-md border p-4 shadow">
 									<div className="flex justify-center items-center gap-2">

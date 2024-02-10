@@ -17,8 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import SocialLinks from "@/app/custom_components/auth/SocialLinks";
+
 import AuthNav from "@/app/custom_components/auth/AuthNav";
 import AuthHeader from "@/app/custom_components/auth/AuthHeader";
 import AuthBanner from "@/app/custom_components/auth/AuthBanner";
@@ -30,6 +29,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 
@@ -60,9 +60,66 @@ export default function KitchenStaffLoginPage() {
         mode: "onBlur",
     });
 
+    useEffect(() => {
+
+		async function validateRememberMeToken() {
+
+			try {
+
+				const response = await fetch("/api/auth/kitchen_staff/login/validate", {
+
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				});
+
+				// First, check if the response is OK
+				if (!response.ok) {
+					const errorText = await response.text(); // Get the error message as text
+					console.error("Error:", errorText);
+					toast({
+						title: "Sign up failed.",
+						description: "Please try again.",
+					});
+					return;
+				}
+
+				// Then, safely parse the JSON
+				const data = await response.text();
+				console.log("Success:", data);
+				toast({
+					title: "Logged in successfully",
+					description: "Redirecting to home page.",
+				});
+				router.push("/waiter/home");
+
+
+
+
+
+
+			} catch (error) {
+
+				console.error("An error occurred:", error);
+				toast({
+					title: "Sign up failed.",
+					description: "Please try again.",
+				});
+			}
+
+		}
+
+
+		validateRememberMeToken();
+
+
+	}, [])
+
+
     async function onSubmit(values) {
+
+        const endpoint = values.remember_me ? "/api/auth/kitchen_staff/login/remember-me" : "/api/auth/kitchen_staff/login";
         try {
-            const response = await fetch("/api/auth/kitchen_staff/login", {
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
@@ -86,7 +143,7 @@ export default function KitchenStaffLoginPage() {
                 title: "Logged in successfully",
                 description: "Redirecting to home page.",
             });
-            router.push("/kitchen_staff/home");
+           // router.push("/kitchen_staff/home");
 
 
         } catch (error) {

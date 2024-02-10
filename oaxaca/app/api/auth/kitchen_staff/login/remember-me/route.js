@@ -1,13 +1,11 @@
-import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
 	const data = await request.json();
-	const cookieStore = cookies();
-	const test = cookieStore.getAll();
 
 
 	try {
-		const res = await fetch(`http://localhost:8081/kitchen_staff/login`, {
+		const res = await fetch(`http://localhost:8081/kitchen_staff/login?remember-me=true`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(data),
@@ -17,21 +15,27 @@ export async function POST(request) {
 			console.error(await res.text()); // Log or handle error response as text
 			return new Response(JSON.stringify({ error: "Request failed with status " + res.status }), {
 				status: res.status,
-				headers: { "Content-Type": "application/json" },
+				headers: {
+					"Content-Type": "application/json",
+
+				},
 			});
 		}
 
-
 		const jsessionId = res.headers.getSetCookie("JSESSIONID");
-		
+		const remember_me = res.headers.getSetCookie("remember-me");
 
+		console.log("J:",jsessionId);
+		console.log("R:", remember_me);
 
 		const response = await res.json();
-		return new Response(JSON.stringify(response), {
+
+		return new NextResponse(JSON.stringify(response), {
 			status: 200,
-			headers: { 
+			headers: {
 				"Content-Type": "application/json",
-				"Set-Cookie": jsessionId 
+				"Set-Cookie": jsessionId,
+				"Set-Cookie": remember_me,
 			},
 		});
 	} catch (error) {
@@ -42,4 +46,5 @@ export async function POST(request) {
 		});
 	}
 }
+
 

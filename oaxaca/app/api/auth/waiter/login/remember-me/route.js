@@ -1,15 +1,11 @@
-import { cookies } from "next/headers";
-
 export async function POST(request) {
 	const data = await request.json();
-	const cookieStore = cookies();
-	const test = cookieStore.getAll();
-
 
 	try {
-		const res = await fetch(`http://localhost:8081/kitchen_staff/login`, {
+		const res = await fetch(`http://localhost:8082/waiter/login?remember-me=true`, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: { "Content-Type": "application/json",
+			},
 			body: JSON.stringify(data),
 		});
 
@@ -21,18 +17,11 @@ export async function POST(request) {
 			});
 		}
 
-
-		const jsessionId = res.headers.getSetCookie("JSESSIONID");
-		
-
-
 		const response = await res.json();
+		console.log(response)
 		return new Response(JSON.stringify(response), {
 			status: 200,
-			headers: { 
-				"Content-Type": "application/json",
-				"Set-Cookie": jsessionId 
-			},
+			headers: { "Content-Type": "application/json" },
 		});
 	} catch (error) {
 		console.error(error);
@@ -42,4 +31,7 @@ export async function POST(request) {
 		});
 	}
 }
+
+
+
 

@@ -86,6 +86,10 @@ public class WaiterController {
             Authentication authentication = attemptAuthentication(waiter.getUsername(), waiter.getPassword());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            if (waiter.getRememberMe() != null && waiter.getRememberMe()) {
+                rememberMeServices.loginSuccess(request, response, authentication);
+            }
+
             Map<String, String> result = new HashMap<>();
             result.put("message", "Waiter Logged in Successfully");
             return ResponseEntity.ok(result);

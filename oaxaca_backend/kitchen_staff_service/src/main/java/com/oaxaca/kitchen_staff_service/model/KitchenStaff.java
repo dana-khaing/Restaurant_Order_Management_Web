@@ -1,5 +1,6 @@
 package com.oaxaca.kitchen_staff_service.model;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

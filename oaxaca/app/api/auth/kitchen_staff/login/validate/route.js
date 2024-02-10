@@ -1,17 +1,19 @@
 import { cookies } from "next/headers";
-
-export async function POST(request) {
-	const data = await request.json();
+export async function GET() {
 	const cookieStore = cookies();
-	const test = cookieStore.getAll();
-
+	const remember_me = cookieStore.get("remember-me");
+	console.log("RM", remember_me);
 
 	try {
-		const res = await fetch(`http://localhost:8081/kitchen_staff/login`, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(data),
+		const res = await fetch(`http://localhost:8081/kitchen_staff/validate-remember-me`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Cookie": `remember-me=${remember_me.value}`
+			},
 		});
+
+
 
 		if (!res.ok) {
 			console.error(await res.text()); // Log or handle error response as text
@@ -21,18 +23,11 @@ export async function POST(request) {
 			});
 		}
 
-
-		const jsessionId = res.headers.getSetCookie("JSESSIONID");
-		
-
-
 		const response = await res.json();
+		console.log(response)
 		return new Response(JSON.stringify(response), {
 			status: 200,
-			headers: { 
-				"Content-Type": "application/json",
-				"Set-Cookie": jsessionId 
-			},
+			headers: { "Content-Type": "application/json" },
 		});
 	} catch (error) {
 		console.error(error);
@@ -42,4 +37,8 @@ export async function POST(request) {
 		});
 	}
 }
+
+
+
+
 
