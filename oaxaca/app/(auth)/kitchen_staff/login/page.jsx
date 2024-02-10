@@ -17,71 +17,142 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import SocialLinks from "@/app/custom_components/auth/SocialLinks";
+
 import AuthNav from "@/app/custom_components/auth/AuthNav";
 import AuthHeader from "@/app/custom_components/auth/AuthHeader";
 import AuthBanner from "@/app/custom_components/auth/AuthBanner";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function CustomerLoginPage() {
+
+
+export default function KitchenStaffLoginPage() {
+
     const router = useRouter();
+
 
     const form = useForm({
         defaultValues: {
             username: "",
             password: "",
             remember_me: false,
+            firstName: "",
+            lastName: "",
+            role: "Chef",
         },
         resolver: zodResolver(
             z.object({
-                username: z.string().min(4).max(16),
-                password: z.string().min(8).max(32),
+                username: z.string({ required_error: "Username should be at least 4 characters" }).min(4).max(16),
+                password: z.string({ required_error: "Password has to be a minimum of 8 characters" }).min(8).max(32),
+                firstName: z.string({ required_error: "First Name Minimum 4 characters" }).min(4).max(32),
+                lastName: z.string({ required_error: "Last Name Minimum 4 characters" }).min(4).max(32),
+                role: z.enum(['Chef', 'Cook', 'Dishwasher']).transform(role => role.toUpperCase()),
                 remember_me: z.boolean().optional(),
             })
         ),
         mode: "onBlur",
     });
 
+    useEffect(() => {
+
+		async function validateRememberMeToken() {
+
+			try {
+
+				const response = await fetch("/api/auth/kitchen_staff/login/validate", {
+
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				});
+
+				// First, check if the response is OK
+				if (!response.ok) {
+					const errorText = await response.text(); // Get the error message as text
+					console.error("Error:", errorText);
+					toast({
+						title: "Sign up failed.",
+						description: "Please try again.",
+					});
+					return;
+				}
+
+				// Then, safely parse the JSON
+				const data = await response.text();
+				console.log("Success:", data);
+				toast({
+					title: "Logged in successfully",
+					description: "Redirecting to home page.",
+				});
+				router.push("/kitchen_staff/home");
+
+
+
+
+
+
+			} catch (error) {
+
+				console.error("An error occurred:", error);
+				toast({
+					title: "Sign up failed.",
+					description: "Please try again.",
+				});
+			}
+
+		}
+
+
+		validateRememberMeToken();
+
+
+	}, [])
+
+
     async function onSubmit(values) {
 
-        const endpoint = values.remember_me ? "/api/auth/customer/login/remember-me" : "/api/auth/customer/login";
+        const endpoint = values.remember_me ? "/api/auth/kitchen_staff/login/remember-me" : "/api/auth/kitchen_staff/login";
         try {
             const response = await fetch(endpoint, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
             });
 
-            console.log(values);
-
-
+            // First, check if the response is OK
             if (!response.ok) {
-
+                const errorText = await response.text(); // Get the error message as text
+                console.error("Error:", errorText);
                 toast({
-                    title: "Login failed.",
+                    title: "Sign up failed.",
                     description: "Please try again.",
                 });
-                console.log(response.text)
                 return;
-
             }
 
+            // Then, safely parse the JSON
+            const data = await response.json();
+            console.log("Success:", data);
             toast({
-                title: "Redirecting to home page",
-                description: "Logged in successfully",
+                title: "Logged in successfully",
+                description: "Redirecting to home page.",
             });
-
-            router.push("/menus");
+           // router.push("/kitchen_staff/home");
 
 
         } catch (error) {
-            console.log(error);
+            console.error("An error occurred:", error);
+            toast({
+                title: "Sign up failed.",
+                description: "Please try again.",
+            });
         }
-
-
     }
 
     const { toast } = useToast();
@@ -89,7 +160,6 @@ export default function CustomerLoginPage() {
     return (
         <main className="flex flex-col justify-center w-full items-center gap-6 lg:flex-row">
             <section className="flex flex-col justify-center items-center w-full h-full gap-8 text-center lg:items-start p-8">
-                <AuthNav />
 
                 <AuthHeader text={"Login"} />
 
@@ -140,6 +210,74 @@ export default function CustomerLoginPage() {
                             )}
                         />
 
+
+
+                        <FormField
+                            control={form.control}
+                            name="firstName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel> First Name </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="shadcn"
+                                            type="firstName"
+                                            {...field}
+                                        />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="lastName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel> Last Name </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="shadcn"
+                                            type="firstName"
+                                            {...field}
+                                        />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+
+                        <FormField
+                            control={form.control}
+                            name="role"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Role</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Chef">Chef</SelectItem>
+                                            <SelectItem value="Cook">Cook</SelectItem>
+                                            <SelectItem value="Dishwasher">Dishwasher</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormDescription>
+                                        This is the role you serve in our kitchen.
+
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
                             name="remember_me"
@@ -171,22 +309,8 @@ export default function CustomerLoginPage() {
                                 <p>Login</p>
                             </Button>
 
-                            <Link
-                                href={"/customer/signup"}
-                                className="cursor-pointer"
-                            >
-                                <FormLabel>
-                                    {" "}
-                                    Don't have an account?{" "}
-                                    <span className="text-red-500">
-                                        {" "}
-                                        Signup.{" "}
-                                    </span>{" "}
-                                </FormLabel>
-                            </Link>
                         </div>
 
-                        <SocialLinks />
                     </form>
                 </Form>
 
