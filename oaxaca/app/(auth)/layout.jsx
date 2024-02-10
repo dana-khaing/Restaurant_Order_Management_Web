@@ -14,7 +14,6 @@ function AuthLayout({ children }) {
         <Toaster />
       </section>
 
-      <AuthBanner />
     </main>
   );
 }
