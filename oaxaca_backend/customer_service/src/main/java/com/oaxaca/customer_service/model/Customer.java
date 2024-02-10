@@ -4,10 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+
 import jakarta.persistence.Column;
 
 @Entity
-public class Customer {
+public class Customer extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +25,7 @@ public class Customer {
     @Column(name = "username", length = 30, nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password", length = 30 ,nullable = false)
+    @Column(name = "password", length = 255 ,nullable = false)
     private String password;
 
     @Column(name = "address", length = 30)
@@ -131,6 +134,13 @@ public class Customer {
         return "Customer [address=" + address + ", creditCard=" + creditCard + ", email=" + email + ", id=" + id
                 + ", name=" + name + ", password=" + password + ", phone=" + phone + ", username=" + username + "]";
     }
+
+
+
+   
+
+
+  
 
 
     

@@ -26,8 +26,8 @@ public class WaiterService {
             throw new WaiterCreationFailedException("Waiter creation failed");
         }
 
-        if (waiter.getName() == null || waiter.getName().isEmpty() ||
-                waiter.getLastname() == null || waiter.getLastname().isEmpty() ||
+        if (waiter.getFirstName() == null || waiter.getFirstName().isEmpty() ||
+                waiter.getLastName() == null || waiter.getLastName().isEmpty() ||
                 waiter.getUsername() == null || waiter.getUsername().isEmpty() ||
                 waiter.getPassword() == null || waiter.getPassword().isEmpty() ||
                 waiter.getEmail() == null || waiter.getEmail().isEmpty() ||

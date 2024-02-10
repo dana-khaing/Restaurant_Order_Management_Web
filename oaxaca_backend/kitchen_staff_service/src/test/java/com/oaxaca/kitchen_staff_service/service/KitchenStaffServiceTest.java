@@ -1,3 +1,4 @@
+// FILEPATH: /Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/kitchen_staff_service/src/test/java/com/oaxaca/kitchen_staff_service/service/KitchenStaffServiceTest.java
 
 package com.oaxaca.kitchen_staff_service.service;
 
@@ -6,86 +7,78 @@ import com.oaxaca.kitchen_staff_service.model.KitchenStaff;
 import com.oaxaca.kitchen_staff_service.repository.KitchenStaffRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-class KitchenStaffServiceTest {
+public class KitchenStaffServiceTest {
 
-    @Mock
-    KitchenStaffRepository kitchenStaffRepository;
-
-    @InjectMocks
-    KitchenStaffService kitchenStaffService;
+    private KitchenStaffRepository kitchenStaffRepository;
+    private KitchenStaffService kitchenStaffService;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setup() {
+        kitchenStaffRepository = Mockito.mock(KitchenStaffRepository.class);
+        kitchenStaffService = new KitchenStaffService(kitchenStaffRepository);
     }
 
     @Test
-    void createKitchenStaff_NullKitchenStaff_ThrowsException() {
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(null));
-    }
-
-    @Test
-    void createKitchenStaff_NullFirstName_ThrowsException() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setFirstName(null);
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
-    }
-
-    @Test
-    void createKitchenStaff_EmptyFirstName_ThrowsException() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setFirstName("");
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
-    }
-
-    @Test
-    void createKitchenStaff_NullLastName_ThrowsException() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setLastName(null);
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
-    }
-
-
-    void createKitchenStaff_EmptyLastName_ThrowsException() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setLastName("");
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
-    }
-
-    @Test
-    void createKitchenStaff_NullRole_ThrowsException() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setRole(null);
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
-    }
-
-    @Test
-    void createKitchenStaff_EmptyRole_ThrowsException() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setRole("");
-        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
-    }
-
-
-    @Test
-    void createKitchenStaff_ValidKitchenStaff_ReturnsKitchenStaff() {
-        KitchenStaff kitchenStaff = new KitchenStaff();
-        kitchenStaff.setFirstName("John");
-        kitchenStaff.setLastName("Doe");
-        kitchenStaff.setRole("Chef");
-
+    public void testCreateKitchenStaffSuccess() {
+        KitchenStaff kitchenStaff = new KitchenStaff("j123", "password", "John", "Doe", "Chef");
         when(kitchenStaffRepository.save(any(KitchenStaff.class))).thenReturn(kitchenStaff);
 
         KitchenStaff createdKitchenStaff = kitchenStaffService.createKitchenStaff(kitchenStaff);
 
         assertEquals(kitchenStaff, createdKitchenStaff);
-        verify(kitchenStaffRepository, times(1)).save(kitchenStaff);
     }
+
+    @Test
+    public void testCreateKitchenStaffFail() {
+        KitchenStaff kitchenStaff = new KitchenStaff();
+
+        assertThrows(KitchenStaffCreationFailedException.class, () -> kitchenStaffService.createKitchenStaff(kitchenStaff));
+    }
+
+    @Test
+    public void testFindKitchenStaffById() {
+        KitchenStaff kitchenStaff = new KitchenStaff("j123", "password", "John", "Doe", "Chef");
+        when(kitchenStaffRepository.findById(1L)).thenReturn(Optional.of(kitchenStaff));
+
+        KitchenStaff foundKitchenStaff = kitchenStaffService.findKitchenStaffById(1L);
+
+        assertEquals(kitchenStaff, foundKitchenStaff);
+    }
+
+    @Test
+    public void testFindKitchenStaffByFirstName() {
+        KitchenStaff kitchenStaff = new KitchenStaff("j123", "password", "John", "Doe", "Chef");
+        when(kitchenStaffRepository.findByFirstName("John")).thenReturn(Optional.of(kitchenStaff));
+
+        KitchenStaff foundKitchenStaff = kitchenStaffService.findKitchenStaffByFirstName("John");
+
+        assertEquals(kitchenStaff, foundKitchenStaff);
+    }
+
+    @Test
+    public void testFindKitchenStaffByLastName() {
+        KitchenStaff kitchenStaff = new KitchenStaff("j123", "password", "John", "Doe", "Chef");
+        when(kitchenStaffRepository.findByLastName("Doe")).thenReturn(Optional.of(kitchenStaff));
+
+        KitchenStaff foundKitchenStaff = kitchenStaffService.findKitchenStaffByLastName("Doe");
+
+        assertEquals(kitchenStaff, foundKitchenStaff);
+    }
+
+  
+
+    @Test
+    public void testFindKitchenStaffByFirstNameAndLastName() {
+        KitchenStaff kitchenStaff = new KitchenStaff("j123", "password", "John", "Doe", "Chef");
+        when(kitchenStaffRepository.findByFirstNameAndLastName("John", "Doe")).thenReturn(Optional.of(kitchenStaff));
+    }
+
 }

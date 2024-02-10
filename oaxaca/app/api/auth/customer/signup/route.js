@@ -2,7 +2,7 @@ export async function POST(request) {
     const data = await request.json();
 
     try {
-        const res = await fetch(`${process.env.API_URL}/auth/customer/login`, {
+        const res = await fetch(`http://localhost:8080/customer/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -11,7 +11,8 @@ export async function POST(request) {
         });
 
         if (!res.ok) {
-            return new Response(JSON.stringify({ message: "Error" }), {
+            console.error(await res.text())
+            return new Response(JSON.stringify({ message: ""}), {
                 status: res.status,
                 headers: {
                     "Content-Type": "application/json",
@@ -28,6 +29,7 @@ export async function POST(request) {
             },
         });
     } catch (error) {
+        console.error(error);
         return new Response(JSON.stringify({ message: error }), {
             status: 500,
             headers: {

@@ -1,4 +1,4 @@
-package com.oaxaca.customer_service.config;
+package com.oaxaca.customer_service.config.oauth;
 
 import java.io.IOException;
 

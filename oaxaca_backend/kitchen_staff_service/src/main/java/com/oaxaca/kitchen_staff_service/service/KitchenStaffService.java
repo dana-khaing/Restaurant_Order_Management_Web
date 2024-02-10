@@ -43,9 +43,7 @@ public class KitchenStaffService {
         return kitchenStaffRepository.findByLastName(lastName).orElse(null);
     }
 
-    public KitchenStaff findKitchenStaffByRole(String role) {
-        return kitchenStaffRepository.findByRole(role).orElse(null);
-    }
+
 
     public KitchenStaff findKitchenStaffByFirstNameAndLastName(String firstName, String lastName) {
         return kitchenStaffRepository.findByFirstNameAndLastName(firstName, lastName).orElse(null);
