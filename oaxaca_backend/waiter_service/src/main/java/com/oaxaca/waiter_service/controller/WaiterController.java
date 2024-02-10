@@ -123,12 +123,14 @@ public class WaiterController {
     }
 
     @GetMapping("/validate-remember-me")
-    public ResponseEntity<String> validateRememberMe(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> validateRememberMe(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = rememberMeServices.autoLogin(request, response);
 
         if (authentication != null && authentication instanceof RememberMeAuthenticationToken) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return ResponseEntity.ok("User authenticated with remember-me token");
+            Map<String, String> result = new HashMap<>();
+            result.put("message", "User authenticated with remember-me token");
+            return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing remember-me token");
         }

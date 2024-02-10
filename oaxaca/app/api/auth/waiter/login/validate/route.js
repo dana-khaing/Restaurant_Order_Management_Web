@@ -1,23 +1,29 @@
 import { cookies } from "next/headers";
 export async function GET() {
+	const cookieStore = cookies();
+	const remember_me = cookieStore.get("remember-me");
+	console.log("RM", remember_me);
 
 	try {
 		const res = await fetch(`http://localhost:8082/waiter/validate-remember-me`, {
 			method: "GET",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				"Cookie": `remember-me=${remember_me.value}`
+			},
 		});
+
+
 
 		if (!res.ok) {
 			console.error(await res.text()); // Log or handle error response as text
 			return new Response(JSON.stringify({ error: "Request failed with status " + res.status }), {
 				status: res.status,
-				headers: {
-					"Content-Type": "application/json",
-				},
+				headers: { "Content-Type": "application/json" },
 			});
 		}
 
-		const response = await res.text();
+		const response = await res.json();
 		console.log(response)
 		return new Response(JSON.stringify(response), {
 			status: 200,
@@ -31,6 +37,9 @@ export async function GET() {
 		});
 	}
 }
+
+
+
 
 
 

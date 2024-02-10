@@ -90,7 +90,7 @@ export default function KitchenStaffLoginPage() {
 					title: "Logged in successfully",
 					description: "Redirecting to home page.",
 				});
-				router.push("/waiter/home");
+				router.push("/kitchen_staff/home");
 
 
 

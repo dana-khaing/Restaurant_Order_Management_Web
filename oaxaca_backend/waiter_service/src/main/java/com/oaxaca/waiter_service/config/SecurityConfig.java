@@ -116,7 +116,7 @@ public class SecurityConfig {
                         .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)
                 .addFilterAfter(rememberMeFilter(), UsernamePasswordAuthenticationFilter.class);
