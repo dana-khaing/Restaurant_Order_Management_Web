@@ -1,7 +1,6 @@
 import React from 'react';
 import AuthNav from './components/AuthNav';
 import { Toaster } from '@/components/ui/toaster';
-import AuthBanner from './components/AuthBanner';
 
 function AuthLayout({ children }) {
   return (
