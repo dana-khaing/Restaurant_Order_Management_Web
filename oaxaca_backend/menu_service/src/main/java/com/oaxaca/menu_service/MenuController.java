@@ -13,12 +13,12 @@ public class MenuController {
   private MenuService menuService;
   
   @RequestMapping("/menu")
-  public List<MenuItem> getAllTopics() {
+  public List<MenuItem> getFullMenu() {
     return menuService.getFullMenu();
   }
   
   @RequestMapping("/menu/{id}")
-  public MenuItem getTopic(@PathVariable int id) {
+  public MenuItem getMenuItem(@PathVariable int id) {
     return menuService.getMenuItem(id);
   }
 }
