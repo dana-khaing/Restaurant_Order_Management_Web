@@ -9,7 +9,9 @@ function MenuCard({ name, diet }) {
         <span className='text-xs px-1 bg-green-500 capitalize rounded-md'>
           {diet}
         </span>
-        <button className='bg-[#EF3C3C] text-white rounded-lg px-7 py-1 block mx-auto mt-2'>
+        <button 
+        onClick={() => addToCart({ name, diet })}
+        className='bg-[#EF3C3C] text-white rounded-lg px-7 py-1 block mx-auto mt-2'>
           Detail
         </button>
       </div>
