@@ -7,7 +7,9 @@ const OrderingUI = () => {
         setCartItems([...cartItems, item]);
     };
     const removeFromCart = (itemId) => {
-        setCartItems(cartItems.filter((item) => item.id !== itemId));
+        const updateCart = [...cartItems];
+        updateCart.splice(itemId, 1);
+        setCartItems(updateCart);
     };
     const getCartTotal = () => {
         return cartItems.reduce((total, item) => total + item.price, 0);
