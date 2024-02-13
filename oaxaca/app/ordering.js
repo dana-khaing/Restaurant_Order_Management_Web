@@ -15,4 +15,14 @@ const OrderingUI = () => {
     const getCartTotal = () => {
         return cartItems.reduce((total, item) => total + item.price, 0);
      };
-}
+    
+return (
+    <div>
+      <h2>Menu</h2>
+      <MenuList addToCart={addToCart} />
+      
+    </div>
+  );
+};
+
+export default OrderingUI;
