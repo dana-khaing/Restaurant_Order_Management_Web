@@ -1,13 +1,15 @@
 package com.oaxaca.menu_service;
 
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.stereotype.Service;
+import org.junit.jupiter.api.Test;
 
-@Service
-public class MenuService {
+class MenuControllerTest {
 
-  private List<MenuItem> menu = Arrays.asList(
+  // This is the menu taken from the menu service. It is here to simplify comparisons during
+  // assertions.
+  private List<MenuItem> sampleMenu = Arrays.asList(
       /* Parameter 1: ID
          Parameter 2: Category
            1 : Appetizers
@@ -41,14 +43,59 @@ public class MenuService {
         new MenuItem(16, 5, "Horchata", "Rice and based horchata.", 4.99f, Arrays.asList("None"), 139),
         new MenuItem(17, 5, "Coca-Cola", "Carbonated soft drink with ice", 2.80f, Arrays.asList("None"), 210)
       );
-
-  public List<MenuItem> getFullMenu() {
-    return menu;
+  
+  @Test
+  void testCreateMenuController() { // Test 01
+    try {
+      MenuController testMC = new MenuController();
+      assertTrue(testMC instanceof MenuController,
+          "Test that a new MenuController instance was created successfully");
+    } catch (Exception e) {
+      fail("Exception thrown while trying to create a new MenuController instance; "
+          + e.getMessage());
+    }
   }
 
-  public MenuItem getMenuItem(int id) {
-    return menu.stream().filter(t -> t.getId() == id).findFirst().get();
+  @Test
+  void testGetFullMenu() {
+    try {
+      MenuController testMC = new MenuController();
+      assertEquals(sampleMenu, testMC.getFullMenu());
+    } catch (Exception e) {
+      fail("Exception thrown while testing getting the full menu from a MenuController instance; "
+          + e.getMessage());
+    }
   }
 
+  @Test
+  void testGetMenuItem_FirstItem() {
+    try {
+      MenuController testMC = new MenuController();
+      assertEquals(sampleMenu.stream().filter(t -> t.getId() == 1).findFirst().get(),
+          testMC.getMenuItem(1),
+          "Test that a MenuController instance returns the first item of the menu successfully");
+    } catch (Exception e) {
+      fail(
+          "Exception thrown while testing getting the first item of the menu from a MenuController instance; "
+              + e.getMessage());
+    }
+  }
+
+  // Currently receiving a compilation error. The variable i must be final since it is inside a lambda expression.
+  // Will work on a solution shortly (today's date: 13/02/2024), for now this test is commented out
+  /*@Test
+  void testGetMenuItem_AllItems() {
+    try {
+      MenuController testMC = new MenuController();
+      for (int i = 1; i <= 17; i++) {
+        assertEquals(sampleMenu.stream().filter(t -> t.getId() == i).findFirst().get(),
+            testMC.getMenuItem(i),
+            "Test that a MenuController instance returns the first item of the menu successfully");
+      }
+    } catch (Exception e) {
+      fail(
+          "Exception thrown while testing getting the first item of the menu from a MenuController instance; "
+              + e.getMessage());
+    }
+  }*/
 }
-
