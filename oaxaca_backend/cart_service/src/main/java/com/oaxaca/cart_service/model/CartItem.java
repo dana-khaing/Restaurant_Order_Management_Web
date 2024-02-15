@@ -20,10 +20,10 @@ public class CartItem {
     private int id;
     private int productId;
     private int quantity;
-    private int price;
+    private double price;
     private String productName;
 
-    public CartItem(int id, int productId, int quantity, int price, String productName) {
+    public CartItem(int id, int productId, int quantity, double price, String productName) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
@@ -55,8 +55,12 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public String getProductName() {

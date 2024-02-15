@@ -16,11 +16,30 @@ public class CartService {
     }
 
     public Cart addCartItem(Cart cart, CartItem cartItem) {
+
+        if (cart == null) {
+            cart = new Cart();
+
+        }
+        if (cartItem == null) {
+            throw new IllegalArgumentException("Cart item cannot be null");
+        }
+
+        if (cartItem.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+
+        if (cartItem.getProductId() <= 0) {
+            throw new IllegalArgumentException("Product ID must be greater than 0");
+        }
+
+        if (cartItem.getPrice() <= 0) {
+            throw new IllegalArgumentException("Price must be greater than 0");
+        }
+
         cart.getItems().add(cartItem);
         redisTemplate.opsForValue().set("cart", cart);
         return cart;
     }
 
-    
-    
 }

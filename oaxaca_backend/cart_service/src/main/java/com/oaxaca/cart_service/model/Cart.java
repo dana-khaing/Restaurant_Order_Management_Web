@@ -1,5 +1,6 @@
 package com.oaxaca.cart_service.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -26,6 +27,7 @@ public class Cart {
     private List<CartItem> items;
 
     public Cart() {
+        items = new ArrayList<>();
     }
 
     public Cart(Long userId, List<CartItem> items) {

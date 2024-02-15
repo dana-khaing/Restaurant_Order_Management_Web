@@ -1,6 +1,7 @@
 package com.oaxaca.cart_service.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -19,7 +20,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import com.oaxaca.cart_service.model.Cart;
 import com.oaxaca.cart_service.model.CartItem;
 
-
 public class CartServiceTest {
 
     @InjectMocks
@@ -36,7 +36,6 @@ public class CartServiceTest {
         MockitoAnnotations.openMocks(this);
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
 
-        
     }
 
     @Test
@@ -44,6 +43,10 @@ public class CartServiceTest {
         // Arrange
         Cart mockCart = mock(Cart.class);
         CartItem mockCartItem = mock(CartItem.class);
+        when(mockCartItem.getQuantity()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(1);
+        when(mockCartItem.getPrice()).thenReturn(1.0);
+
         @SuppressWarnings("unchecked")
         List<CartItem> mockCartItems = mock(List.class);
         when(mockCart.getItems()).thenReturn(mockCartItems);
@@ -55,6 +58,76 @@ public class CartServiceTest {
         verify(mockCartItems, times(1)).add(mockCartItem);
         verify(redisTemplate.opsForValue(), times(1)).set("cart", mockCart);
         assertEquals(mockCart, result);
+    }
+
+    @Test
+    public void testAddCartItemWithNullCart() {
+        // Arrange
+        CartItem mockCartItem = mock(CartItem.class);
+        when(mockCartItem.getQuantity()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(1);
+        when(mockCartItem.getPrice()).thenReturn(1.0);
+
+        // Act
+        
+        Cart result = cartService.addCartItem(null, mockCartItem);
+
+        // Assert
+        verify(redisTemplate.opsForValue(), times(1)).set("cart", result);
+        assertEquals(1, result.getItems().size());
+    }
+
+    @Test
+    public void testAddCartItemWithNullCartItem() {
+        // Arrange
+        Cart mockCart = mock(Cart.class);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.addCartItem(mockCart, null);
+        });
+    }
+
+    @Test
+    public void testAddCartItemWithZeroQuantity() {
+        // Arrange
+        Cart mockCart = mock(Cart.class);
+        CartItem mockCartItem = mock(CartItem.class);
+        when(mockCartItem.getQuantity()).thenReturn(0);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.addCartItem(mockCart, mockCartItem);
+        });
+    }
+
+    @Test
+    public void testAddCartItemWithNegativeProductId() {
+        // Arrange
+        Cart mockCart = mock(Cart.class);
+        CartItem mockCartItem = mock(CartItem.class);
+        when(mockCartItem.getQuantity()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(-1);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.addCartItem(mockCart, mockCartItem);
+        });
+    }
+
+    @Test
+    public void testAddCartItemWithZeroPrice() {
+        // Arrange
+        Cart mockCart = mock(Cart.class);
+        CartItem mockCartItem = mock(CartItem.class);
+        when(mockCartItem.getQuantity()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(1);
+        when(mockCartItem.getPrice()).thenReturn(0.0);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.addCartItem(mockCart, mockCartItem);
+        });
     }
 
 }
