@@ -15,7 +15,7 @@ public class CartService {
         this.redisTemplate = redisTemplate;
     }
 
-    public Cart addCartItem(Cart cart, CartItem cartItem) {
+    public Cart addCartItem(String sessionId, Cart cart, CartItem cartItem) {
 
         if (cart == null) {
             cart = new Cart();
@@ -45,16 +45,34 @@ public class CartService {
             existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
             existingCartItem.setPrice(cartItem.getPrice());
             existingCartItem.setProductName(cartItem.getProductName());
-            redisTemplate.opsForValue().set("cart", cart);
+            redisTemplate.opsForValue().set(sessionId, cart);
 
         } else {
             cart.getItems().add(cartItem);
-            redisTemplate.opsForValue().set("cart", cart);
+            redisTemplate.opsForValue().set(sessionId, cart);
 
         }
 
         return cart;
 
+    }
+
+    public void deleteItemCart(String sessionId, Cart cart, int productId) {
+
+        if (cart == null) {
+            throw new IllegalArgumentException("Cart cannot be null");
+        }
+
+        if (productId <= 0) {
+            throw new IllegalArgumentException("Product ID must be greater than 0");
+        }
+
+        cart.getItems().removeIf(item -> item.getProductId() == productId);
+        redisTemplate.opsForValue().set(sessionId, cart);
+    }
+
+    public Cart fetchCart(String sessionId) {
+        return (Cart) redisTemplate.opsForValue().get(sessionId);
     }
 
 }

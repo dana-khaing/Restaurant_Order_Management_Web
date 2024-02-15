@@ -52,11 +52,11 @@ public class CartServiceTest {
         when(mockCart.getItems()).thenReturn(mockCartItems);
 
         // Act
-        Cart result = cartService.addCartItem(mockCart, mockCartItem);
+        Cart result = cartService.addCartItem("test",mockCart, mockCartItem);
 
         // Assert
         verify(mockCartItems, times(1)).add(mockCartItem);
-        verify(redisTemplate.opsForValue(), times(1)).set("cart", mockCart);
+        verify(redisTemplate.opsForValue(), times(1)).set("test", mockCart);
         assertEquals(mockCart, result);
     }
 
@@ -70,10 +70,10 @@ public class CartServiceTest {
 
         // Act
 
-        Cart result = cartService.addCartItem(null, mockCartItem);
+        Cart result = cartService.addCartItem("test", null, mockCartItem);
 
         // Assert
-        verify(redisTemplate.opsForValue(), times(1)).set("cart", result);
+        verify(redisTemplate.opsForValue(), times(1)).set("test", result);
         assertEquals(1, result.getItems().size());
     }
 
@@ -84,7 +84,7 @@ public class CartServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.addCartItem(mockCart, null);
+            cartService.addCartItem("test", mockCart, null);
         });
     }
 
@@ -97,7 +97,7 @@ public class CartServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.addCartItem(mockCart, mockCartItem);
+            cartService.addCartItem("test", mockCart, mockCartItem);
         });
     }
 
@@ -111,7 +111,7 @@ public class CartServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.addCartItem(mockCart, mockCartItem);
+            cartService.addCartItem("test", mockCart, mockCartItem);
         });
     }
 
@@ -126,7 +126,7 @@ public class CartServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.addCartItem(mockCart, mockCartItem);
+            cartService.addCartItem("test", mockCart, mockCartItem);
         });
     }
 
@@ -141,11 +141,58 @@ public class CartServiceTest {
         CartItem newItem = new CartItem(1, 1, 2, 1.0, "Test Product");
 
         // Act
-        Cart result = cartService.addCartItem(cart, newItem);
+        Cart result = cartService.addCartItem("test", cart, newItem);
 
         // Assert
         assertEquals(1, result.getItems().size());
         assertEquals(3, result.getItems().get(0).getQuantity());
+    }
+
+    public void testDeleteItemCart(){
+        // Arrange
+        Cart cart = new Cart();
+        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product");
+
+        cart.getItems().add(existingItem);
+
+        // Act
+        cartService.deleteItemCart("test", cart, 1);
+
+        // Assert
+        assertEquals(0, cart.getItems().size());
+    }
+
+    @Test
+    public void testDeleteItemCartWithNullCart() {
+        // Arrange
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.deleteItemCart("test", null, 1);
+        });
+    }
+
+    @Test
+    public void testDeleteItemCartWithNegativeProductId() {
+        // Arrange
+        Cart mockCart = mock(Cart.class);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.deleteItemCart("test", mockCart, -1);
+        });
+    }
+
+    @Test
+    public void testFetchCart(){
+        // Arrange
+        Cart mockCart = mock(Cart.class);
+        when(redisTemplate.opsForValue().get("test")).thenReturn(mockCart);
+
+        // Act
+        Cart result = cartService.fetchCart("test");
+
+        // Assert
+        assertEquals(mockCart, result);
     }
 
 }
