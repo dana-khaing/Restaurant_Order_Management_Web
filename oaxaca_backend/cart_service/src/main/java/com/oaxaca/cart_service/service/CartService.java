@@ -57,7 +57,7 @@ public class CartService {
 
     }
 
-    public void deleteItemCart(String sessionId, Cart cart, int productId) {
+    public Cart deleteItemCart(String sessionId, Cart cart, int productId) {
 
         if (cart == null) {
             throw new IllegalArgumentException("Cart cannot be null");
@@ -69,6 +69,8 @@ public class CartService {
 
         cart.getItems().removeIf(item -> item.getProductId() == productId);
         redisTemplate.opsForValue().set(sessionId, cart);
+
+        return cart;
     }
 
     public Cart fetchCart(String sessionId) {
