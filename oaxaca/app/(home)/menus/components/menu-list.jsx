@@ -37,7 +37,7 @@ function MenuList() {
   }, []);
 
   return (
-    <div className='w-4/5 grid grid-cols-5 gap-3'>
+    <div className='w-4/5 grid lg:grid-cols-5 gap-3 md:grid-cols-3'>
       {menus.map((menu) => (
         <MenuCard key={menu.id} menu={menu} />
       ))}

@@ -2,14 +2,14 @@ import React from 'react';
 
 function MenuCard({ menu: { name, description, price } }) {
   return (
-    <div className='w-52 border border-[#EF3C3C] rounded-xl'>
+    <div className='w-52 border border-[#EF3C3C] rounded-xl flex flex-col'>
       <img src='/images/burrito.jpeg' className='w-full h-36 rounded-t-xl' />
-      <div className='p-2'>
-        <h5 className='text-md font-semibold'>{name}</h5>
-        <span className='text-xs px-1 bg-green-500 capitalize rounded-md'>
+      <div className='p-2 flex-1 flex flex-col'>
+        <h5 className='text-md font-semibold line-clamp-1'>{name}</h5>
+        <span className='text-xs px-1 bg-green-500 capitalize rounded-md line-clamp-2 my-3'>
           {description}
         </span>
-        <button className='bg-[#EF3C3C] text-white rounded-lg px-7 py-1 block mx-auto mt-2'>
+        <button className='mt-auto bg-[#EF3C3C] text-white rounded-lg px-7 py-1 block mx-auto'>
           Detail
         </button>
       </div>
