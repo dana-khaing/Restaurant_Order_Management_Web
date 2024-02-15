@@ -1,7 +1,7 @@
 function MenuCard({ menu: { name, description, price, allergens } }) {
   return (
-    <div className='max-w-56 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
-      <img src='/images/burrito.jpeg' className='w-full h-36 rounded-t-xl' />
+    <div className='max-w-64 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
+      <img src='/images/burrito.jpeg' className='w-full h-40 rounded-t-xl' />
       <div className='p-2 flex-1 flex flex-col'>
         <h5 className='text-md font-semibold line-clamp-1'>{name}</h5>
         <span className='text-gray-600 text-sm'>£{price}</span>

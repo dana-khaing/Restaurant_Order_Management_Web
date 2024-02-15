@@ -29,7 +29,7 @@ function MenuList({ dummyAllergens, selectedFilters }) {
   }, []);
 
   return (
-    <div className='w-5/6 grid lg:grid-cols-5 gap-3 md:grid-cols-3 sm:grid-cols-2'>
+    <div className='w-5/6 grid lg:grid-cols-4 gap-8 md:grid-cols-3 sm:grid-cols-2 justify-center'>
       {menus
         .filter(
           (m) =>

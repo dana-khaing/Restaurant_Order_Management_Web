@@ -28,7 +28,7 @@ function MenuPage() {
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   return (
-    <div className='flex gap-2 p-4'>
+    <div className='flex gap-8 p-4 px-10'>
       <MenuList
         selectedFilters={selectedFilters}
         dummyAllergens={dummyAllergens}
