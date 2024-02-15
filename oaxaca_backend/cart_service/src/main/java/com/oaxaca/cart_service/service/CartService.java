@@ -37,9 +37,24 @@ public class CartService {
             throw new IllegalArgumentException("Price must be greater than 0");
         }
 
-        cart.getItems().add(cartItem);
-        redisTemplate.opsForValue().set("cart", cart);
+        CartItem existingCartItem = cart.getItems().stream()
+                .filter(item -> item.getProductId() == cartItem.getProductId())
+                .findFirst().orElse(null);
+
+        if (existingCartItem != null) {
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
+            existingCartItem.setPrice(cartItem.getPrice());
+            existingCartItem.setProductName(cartItem.getProductName());
+            redisTemplate.opsForValue().set("cart", cart);
+
+        } else {
+            cart.getItems().add(cartItem);
+            redisTemplate.opsForValue().set("cart", cart);
+
+        }
+
         return cart;
+
     }
 
 }

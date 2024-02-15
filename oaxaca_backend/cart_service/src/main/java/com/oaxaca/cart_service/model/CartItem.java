@@ -59,8 +59,8 @@ public class CartItem {
         return price;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setPrice(double d) {
+        this.price = d;
     }
 
     public String getProductName() {

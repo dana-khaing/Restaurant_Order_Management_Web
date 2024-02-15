@@ -69,7 +69,7 @@ public class CartServiceTest {
         when(mockCartItem.getPrice()).thenReturn(1.0);
 
         // Act
-        
+
         Cart result = cartService.addCartItem(null, mockCartItem);
 
         // Assert
@@ -128,6 +128,24 @@ public class CartServiceTest {
         assertThrows(IllegalArgumentException.class, () -> {
             cartService.addCartItem(mockCart, mockCartItem);
         });
+    }
+
+    @Test
+    public void testAddCartItemWithExistingItem() {
+        // Arrange
+        Cart cart = new Cart();
+        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product");
+
+        cart.getItems().add(existingItem);
+
+        CartItem newItem = new CartItem(1, 1, 2, 1.0, "Test Product");
+
+        // Act
+        Cart result = cartService.addCartItem(cart, newItem);
+
+        // Assert
+        assertEquals(1, result.getItems().size());
+        assertEquals(3, result.getItems().get(0).getQuantity());
     }
 
 }
