@@ -195,4 +195,42 @@ public class CartServiceTest {
         assertEquals(mockCart, result);
     }
 
+    @Test
+    public void testFetchCartWithNullCart(){
+        // Arrange
+        when(redisTemplate.opsForValue().get("test")).thenReturn(null);
+
+        // Act
+        Cart result = cartService.fetchCart("test");
+
+        // Assert
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void testFetchCartWithNullSessionId(){
+        // Arrange
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.fetchCart(null);
+        });
+    }
+
+    @Test
+    public void testModifyExistingItemQuantity(){
+        // Arrange
+        Cart cart = new Cart();
+        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product");
+
+        cart.getItems().add(existingItem);
+
+        // Act
+        cartService.modifyItemQuantity(cart, 1, 2);
+
+        // Assert
+        assertEquals(2, cart.getItems().get(0).getQuantity());
+    }
+
+
+
 }

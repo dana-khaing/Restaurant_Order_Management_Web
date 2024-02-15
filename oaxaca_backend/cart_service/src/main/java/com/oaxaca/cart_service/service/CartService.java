@@ -72,7 +72,37 @@ public class CartService {
     }
 
     public Cart fetchCart(String sessionId) {
+
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null");
+        }
+
         return (Cart) redisTemplate.opsForValue().get(sessionId);
+    }
+
+    public void modifyItemQuantity( Cart cart, int productId, int quantity) {
+
+        if (cart == null) {
+            throw new IllegalArgumentException("Cart cannot be null");
+        }
+
+        if (productId <= 0) {
+            throw new IllegalArgumentException("Product ID must be greater than 0");
+        }
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+
+        CartItem existingCartItem = cart.getItems().stream()
+                .filter(item -> item.getProductId() == productId)
+                .findFirst().orElse(null);
+
+        if (existingCartItem != null) {
+            existingCartItem.setQuantity(quantity);
+            redisTemplate.opsForValue().set("test", cart);
+        }
+
     }
 
 }
