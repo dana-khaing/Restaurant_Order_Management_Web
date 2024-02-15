@@ -1,34 +1,45 @@
+'use client';
+
 import MenuList from './components/menu-list';
 import MenuFilters from './components/menu-filter';
+import { useState } from 'react';
+
+const dummyAllergens = [
+  { id: 0, name: 'None' },
+  {
+    id: 1,
+    name: 'Gluten',
+  },
+  {
+    id: 2,
+    name: 'Shellfish',
+  },
+  {
+    id: 3,
+    name: 'Nuts',
+  },
+  {
+    id: 4,
+    name: 'Dairy',
+  },
+];
 
 function MenuPage() {
-  const dummyAllergens = [
-    {
-      id: 1,
-      name: 'Gluten',
-    },
-    {
-      id: 2,
-      name: 'Shellfish',
-    },
-    {
-      id: 3,
-      name: 'Nuts',
-    },
-    {
-      id: 4,
-      name: 'Dairy',
-    },
-    {
-      id: 5,
-      name: 'None',
-    },
-  ];
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
   return (
     <div className='flex gap-2 p-4'>
-      <MenuList dummyAllergens={dummyAllergens} />
+      <MenuList
+        selectedFilters={selectedFilters}
+        dummyAllergens={dummyAllergens}
+      />
       <MenuFilters
-        filters={dummyAllergens.slice(0, -1).map((a) => `${a.name}-free`)}
+        filters={dummyAllergens.slice(1).map((a) => ({
+          id: a.id,
+          name: `${a.name}-free`,
+        }))}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
       />
     </div>
   );

@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import MenuCard from './menu-card';
 import { SERVICE_URLS } from '@/app/constants';
 
-// ['Gluten-free', 'Shellfish-free', 'Nut-free', 'Dairy-free', 'No Allergens'];
-
-function MenuList({ dummyAllergens }) {
+function MenuList({ dummyAllergens, selectedFilters }) {
   const [menus, setMenus] = useState([]);
 
   useEffect(() => {
@@ -32,9 +30,16 @@ function MenuList({ dummyAllergens }) {
 
   return (
     <div className='w-5/6 grid lg:grid-cols-5 gap-3 md:grid-cols-3 sm:grid-cols-2'>
-      {menus.map((menu) => (
-        <MenuCard key={menu.id} menu={menu} />
-      ))}
+      {menus
+        .filter(
+          (m) =>
+            !m.allergens.some((allergen) =>
+              selectedFilters.includes(allergen.id)
+            )
+        )
+        .map((menu) => (
+          <MenuCard key={menu.id} menu={menu} />
+        ))}
     </div>
   );
 }

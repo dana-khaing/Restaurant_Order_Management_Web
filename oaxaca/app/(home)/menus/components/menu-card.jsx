@@ -1,8 +1,4 @@
-function MenuCard({
-  menu: { name, description, price, allergens },
-  dummyAllergens,
-}) {
-  console.log(allergens);
+function MenuCard({ menu: { name, description, price, allergens } }) {
   return (
     <div className='max-w-56 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
       <img src='/images/burrito.jpeg' className='w-full h-36 rounded-t-xl' />
