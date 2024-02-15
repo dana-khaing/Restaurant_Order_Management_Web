@@ -1,13 +1,14 @@
 package com.oaxaca.menu_service;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MenuService {
 
-  private List<MenuItem> menu = Arrays.asList(
+  private List<MenuItem> menu = new ArrayList<>(Arrays.asList(
       /* Parameter 1: ID
          Parameter 2: Category
            1 : Appetizers
@@ -40,7 +41,7 @@ public class MenuService {
         new MenuItem(15, 5, "Mezcal Cocktail", "Various mezcal-based cocktails.", 9.99f, Arrays.asList("None"), 253),
         new MenuItem(16, 5, "Horchata", "Rice and based horchata.", 4.99f, Arrays.asList("None"), 139),
         new MenuItem(17, 5, "Coca-Cola", "Carbonated soft drink with ice", 2.80f, Arrays.asList("None"), 210)
-      );
+      ));
 
   public List<MenuItem> getFullMenu() {
     return menu;
@@ -48,6 +49,24 @@ public class MenuService {
 
   public MenuItem getMenuItem(int id) {
     return menu.stream().filter(t -> t.getId() == id).findFirst().get();
+  }
+  
+  public void addMenuItem(MenuItem menuItem) {
+    menu.add(menuItem);
+  }
+  
+  public void updateMenuItem(int id, MenuItem menuItem) {
+    for (int i = 0; i < menu.size(); i++) {
+      MenuItem temp = menu.get(i);
+      if (temp.getId() == id) {
+        menu.set(i, menuItem);
+        return;
+      }
+    }
+  }
+  
+  public void deleteMenuItem(int id) {
+    menu.removeIf(t -> t.getId() == id);
   }
 
 }
