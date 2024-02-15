@@ -1,5 +1,3 @@
-import React from 'react';
-
 function MenuCard({ menu: { name, description, price } }) {
   return (
     <div className='w-52 border border-[#EF3C3C] rounded-xl flex flex-col'>
