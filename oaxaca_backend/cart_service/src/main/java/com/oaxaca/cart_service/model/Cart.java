@@ -1,14 +1,20 @@
 package com.oaxaca.cart_service.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 
 @Entity
 public class Cart {
+
+   
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +22,13 @@ public class Cart {
 
     private Long userId;
 
-    private ArrayList<CartItem> items;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CartItem> items;
 
     public Cart() {
     }
 
-    public Cart(Long userId, ArrayList<CartItem> items) {
+    public Cart(Long userId, List<CartItem> items) {
         this.userId = userId;
         this.items = items;
     }
@@ -42,11 +49,11 @@ public class Cart {
         this.userId = userId;
     }
 
-    public ArrayList<CartItem> getItems() {
+    public List<CartItem> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<CartItem> items) {
+    public void setItems(List<CartItem> items) {
         this.items = items;
     }
 
