@@ -25,7 +25,7 @@ public class CartController {
     }
 
     @PostMapping("/fetch")
-    public ResponseEntity<?> fetchCart(@RequestParam String sessionId) {
+    public ResponseEntity<?> fetchCart(@CookieValue("JSESSIONID") String sessionId) {
 
         if (sessionId == null) {
             return ResponseEntity.badRequest().body("Session ID cannot be null");
@@ -42,7 +42,7 @@ public class CartController {
     }
 
     @PostMapping("/addItem")
-    public ResponseEntity<?> addItem(@RequestBody CartItem menuItem, @CookieValue("JSESSIONID") String sessionId){
+    public ResponseEntity<?> addItem(@RequestBody CartItem menuItem, @CookieValue("JSESSIONID") String sessionId) {
         if (menuItem == null) {
             return ResponseEntity.badRequest().body("Cart item cannot be null");
         }
@@ -58,13 +58,13 @@ public class CartController {
         if (menuItem.getPrice() <= 0) {
             return ResponseEntity.badRequest().body("Price must be greater than 0");
         }
-        
+
         Cart currentCart = cartService.fetchCart(sessionId);
-        
+
         cartService.addCartItem(sessionId, currentCart, menuItem);
 
-        return ResponseEntity.ok(Map.of("Cart: ", "Cart updated." ));
-        
+        return ResponseEntity.ok(Map.of("Cart: ", "Cart updated."));
+
     }
 
     @PostMapping("/deleteItem")
@@ -75,10 +75,25 @@ public class CartController {
             return ResponseEntity.badRequest().body("Cart is empty");
         }
 
-
         cartService.deleteItemCart(sessionId, currentCart, productId);
         return ResponseEntity.ok(Map.of("Cart: ", "Item deleted."));
     }
 
+    @PostMapping("/modifyItemQuantity/{productId}")
+    public ResponseEntity<?> modifyItemQuantity(@RequestParam int quantity, @RequestParam int productId,
+            @CookieValue("JSESSIONID") String sessionId) {
+        Cart currentCart = cartService.fetchCart(sessionId);
+
+        if (currentCart == null) {
+            return ResponseEntity.badRequest().body("Cart is empty");
+        }
+
+        if (quantity <= 0) {
+            return ResponseEntity.badRequest().body("Quantity must be greater than 0");
+        }
+
+        cartService.modifyItemQuantity(currentCart, productId, quantity);
+        return ResponseEntity.ok(Map.of("Cart: ", "Item quantity modified."));
+    }
 
 }
