@@ -134,11 +134,11 @@ public class CartServiceTest {
     public void testAddCartItemWithExistingItem() {
         // Arrange
         Cart cart = new Cart();
-        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product");
+        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product", "vegan");
 
         cart.getItems().add(existingItem);
 
-        CartItem newItem = new CartItem(1, 1, 2, 1.0, "Test Product");
+        CartItem newItem = new CartItem(1, 1, 2, 1.0, "Test Product", "vegan");
 
         // Act
         Cart result = cartService.addCartItem("test", cart, newItem);
@@ -151,7 +151,7 @@ public class CartServiceTest {
     public void testDeleteItemCart(){
         // Arrange
         Cart cart = new Cart();
-        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product");
+        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product", "vegan");
 
         cart.getItems().add(existingItem);
 
@@ -220,7 +220,7 @@ public class CartServiceTest {
     public void testModifyExistingItemQuantity(){
         // Arrange
         Cart cart = new Cart();
-        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product");
+        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product", "vegan");
 
         cart.getItems().add(existingItem);
 
