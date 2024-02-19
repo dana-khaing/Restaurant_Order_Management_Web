@@ -1,5 +1,6 @@
 function MenuCard({ menu: { name, description, price, allergens } }) {
   return (
+<<<<<<< HEAD
     <div className='max-w-64 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
       <img src='/images/burrito.jpeg' className='w-full h-40 rounded-t-xl' />
       <div className='p-2 flex-1 flex flex-col'>
@@ -17,6 +18,18 @@ function MenuCard({ menu: { name, description, price, allergens } }) {
         <p className='line-clamp-1 text-sm mb-2 text-gray-500'>{description}</p>
 
         <button className='mt-auto bg-[#EF3C3C] text-white rounded-lg px-7 py-1 block mx-auto'>
+=======
+    <div className='w-52 border border-[#EF3C3C] rounded-xl' key={name}>
+      <img src='/images/burrito.jpeg' className='w-full h-36 rounded-t-xl' />
+      <div className='p-2'>
+        <h5 className='text-md font-semibold'>{name}</h5>
+        <span className='text-xs px-1 bg-green-500 capitalize rounded-md'>
+          {diet}
+        </span>
+        <button 
+        onClick={() => addToCart({ name, diet })}
+        className='bg-[#EF3C3C] text-white rounded-lg px-7 py-1 block mx-auto mt-2'>
+>>>>>>> feature-ordering_ui
           Detail
         </button>
       </div>

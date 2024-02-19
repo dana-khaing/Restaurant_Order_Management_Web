@@ -22,7 +22,7 @@ public class MenuService {
          Parameter 6: Allergies
          Parameter 7: Calories
          
-         Credit to Irene Vasquez for the menu & Michael Goodwin for allergies and calories of the menu
+         Credit to Irene Vazquez for the menu & Michael Goodwin for allergies and calories of the menu
       */
         new MenuItem(1, 1, "Tlayudas (Vegetarian option)", "Large, thin, crispy tortillas with vegetable toppings.", 6.50f, Arrays.asList("Gluten"), 528),
         new MenuItem(2, 1, "Tostadas de Chapulines", "Tostadas with guacamole and seasoned chapulines.", 7.99f, Arrays.asList("Shellfish"), 315),
