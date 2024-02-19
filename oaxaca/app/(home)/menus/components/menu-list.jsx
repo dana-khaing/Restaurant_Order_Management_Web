@@ -6,6 +6,19 @@ import { SERVICE_URLS } from '@/app/constants';
 
 function MenuList({ dummyAllergens, selectedFilters }) {
   const [menus, setMenus] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+
+  const addToCart = (item) => {
+      setCartItems([...cartItems, item]);
+  };
+  const removeFromCart = (itemId) => {
+      const updateCart = [...cartItems];
+      updateCart.splice(itemId, 1);
+      setCartItems(updateCart);
+  };
+  const getCartTotal = () => {
+      return cartItems.reduce((total, item) => total + item.price, 0);
+   };
 
   useEffect(() => {
     async function fetchMenus() {
