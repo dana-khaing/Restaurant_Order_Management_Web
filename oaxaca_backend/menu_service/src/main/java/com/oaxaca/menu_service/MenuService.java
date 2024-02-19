@@ -19,7 +19,7 @@ public class MenuService {
          Parameter 4: Description
          Parameter 5: Price
          
-         Credit to Irene Vasquez for the menu
+         Credit to Irene Vazquez for the menu
       */
         new MenuItem(1, 1, "Tlayudas (Vegetarian option)", "Large, thin, crispy tortillas with vegetable toppings.", 6.50f),
         new MenuItem(2, 1, "Tostadas de Chapulines", "Tostadas with guacamole and seasoned chapulines.", 7.99f),
