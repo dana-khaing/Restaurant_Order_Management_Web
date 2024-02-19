@@ -22,13 +22,15 @@ public class CartItem {
     private int quantity;
     private double price;
     private String productName;
+    private String dietaryRequirement;
 
-    public CartItem(int id, int productId, int quantity, double price, String productName) {
+    public CartItem(int id, int productId, int quantity, double price, String productName, String dietaryRequirement) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
         this.productName = productName;
+        this.dietaryRequirement = dietaryRequirement;
     }
 
     public int getId() {
@@ -59,12 +61,16 @@ public class CartItem {
         return price;
     }
 
-    public void setPrice(double d) {
-        this.price = d;
-    }
-
     public String getProductName() {
         return productName;
+    }
+
+    public String getDietaryRequirement() {
+        return dietaryRequirement;
+    }
+
+    public void setPrice(double d) {
+        this.price = d;
     }
 
     public void setPrice(int price) {
@@ -74,5 +80,11 @@ public class CartItem {
     public void setProductName(String productName) {
         this.productName = productName;
     }
+
+    public void setDietaryRequirement(String dietaryRequirement) {
+        this.dietaryRequirement = dietaryRequirement;
+    }
+
+
 
 }
