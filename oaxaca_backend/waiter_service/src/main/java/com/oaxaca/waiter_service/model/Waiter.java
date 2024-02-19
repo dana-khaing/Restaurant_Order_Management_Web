@@ -5,7 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
 import java.util.Objects;
+
 
 import jakarta.persistence.Column;
 
@@ -28,28 +30,29 @@ public class Waiter {
     @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
-
-    @Column()
-    private Long restaurantId;
 
     @Column(nullable = false)
     private String restaurantName;
 
-    @Column()
+    @Column(nullable = false)
     private String restaurantAddress;
-
-    @Column()
-    private Long managerId;
 
     @Column(nullable = false)
     private String managerName;
 
+    @Column(nullable = false)
+    private LocalDate dateOfBirth;
+
+    @Column
+    private Boolean rememberMe;
+
     public Waiter() {
     }
 
-    public Waiter(String username, String password, String name, String lastname, String email, String managerName, String restaurantName) {
+    public Waiter(String username, String password, String name, String lastname, String email, String managerName,
+            String restaurantName, String restaurantAddress, LocalDate dateOfBirth) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -57,6 +60,9 @@ public class Waiter {
         this.email = email;
         this.managerName = managerName;
         this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
+        this.dateOfBirth = dateOfBirth;
+
     }
 
     public Long getId() {
@@ -83,19 +89,19 @@ public class Waiter {
         this.password = password;
     }
 
-    public String getName() {
+    public String getFirstName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setFirstName(String name) {
         this.name = name;
     }
 
-    public String getLastname() {
+    public String getLastName() {
         return this.lastname;
     }
 
-    public void setLastname(String lastname) {
+    public void setLastName(String lastname) {
         this.lastname = lastname;
     }
 
@@ -105,14 +111,6 @@ public class Waiter {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
     }
 
     public String getRestaurantName() {
@@ -131,14 +129,6 @@ public class Waiter {
         this.restaurantAddress = restaurantAddress;
     }
 
-    public Long getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(Long managerId) {
-        this.managerId = managerId;
-    }
-
     public String getManagerName() {
         return managerName;
     }
@@ -147,14 +137,26 @@ public class Waiter {
         this.managerName = managerName;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Boolean getRememberMe() {
+        return rememberMe;
+    }
+
     @Override
     public String toString() {
         return "{" +
                 " id='" + getId() + "'" +
                 ", username='" + getUsername() + "'" +
                 ", password='" + getPassword() + "'" +
-                ", name='" + getName() + "'" +
-                ", lastname='" + getLastname() + "'" +
+                ", name='" + getFirstName() + "'" +
+                ", lastname='" + getLastName() + "'" +
                 ", email='" + getEmail() + "'" +
                 "}";
     }
