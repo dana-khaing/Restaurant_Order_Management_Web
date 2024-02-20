@@ -3,11 +3,15 @@ package com.oaxaca.menu_service;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MenuService {
 
+  @Autowired
+  private MenuRepository menuRepository;
+  
   private List<MenuItem> menu = new ArrayList<>(Arrays.asList(
       /* Parameter 1: ID
          Parameter 2: Category
@@ -44,29 +48,25 @@ public class MenuService {
       ));
 
   public List<MenuItem> getFullMenu() {
+    List<MenuItem> menu = new ArrayList<>();
+    menuRepository.findAll().forEach(menu::add);
     return menu;
   }
 
   public MenuItem getMenuItem(int id) {
-    return menu.stream().filter(t -> t.getId() == id).findFirst().get();
+    return menuRepository.findById(id).orElse(null);
   }
   
   public void addMenuItem(MenuItem menuItem) {
-    menu.add(menuItem);
+    menuRepository.save(menuItem);
   }
   
   public void updateMenuItem(int id, MenuItem menuItem) {
-    for (int i = 0; i < menu.size(); i++) {
-      MenuItem temp = menu.get(i);
-      if (temp.getId() == id) {
-        menu.set(i, menuItem);
-        return;
-      }
-    }
+    menuRepository.save(menuItem);
   }
   
   public void deleteMenuItem(int id) {
-    menu.removeIf(t -> t.getId() == id);
+    menuRepository.deleteById(id);
   }
 
 }
