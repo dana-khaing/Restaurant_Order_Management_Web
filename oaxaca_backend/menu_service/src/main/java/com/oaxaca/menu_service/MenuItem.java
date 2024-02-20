@@ -1,10 +1,17 @@
 package com.oaxaca.menu_service;
 
 import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "menu")
 public class MenuItem {
 
   // Customer - View Menu
+  @Id
   private int id;
   private int category;
   private String name;
@@ -15,6 +22,12 @@ public class MenuItem {
   private List<String> allergens;
   private int calories;
 
+  // Default no-argument constructor
+  // This is required by JPA for database functionality to work
+  public MenuItem() {
+    
+  }
+  
   public MenuItem(int id, int category, String name, String description, float price,
       List<String> allergens, int calories) {
     this.id = id;
@@ -34,6 +47,7 @@ public class MenuItem {
     this.id = id;
   }
 
+  @Column(name = "category", nullable = false)
   public int getCategory() {
     return category;
   }
@@ -42,6 +56,7 @@ public class MenuItem {
     this.category = category;
   }
 
+  @Column(name = "name", nullable = false)
   public String getName() {
     return name;
   }
@@ -50,6 +65,7 @@ public class MenuItem {
     this.name = name;
   }
 
+  @Column(name = "description", nullable = false)
   public String getDescription() {
     return description;
   }
@@ -58,6 +74,7 @@ public class MenuItem {
     this.description = description;
   }
 
+  @Column(name = "price", nullable = false)
   public float getPrice() {
     return price;
   }
@@ -66,6 +83,7 @@ public class MenuItem {
     this.price = price;
   }
 
+  @Column(name = "allergens", nullable = false)
   public List<String> getAllergens() {
     return this.allergens;
   }
@@ -74,6 +92,7 @@ public class MenuItem {
     this.allergens = allergens;
   }
 
+  @Column(name = "calories", nullable = false)
   public int getCalories() {
     return this.calories;
   }
