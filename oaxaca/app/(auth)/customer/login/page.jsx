@@ -23,6 +23,7 @@ import AuthNav from "@/app/custom_components/auth/AuthNav";
 import AuthHeader from "@/app/custom_components/auth/AuthHeader";
 import AuthBanner from "@/app/custom_components/auth/AuthBanner";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function CustomerLoginPage() {
     const router = useRouter();
@@ -42,6 +43,59 @@ export default function CustomerLoginPage() {
         ),
         mode: "onBlur",
     });
+
+
+    useEffect(() => {
+
+
+
+        async function validateRememberMeToken() {
+
+            try {
+
+                const response = await fetch("/api/auth/customer/login/validate", {
+
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                // First, check if the response is OK
+                if (!response.ok) {
+                    const errorText = await response.text(); // Get the error message as text
+                    console.error("Error:", errorText);
+                   
+                    return;
+                }
+
+                // Then, safely parse the JSON
+                const data = await response.text();
+                console.log("Success:", data);
+                toast({
+                    title: "Logged in successfully",
+                    description: "Redirecting to home page.",
+                });
+                router.push("/menus");
+
+
+
+
+
+
+            } catch (error) {
+
+                console.error("An error occurred:", error);
+                toast({
+                    title: "Sign up failed.",
+                    description: "Please try again.",
+                });
+            }
+
+        }
+
+        validateRememberMeToken();
+
+
+    }, []);
 
     async function onSubmit(values) {
 
