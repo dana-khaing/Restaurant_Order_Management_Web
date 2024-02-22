@@ -1,0 +1,8 @@
+com/oaxaca/shared_library/model/order/OrderItem.class
+com/oaxaca/shared_library/model/order/IOrderItem.class
+com/oaxaca/shared_library/model/menu/IMenuItem.class
+com/oaxaca/shared_library/model/order/Order.class
+com/oaxaca/shared_library/model/order/IOrder.class
+com/oaxaca/shared_library/model/order/OrderStatus.class
+com/oaxaca/shared_library/model/order/OrderType.class
+com/oaxaca/shared_library/model/menu/MenuItem.class
