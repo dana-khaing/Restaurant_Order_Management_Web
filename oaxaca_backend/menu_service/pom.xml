@@ -67,6 +67,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+			<groupId>com.oaxaca</groupId>
+			<artifactId>shared_library</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
   </dependencies>
 
   <build>
