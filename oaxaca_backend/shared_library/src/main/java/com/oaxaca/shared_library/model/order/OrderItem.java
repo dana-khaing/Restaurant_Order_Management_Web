@@ -1,8 +1,18 @@
-package com.oaxaca.shared_library.model;
+package com.oaxaca.shared_library.model.order;
+
 import java.util.List;
+import java.util.Objects;
 
-public class MenuItem implements IMenuItem{
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class OrderItem implements IOrderItem{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int category;
     private String name;
@@ -11,7 +21,8 @@ public class MenuItem implements IMenuItem{
     private List<String> allergens;
     private int calories;
 
-    public MenuItem(int id, int category, String name, String description, float price,
+
+    public OrderItem(int id, int category, String name, String description, float price,
         List<String> allergens, int calories) {
         this.id = id;
         this.category = category;
@@ -20,6 +31,7 @@ public class MenuItem implements IMenuItem{
         this.price = price;
         this.allergens = allergens;
         this.calories = calories;
+      
     }
 
     public int getId() {
@@ -62,6 +74,8 @@ public class MenuItem implements IMenuItem{
         this.price = price;
     }
 
+   
+
     public List<String> getAllergens() {
         return this.allergens;
     }
@@ -80,21 +94,34 @@ public class MenuItem implements IMenuItem{
 
     @Override
     public String toString() {
-        return "MenuItem [id=" + id + ", category=" + category + ", name=" + name + ", description=" + description
-                + ", price=" + price + ", allergens=" + allergens + ", calories=" + calories + "]";
+        return "OrderItem{" +
+            "id=" + id +
+            ", category=" + category +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", price=" + price +
+            ", allergens=" + allergens +
+            ", calories=" + calories +
+            '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof MenuItem)) {
-            return false;
-        }
-        MenuItem menuItem = (MenuItem) o;
-        return id == menuItem.id && category == menuItem.category && Objects.equals(name, menuItem.name)
-                && Objects.equals(description, menuItem.description) && price == menuItem.price
-                && Objects.equals(allergens, menuItem.allergens) && calories == menuItem.calories;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return id == orderItem.id &&
+            category == orderItem.category &&
+            Float.compare(orderItem.price, price) == 0 &&
+            calories == orderItem.calories &&
+            Objects.equals(name, orderItem.name) &&
+            Objects.equals(description, orderItem.description) &&
+            Objects.equals(allergens, orderItem.allergens);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, category, name, description, price, allergens, calories);
     }
     
 }

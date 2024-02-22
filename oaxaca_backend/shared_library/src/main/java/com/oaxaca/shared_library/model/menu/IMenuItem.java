@@ -1,4 +1,4 @@
-package com.oaxaca.shared_library.model;
+package com.oaxaca.shared_library.model.menu;
 
 import java.util.List;
 

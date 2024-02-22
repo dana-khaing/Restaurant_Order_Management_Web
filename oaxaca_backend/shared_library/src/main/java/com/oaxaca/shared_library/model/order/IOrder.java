@@ -1,4 +1,4 @@
-package com.oaxaca.shared_library.model;
+package com.oaxaca.shared_library.model.order;
 
 import java.util.List;
 

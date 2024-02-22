@@ -1,11 +1,13 @@
-package com.oaxaca.shared_library.model;
+package com.oaxaca.shared_library.model.order;
 
-import org.springframework.data.annotation.Id;
-import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import java.util.List;
 
 
 @Entity
