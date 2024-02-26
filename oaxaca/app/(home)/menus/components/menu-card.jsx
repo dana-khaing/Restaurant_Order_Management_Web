@@ -13,7 +13,10 @@ function MenuCard({ menu }) {
 
         <div className='my-1'>
           {allergens.map((allergen) => (
-            <span className='text-xs mr-1 p-1 bg-green-500 capitalize rounded-md'>
+            <span
+              key={allergen.id}
+              className='text-xs mr-1 p-1 bg-green-500 capitalize rounded-md'
+            >
               {allergen.name}
             </span>
           ))}
