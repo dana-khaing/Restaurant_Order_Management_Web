@@ -1,10 +1,40 @@
+'use client';
+
+import { addToCart } from '@/app/actions/cart';
 import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useState } from 'react';
 
-export default function MenuModal({ menu: { name, price, allergens } }) {
+export default function MenuModal({ menu }) {
+  const { name, price, allergens } = menu;
+  console.log(menu);
+
+  const [quantity, setQuantity] = useState(1);
+  const incrementQuantity = () => setQuantity((prev) => prev + 1);
+  const decrementQuantity = () => {
+    if (quantity > 1) setQuantity((prev) => prev - 1);
+  };
+
+  const handleAddCartItem = async () => {
+    // this.id = id;
+    // this.productId = productId;
+    // this.quantity = quantity;
+    // this.price = price;
+    // this.productName = productName;
+    // this.dietaryRequirement = dietaryRequirement;
+
+    await addToCart({
+      id: 1,
+      productId: menu.id,
+      quantity,
+      price,
+      productName: name,
+      dietaryRequirement: allergens.map((a) => a.name).join(', '),
+    });
+  };
   return (
     <DialogHeader>
       <DialogTitle>{name}</DialogTitle>
@@ -22,15 +52,24 @@ export default function MenuModal({ menu: { name, price, allergens } }) {
 
         <div className='flex justify-between items-end'>
           <div className='flex gap-3 items-center text-xl text-black mt-4'>
-            <span className='bg-gray-300 rounded-xl px-3 py-1 cursor-pointer'>
+            <button
+              onClick={decrementQuantity}
+              className='bg-gray-300 rounded-xl px-3 py-1'
+            >
               -
-            </span>
-            <span className=''>1</span>
-            <span className='bg-gray-300 rounded-xl px-3 py-1 cursor-pointer'>
+            </button>
+            <span className=''>{quantity}</span>
+            <button
+              onClick={incrementQuantity}
+              className='bg-gray-300 rounded-xl px-3 py-1'
+            >
               +
-            </span>
+            </button>
           </div>
-          <button className='bg-red-600 px-3 py-2 text-white rounded-lg'>
+          <button
+            onClick={handleAddCartItem}
+            className='bg-red-600 px-3 py-2 text-white rounded-lg'
+          >
             Add to Cart
           </button>
         </div>
