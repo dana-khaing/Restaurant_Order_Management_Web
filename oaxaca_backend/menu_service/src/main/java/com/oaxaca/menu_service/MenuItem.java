@@ -21,6 +21,9 @@ public class MenuItem {
   // Customer - Allergies and Calories
   private List<String> allergens;
   private int calories;
+  
+  // Waiter - Change the Menu
+  private boolean available;
 
   // Default no-argument constructor
   // This is required by JPA for database functionality to work
@@ -29,7 +32,7 @@ public class MenuItem {
   }
   
   public MenuItem(int id, int category, String name, String description, float price,
-      List<String> allergens, int calories) {
+      List<String> allergens, int calories, boolean available) {
     this.id = id;
     this.category = category;
     this.name = name;
@@ -37,6 +40,7 @@ public class MenuItem {
     this.price = price;
     this.allergens = allergens;
     this.calories = calories;
+    this.available = available;
   }
 
   public int getId() {
@@ -99,6 +103,17 @@ public class MenuItem {
 
   public void setCalories(int calories) {
     this.calories = calories;
+  }
+  
+  @Column(name = "availability", nullable = false)
+  public boolean getAvailability() {
+    return this.available;
+  }
+  
+  public void setAvailability(boolean available) {
+    if (this.available != available) {
+      this.available = !this.available;
+    }
   }
 
   @Override
