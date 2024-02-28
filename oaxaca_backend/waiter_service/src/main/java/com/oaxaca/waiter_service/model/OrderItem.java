@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.oaxaca.shared_library.model.order.IOrderItem;
 
-import jakarta.persistence.ElementCollection;
+
 import jakarta.persistence.Embeddable;
 
 @Embeddable

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long>{
 
+    @SuppressWarnings("null")
     public Optional<Order> findById(Long id);
 
     public List<Order> findByCustomerName(String customerName);
