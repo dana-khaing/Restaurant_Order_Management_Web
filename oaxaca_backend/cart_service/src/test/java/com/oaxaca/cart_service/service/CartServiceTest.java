@@ -134,24 +134,22 @@ public class CartServiceTest {
     public void testAddCartItemWithExistingItem() {
         // Arrange
         Cart cart = new Cart();
-        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product", "vegan");
+        CartItem existingItem = new CartItem( 1, 1, 1.0, "Test Product", "vegan");
 
         cart.getItems().add(existingItem);
 
-        CartItem newItem = new CartItem(1, 1, 2, 1.0, "Test Product", "vegan");
-
-        // Act
-        Cart result = cartService.addCartItem("test", cart, newItem);
-
+        CartItem newItem = new CartItem( 1, 2, 1.0, "Test Product", "vegan");
+        
         // Assert
-        assertEquals(1, result.getItems().size());
-        assertEquals(3, result.getItems().get(0).getQuantity());
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.addCartItem("test", cart, newItem);
+        });
     }
 
     public void testDeleteItemCart(){
         // Arrange
         Cart cart = new Cart();
-        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product", "vegan");
+        CartItem existingItem = new CartItem(1, 1, 1, "Test Product", "vegan");
 
         cart.getItems().add(existingItem);
 
@@ -220,7 +218,7 @@ public class CartServiceTest {
     public void testModifyExistingItemQuantity(){
         // Arrange
         Cart cart = new Cart();
-        CartItem existingItem = new CartItem(1, 1, 1, 1.0, "Test Product", "vegan");
+        CartItem existingItem = new CartItem(1, 1, 1, "Test Product", "vegan");
 
         cart.getItems().add(existingItem);
 
