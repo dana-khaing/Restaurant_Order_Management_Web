@@ -108,7 +108,7 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithInvalidQuantityReturnsBadRequest() {
         // Arrange
-        CartItem menuItem = new CartItem(0, 0, 0, 1, "Test Product", "halal");
+        CartItem menuItem = new CartItem( 0, 0, 1, "Test Product", "halal");
         String sessionId = "test";
 
         // Act
@@ -122,7 +122,7 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithInvalidProductIdReturnsBadRequest() {
         // Arrange
-        CartItem menuItem = new CartItem(0, -1, 1, 1, "Test Product", "vegan");
+        CartItem menuItem = new CartItem(-1, 1, 1, "Test Product", "vegan");
         String sessionId = "test";
 
         // Act
@@ -136,7 +136,7 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithInvalidPriceReturnsBadRequest() {
         // Arrange
-        CartItem menuItem = new CartItem(0, 1, 1, 0, "Test Product", "vegan");
+        CartItem menuItem = new CartItem(1, 1, -1, "Test Product", "vegan");
         menuItem.setPrice(0);
         String sessionId = "test";
 
@@ -152,7 +152,7 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithValidCartItemReturnsOkCart() {
         // Arrange
-        CartItem menuItem = new CartItem(1, 1, 1, 1, "Test Product" ,"vegan");
+        CartItem menuItem = new CartItem(1, 1, 1, "Test Product" ,"vegan");
         String sessionId = "test";
         Cart mockCart = new Cart();
         when(cartService.addCartItem(sessionId, mockCart, menuItem)).thenReturn(mockCart); 
