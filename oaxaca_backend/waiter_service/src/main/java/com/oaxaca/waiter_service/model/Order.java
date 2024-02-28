@@ -1,46 +1,53 @@
-package com.oaxaca.shared_library.model.order;
+package com.oaxaca.waiter_service.model;
 
+import java.util.List;
 
+import com.oaxaca.shared_library.model.order.OrderStatus;
+import com.oaxaca.shared_library.model.order.OrderType;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
-import java.util.List;
-
 
 @Entity
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "order_id")
     private Long id;
 
-    private List<OrderItem> orderItems;
 
+    @Enumerated(EnumType.STRING)
     private OrderType orderType;
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     private String customerName;
 
+    @ElementCollection
+    @Embedded
+    private List<OrderItem> orderItems;
 
-    public Order(List<OrderItem> orderItems, OrderType orderType, OrderStatus orderStatus, String customerName) {
-        this.orderItems = orderItems;
+    public Order() {
+
+    }
+
+    public Order( OrderType orderType, OrderStatus orderStatus, String customerName) {
         this.orderType = orderType;
         this.orderStatus = orderStatus;
         this.customerName = customerName;
     }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
+  
 
     public OrderType getOrderType() {
         return orderType;
@@ -73,8 +80,5 @@ public class Order {
     public void setId(Long id) {
         this.id = id;
     }
-
-
-
 
 }

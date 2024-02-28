@@ -5,7 +5,6 @@ import java.util.List;
 public interface IMenuItem {
     
     // Getters
-    int getId();
     int getCategory();
     String getName();
     String getDescription();
@@ -14,7 +13,6 @@ public interface IMenuItem {
     int getCalories();
 
     // Setters
-    void setId(int id);
     void setCategory(int category);
     void setName(String name);
     void setDescription(String description);
