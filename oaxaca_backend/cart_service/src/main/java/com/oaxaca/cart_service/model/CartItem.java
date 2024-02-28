@@ -4,9 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("CartItem")
-public class CartItem {
-
-  
+public class CartItem { 
 
     @Id
     private int id;
