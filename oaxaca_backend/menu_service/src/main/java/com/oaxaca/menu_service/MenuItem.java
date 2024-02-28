@@ -2,8 +2,10 @@ package com.oaxaca.menu_service;
 
 import java.util.List;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,26 +15,39 @@ public class MenuItem {
   // Customer - View Menu
   @Id
   private int id;
+
+  @Column(name = "category", nullable = false)
   private int category;
+
+  @Column(name = "name", nullable = false)
   private String name;
+
+  @Lob
+  @Column(name = "description", nullable = false)
   private String description;
+
+  @Column(name = "price", nullable = false)
   private float price;
 
   // Customer - Allergies and Calories
+  @ElementCollection
   private List<String> allergens;
+
+  @Column(name = "calories", nullable = false)
   private int calories;
-  
+
   // Waiter - Change the Menu
-  private boolean available;
+  @Column(name = "availability", nullable = false)
+  private boolean availability;
 
   // Default no-argument constructor
   // This is required by JPA for database functionality to work
   public MenuItem() {
-    
+
   }
-  
+
   public MenuItem(int id, int category, String name, String description, float price,
-      List<String> allergens, int calories, boolean available) {
+      List<String> allergens, int calories, boolean availability) {
     this.id = id;
     this.category = category;
     this.name = name;
@@ -40,7 +55,7 @@ public class MenuItem {
     this.price = price;
     this.allergens = allergens;
     this.calories = calories;
-    this.available = available;
+    this.availability = availability;
   }
 
   public int getId() {
@@ -51,7 +66,6 @@ public class MenuItem {
     this.id = id;
   }
 
-  @Column(name = "category", nullable = false)
   public int getCategory() {
     return category;
   }
@@ -60,7 +74,6 @@ public class MenuItem {
     this.category = category;
   }
 
-  @Column(name = "name", nullable = false)
   public String getName() {
     return name;
   }
@@ -69,7 +82,6 @@ public class MenuItem {
     this.name = name;
   }
 
-  @Column(name = "description", nullable = false)
   public String getDescription() {
     return description;
   }
@@ -78,7 +90,6 @@ public class MenuItem {
     this.description = description;
   }
 
-  @Column(name = "price", nullable = false)
   public float getPrice() {
     return price;
   }
@@ -87,7 +98,6 @@ public class MenuItem {
     this.price = price;
   }
 
-  @Column(name = "allergens", nullable = false)
   public List<String> getAllergens() {
     return this.allergens;
   }
@@ -96,7 +106,6 @@ public class MenuItem {
     this.allergens = allergens;
   }
 
-  @Column(name = "calories", nullable = false)
   public int getCalories() {
     return this.calories;
   }
@@ -104,23 +113,21 @@ public class MenuItem {
   public void setCalories(int calories) {
     this.calories = calories;
   }
-  
-  @Column(name = "availability", nullable = false)
+
   public boolean getAvailability() {
-    return this.available;
+    return this.availability;
   }
-  
-  public void setAvailability(boolean available) {
-    if (this.available != available) {
-      this.available = !this.available;
-    }
+
+  public void setAvailability(boolean availability) {
+    this.availability = availability;
   }
 
   @Override
   public String toString() {
     return "{\"id\":" + String.valueOf(id) + ",\"name\":\"" + name + "\",\"description\":\""
         + description + "\",\"price\":" + String.valueOf(price) + ",\"allergens\":"
-        + allergens.toString() + ",\"calories\":" + String.valueOf(calories) + "}";
+        + allergens.toString() + ",\"calories\":" + String.valueOf(calories) + ",\"availability\":"
+        + String.valueOf(availability) + "}";
   }
 
   @Override
