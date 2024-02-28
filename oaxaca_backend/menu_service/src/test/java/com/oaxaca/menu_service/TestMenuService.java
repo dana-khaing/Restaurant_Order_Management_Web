@@ -175,7 +175,7 @@ class TestMenuService {
 
   @Test
   @Transactional
-  void testRemoveMenuItem() {
+  void testRemoveMenuItem() { // Test 06
     try {
       assertTrue(testMS.getMenuItem(10001).equals(item1),
           "Test that the first item is already in the database");
@@ -194,7 +194,7 @@ class TestMenuService {
 
   @Test
   @Transactional
-  void stressTest_AddRemoveMenuItems() {
+  void stressTest_AddRemoveMenuItems() { // Test 07
     try {
       // Setup a duplicate list of the database for tracking what has been added and removed
       ArrayList<MenuItem> stressTestMenuList = new ArrayList<>();
@@ -239,6 +239,37 @@ class TestMenuService {
           "Test that the menu is now back to its original state before the stress test");
     } catch (Exception e) {
       fail("Exception thrown while stress testing adding and removing items from the menu; "
+          + e.getMessage());
+    }
+  }
+
+  @Test
+  @Transactional
+  void testUpdateMenuItem() { // Test 08
+    try {
+      // Prerequisite checks
+      assertTrue(testMS.getMenuItem(10001).equals(item1),
+          "Test that the first item is in the menu unmodified");
+      assertEquals(testMS.getFullMenu().toString(),
+          Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,
+              item11, item12, item13, item14, item15, item16, item17).toString(),
+          "Test that the full menu is in the original state before the updating the first item");
+
+      // Updating the menu
+      MenuItem updatedItem1 = new MenuItem(10001, 1, "Tlayudas 2.0 (Vegetarian option)",
+          "Larger, thinner, crispier tortillas with more vegetable toppings.", 7.50f,
+          Arrays.asList("Gluten"), 778, true);
+      testMS.updateMenuItem(10001, updatedItem1);
+
+      // Checking the menu has been updated correctly
+      assertEquals(testMS.getMenuItem(10001).toString(), updatedItem1.toString(),
+          "Test that the first item has now been updated");
+      assertEquals(testMS.getFullMenu().toString(),
+          Arrays.asList(updatedItem1, item2, item3, item4, item5, item6, item7, item8, item9,
+              item10, item11, item12, item13, item14, item15, item16, item17).toString(),
+          "Test that the menu now shows the updated first item");
+    } catch (Exception e) {
+      fail("Exception thrown while testing updating an existing item in the menu; "
           + e.getMessage());
     }
   }
