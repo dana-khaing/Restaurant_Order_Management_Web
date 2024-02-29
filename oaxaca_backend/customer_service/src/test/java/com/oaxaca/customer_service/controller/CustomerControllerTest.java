@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CustomerControllerTest {
@@ -57,7 +58,7 @@ public class CustomerControllerTest {
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Customer Logged in Successfully", response.getBody());
+        assertEquals(Map.of("message", "Customer Logged in Successfully"), response.getBody());
         verify(authenticationManager, times(1)).authenticate(any());
         assertEquals(authentication, SecurityContextHolder.getContext().getAuthentication());
     }
