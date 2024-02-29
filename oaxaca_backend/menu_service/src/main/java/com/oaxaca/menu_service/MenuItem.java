@@ -1,22 +1,53 @@
 package com.oaxaca.menu_service;
 
 import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "menu")
 public class MenuItem {
 
   // Customer - View Menu
+  @Id
   private int id;
+
+  @Column(name = "category", nullable = false)
   private int category;
+
+  @Column(name = "name", nullable = false)
   private String name;
+
+  @Lob
+  @Column(name = "description", nullable = false)
   private String description;
+
+  @Column(name = "price", nullable = false)
   private float price;
 
   // Customer - Allergies and Calories
+  @ElementCollection
   private List<String> allergens;
+
+  @Column(name = "calories", nullable = false)
   private int calories;
 
+  // Waiter - Change the Menu
+  @Column(name = "availability", nullable = false)
+  private boolean availability;
+
+  // Default no-argument constructor
+  // This is required by JPA for database functionality to work
+  public MenuItem() {
+
+  }
+
   public MenuItem(int id, int category, String name, String description, float price,
-      List<String> allergens, int calories) {
+      List<String> allergens, int calories, boolean availability) {
     this.id = id;
     this.category = category;
     this.name = name;
@@ -24,6 +55,7 @@ public class MenuItem {
     this.price = price;
     this.allergens = allergens;
     this.calories = calories;
+    this.availability = availability;
   }
 
   public int getId() {
@@ -82,11 +114,20 @@ public class MenuItem {
     this.calories = calories;
   }
 
+  public boolean getAvailability() {
+    return this.availability;
+  }
+
+  public void setAvailability(boolean availability) {
+    this.availability = availability;
+  }
+
   @Override
   public String toString() {
     return "{\"id\":" + String.valueOf(id) + ",\"name\":\"" + name + "\",\"description\":\""
         + description + "\",\"price\":" + String.valueOf(price) + ",\"allergens\":"
-        + allergens.toString() + ",\"calories\":" + String.valueOf(calories) + "}";
+        + allergens.toString() + ",\"calories\":" + String.valueOf(calories) + ",\"availability\":"
+        + String.valueOf(availability) + "}";
   }
 
   @Override
