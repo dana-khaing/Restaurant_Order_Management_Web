@@ -2,7 +2,7 @@ import { Link } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex-col justify-center items-center px-5 py-5">
+    <div className="flex-col justify-center items-center px-5 py-5 bg-[#FFF5F2]">
       <div className="text-center font-black text-[#EF3C3C] text-7xl font-serif my-16">
         WELCOME TO OAXACA
       </div>
