@@ -35,6 +35,12 @@ public class WaiterSummonRequest {
 
   @Column(name = "isCustomerServed", nullable = false)
   private boolean isCustomerServed;
+  
+  // Default no-argument constructor
+  // This is required by JPA for database functionality to work
+  public WaiterSummonRequest() {
+    
+  }
  
   public WaiterSummonRequest(Customer customer, int tableNumber) {
     this.customer = customer;
