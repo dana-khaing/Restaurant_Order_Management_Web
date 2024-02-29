@@ -1,6 +1,7 @@
 package com.oaxaca.waiter_summon_service;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,9 +35,50 @@ public class WaiterSummonRequest {
 
   @Column(name = "isCustomerServed", nullable = false)
   private boolean isCustomerServed;
+ 
+  public WaiterSummonRequest(Customer customer, int tableNumber) {
+    this.customer = customer;
+    this.tableNumber = tableNumber;
+    this.summonRequestTime = OffsetDateTime.now(ZoneId.of("Europe/London"));
+    this.isCustomerServed = false;
+  }
+
+  public int getRequestId() {
+    return requestId;
+  }
   
-  public WaiterSummonRequest() {
-    
+  // No setter for requestId, this field is immutable
+
+  public Customer getCustomer() {
+    return customer;
+  }
+
+  public void setCustomer(Customer customer) {
+    this.customer = customer;
+  }
+
+  public int getTableNumber() {
+    return tableNumber;
+  }
+
+  public void setTableNumber(int tableNumber) {
+    this.tableNumber = tableNumber;
+  }
+
+  public OffsetDateTime getSummonRequestTime() {
+    return summonRequestTime;
+  }
+
+  public void setSummonRequestTime(OffsetDateTime summonRequestTime) {
+    this.summonRequestTime = summonRequestTime;
+  }
+
+  public boolean getIsCustomerServed() {
+    return isCustomerServed;
+  }
+
+  public void setIsCustomerServed(boolean isCustomerServed) {
+    this.isCustomerServed = isCustomerServed;
   }
   
 }
