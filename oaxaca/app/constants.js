@@ -3,4 +3,5 @@ export const SERVICE_URLS = {
   KITCHEN_STAFF_SERVICE: 'http://localhost:8081',
   WAITER_SERVICE: 'http://localhost:8082',
   MENU_SERVICE: 'http://localhost:8083',
+  CART_SERVICE: 'http://localhost:8084',
 };

@@ -46,7 +46,7 @@ public class CartController {
             return ResponseEntity.ok(Map.of("message", "Cart is empty"));
         }
 
-        return ResponseEntity.ok(Map.of("Cart: ", cart));
+        return ResponseEntity.ok(Map.of("cart", cart));
 
     }
 
