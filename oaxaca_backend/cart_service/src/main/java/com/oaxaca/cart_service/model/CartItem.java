@@ -1,23 +1,24 @@
 package com.oaxaca.cart_service.model;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("CartItem")
-public class CartItem {
-
-  
+public class CartItem implements Serializable{
 
     @Id
-    private int id;
+    private String id;
     private int productId;
     private int quantity;
     private double price;
     private String productName;
     private String dietaryRequirement;
 
-    public CartItem(int id, int productId, int quantity, double price, String productName, String dietaryRequirement) {
-        this.id = id;
+    public CartItem(int productId, int quantity, double price, String productName, String dietaryRequirement) {
+        this.id = UUID.randomUUID().toString();
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
@@ -25,7 +26,7 @@ public class CartItem {
         this.dietaryRequirement = dietaryRequirement;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -37,7 +38,7 @@ public class CartItem {
         return quantity;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

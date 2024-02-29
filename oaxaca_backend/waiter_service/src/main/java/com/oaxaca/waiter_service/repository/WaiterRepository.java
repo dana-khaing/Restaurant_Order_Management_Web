@@ -8,6 +8,7 @@ import com.oaxaca.waiter_service.model.Waiter;
 
 public interface WaiterRepository extends JpaRepository<Waiter, Long> {
 
+    @SuppressWarnings("null")
     Optional<Waiter> findById(Long id);
 
     Optional<Waiter> findByUsername(String username);

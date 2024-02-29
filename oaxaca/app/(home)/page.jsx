@@ -1,5 +1,3 @@
-import { Link } from "lucide-react";
-
 export default function Home() {
   return (
     <div className="flex-col justify-center items-center px-5 py-5 bg-[#FFF5F2]">

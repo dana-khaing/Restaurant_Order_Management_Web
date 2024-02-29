@@ -65,4 +65,12 @@ public class WaiterOrderService {
         return orderRepository.save(orderToSend);
     }
 
+    public void saveOrder(Order order) {
+        if (order == null) {
+            throw new IllegalArgumentException("Order cannot be null");
+        }
+
+        orderRepository.save(order);
+    }
+
 }

@@ -5,6 +5,16 @@ export async function GET() {
   const remember_me = cookieStore.get('remember-me');
   console.log('RM', remember_me);
 
+  if (!remember_me) {
+    return new Response(
+      JSON.stringify({ error: 'No remember-me token found' }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
   try {
     const res = await fetch(
       `${SERVICE_URLS.CUSTOMER_SERVICE}/customer/validate-remember-me`,
