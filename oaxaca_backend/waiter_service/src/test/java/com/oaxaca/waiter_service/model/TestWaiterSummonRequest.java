@@ -1,4 +1,4 @@
-package com.oaxaca.waiter_summon_service;
+package com.oaxaca.waiter_service.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
