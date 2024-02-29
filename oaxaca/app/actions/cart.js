@@ -41,3 +41,39 @@ export async function addToCart(item) {
 
   revalidatePath('/');
 }
+
+export async function updateCartItem(productId, quantity) {
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
+
+  const res = await fetch(
+    `${SERVICE_URLS.CART_SERVICE}/cart/modifyItemQuantity/${productId}?quantity=${quantity}&productId=${productId}`,
+    {
+      method: 'PUT',
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  revalidatePath('/');
+}
+
+export async function removeCartItem(productId) {
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
+
+  const res = await fetch(
+    `${SERVICE_URLS.CART_SERVICE}/cart/deleteItem?productId=${productId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  revalidatePath('/');
+}
