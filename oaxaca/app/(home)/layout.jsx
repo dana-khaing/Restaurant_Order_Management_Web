@@ -8,8 +8,8 @@ export default function HomeLayout({ children }) {
         <span className="text-2xl text-white tracking-wider">OAXACA</span>
         <div className="flex gap-3 items-center">
           <CallWaiterButton />
-          <Link className="text-white text-lg font-semibold" href="/">
-            Log In
+          <Link href="/customer/login">
+            <h4 className="text-white text-lg font-medium hover: ">Login</h4>
           </Link>
         </div>
       </div>
