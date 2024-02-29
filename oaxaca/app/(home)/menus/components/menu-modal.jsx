@@ -19,13 +19,6 @@ export default function MenuModal({ menu }) {
   };
 
   const handleAddCartItem = async () => {
-    // this.id = id;
-    // this.productId = productId;
-    // this.quantity = quantity;
-    // this.price = price;
-    // this.productName = productName;
-    // this.dietaryRequirement = dietaryRequirement;
-
     await addToCart({
       id: 1,
       productId: menu.id,

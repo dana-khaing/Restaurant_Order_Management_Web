@@ -19,7 +19,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import SocialLinks from '@/app/custom_components/auth/SocialLinks';
-import AuthNav from '@/app/custom_components/auth/AuthNav';
 import AuthHeader from '@/app/custom_components/auth/AuthHeader';
 import AuthBanner from '@/app/custom_components/auth/AuthBanner';
 import { useRouter } from 'next/navigation';

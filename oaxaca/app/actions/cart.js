@@ -1,42 +1,43 @@
 'use server';
 
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { SERVICE_URLS } from '../constants';
+import { revalidatePath } from 'next/cache';
 
 export async function fetchCart() {
-  const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/fetch`, {
-    headers: headers(),
-  });
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-  const cart = await res.json();
-  return cart;
+  console.log('jsessionId', jsessionId);
+
+  try {
+    const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/fetch`, {
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const cart = await res.json();
+    return cart['cart'];
+  } catch (e) {
+    console.log(e.message);
+    return [];
+  }
 }
-
-// this.id = id;
-// this.productId = productId;
-// this.quantity = quantity;
-// this.price = price;
-// this.productName = productName;
-// this.dietaryRequirement = dietaryRequirement;
 
 export async function addToCart(item) {
   const cookieStore = cookies();
-  const jseesionId = cookieStore.get('JSESSIONID').value;
-
-  console.log(item);
-  console.log(jseesionId);
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
   const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/addItem`, {
     method: 'POST',
     headers: {
-      Cookie: `JSESSIONID=6BA0A708574F26A50B5C53CAB9308D63`,
+      Cookie: `JSESSIONID=${jsessionId}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(item),
   });
 
-  const cart = await res.json();
-
-  console.log(cart);
-  return cart;
+  revalidatePath('/');
 }
