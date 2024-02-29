@@ -1,6 +1,6 @@
 'use client';
 
-import { addToCart, fetchCart, incrementCartItem } from '@/app/actions/cart';
+import { addToCart, fetchCart, updateCartItem } from '@/app/actions/cart';
 import {
   DialogDescription,
   DialogHeader,
@@ -24,7 +24,7 @@ export default function MenuModal({ menu }) {
     const existingItem = cartItems.find((item) => item.productId === menu.id);
 
     if (existingItem) {
-      await incrementCartItem(menu.id, existingItem.quantity + quantity);
+      await updateCartItem(menu.id, existingItem.quantity + quantity);
     } else {
       await addToCart({
         productId: menu.id,

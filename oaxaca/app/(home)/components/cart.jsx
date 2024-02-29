@@ -1,6 +1,6 @@
 'use client';
 
-import { removeCartItem } from '@/app/actions/cart';
+import { removeCartItem, updateCartItem } from '@/app/actions/cart';
 import {
   Popover,
   PopoverContent,
@@ -10,8 +10,19 @@ import { ShoppingCart } from 'lucide-react';
 
 export default function Cart({ cartItems }) {
   const decrementQuantity = async (productId) => {
-    await removeCartItem(productId);
+    const item = cartItems.find((item) => item.productId === productId);
+    if (item.quantity > 1) {
+      await updateCartItem(productId, item.quantity - 1);
+    } else {
+      await removeCartItem(productId);
+    }
   };
+
+  const incrementQuantity = async (productId) => {
+    const item = cartItems.find((item) => item.productId === productId);
+    await updateCartItem(productId, item.quantity + 1);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -44,7 +55,10 @@ export default function Cart({ cartItems }) {
                         -
                       </span>
                       <span>{item.quantity}</span>
-                      <span className='bg-gray-500 rounded-lg px-2 py-0.5 text-white'>
+                      <span
+                        onClick={() => incrementQuantity(item.productId)}
+                        className='bg-gray-500 rounded-lg px-2 py-0.5 text-white cursor-pointer'
+                      >
                         +
                       </span>
                     </div>

@@ -42,11 +42,9 @@ export async function addToCart(item) {
   revalidatePath('/');
 }
 
-export async function incrementCartItem(productId, quantity) {
+export async function updateCartItem(productId, quantity) {
   const cookieStore = cookies();
   const jsessionId = cookieStore.get('JSESSIONID')?.value;
-
-  console.log(jsessionId);
 
   const res = await fetch(
     `${SERVICE_URLS.CART_SERVICE}/cart/modifyItemQuantity/${productId}?quantity=${quantity}&productId=${productId}`,
