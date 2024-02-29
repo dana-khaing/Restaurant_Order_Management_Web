@@ -8,8 +8,6 @@ export async function fetchCart() {
   const cookieStore = cookies();
   const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-  console.log('jsessionId', jsessionId);
-
   try {
     const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/fetch`, {
       headers: {
@@ -19,6 +17,8 @@ export async function fetchCart() {
     });
 
     const data = await res.json();
+
+    console.log(data['cart']);
     return data['cart'];
   } catch (e) {
     console.log(e.message);
