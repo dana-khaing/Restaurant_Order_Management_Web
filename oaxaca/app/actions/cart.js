@@ -46,7 +46,7 @@ export async function incrementCartItem(productId, quantity) {
   const cookieStore = cookies();
   const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-  console.log(quantity);
+  console.log(jsessionId);
 
   const res = await fetch(
     `${SERVICE_URLS.CART_SERVICE}/cart/modifyItemQuantity/${productId}?quantity=${quantity}&productId=${productId}`,
