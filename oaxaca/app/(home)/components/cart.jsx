@@ -1,3 +1,6 @@
+'use client';
+
+import { removeCartItem } from '@/app/actions/cart';
 import {
   Popover,
   PopoverContent,
@@ -6,6 +9,9 @@ import {
 import { ShoppingCart } from 'lucide-react';
 
 export default function Cart({ cartItems }) {
+  const decrementQuantity = async (productId) => {
+    await removeCartItem(productId);
+  };
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -31,7 +37,10 @@ export default function Cart({ cartItems }) {
                   <div className='flex flex-col gap-1'>
                     <span className='font-semibold'>{item.productName}</span>
                     <div className='flex gap-2 items-center'>
-                      <span className='bg-gray-500 rounded-lg px-2 py-0.5 text-white'>
+                      <span
+                        onClick={() => decrementQuantity(item.productId)}
+                        className='bg-gray-500 rounded-lg px-2 py-0.5 text-white cursor-pointer'
+                      >
                         -
                       </span>
                       <span>{item.quantity}</span>
@@ -46,10 +55,12 @@ export default function Cart({ cartItems }) {
             ))}
             <span className='text-right text-lg font-semibold'>
               Total:{' '}
-              {cartItems.reduce(
-                (prev, item) => prev + item.quantity * item.price,
-                0
-              )}
+              {Number(
+                cartItems.reduce(
+                  (prev, item) => prev + item.quantity * item.price,
+                  0
+                )
+              ).toFixed(2)}
             </span>
           </div>
         </div>
