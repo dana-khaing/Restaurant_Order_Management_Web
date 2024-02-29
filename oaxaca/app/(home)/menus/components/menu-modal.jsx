@@ -5,6 +5,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 
@@ -59,12 +60,15 @@ export default function MenuModal({ menu }) {
               +
             </button>
           </div>
-          <button
-            onClick={handleAddCartItem}
-            className='bg-red-600 px-3 py-2 text-white rounded-lg'
-          >
-            Add to Cart
-          </button>
+
+          <DialogClose asChild>
+            <button
+              onClick={handleAddCartItem}
+              className='bg-red-600 px-3 py-2 text-white rounded-lg'
+            >
+              Add to Cart
+            </button>
+          </DialogClose>
         </div>
       </DialogDescription>
     </DialogHeader>

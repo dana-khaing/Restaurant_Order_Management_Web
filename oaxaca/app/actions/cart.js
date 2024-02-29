@@ -18,8 +18,8 @@ export async function fetchCart() {
       },
     });
 
-    const cart = await res.json();
-    return cart['cart'];
+    const data = await res.json();
+    return data['cart'];
   } catch (e) {
     console.log(e.message);
     return [];
