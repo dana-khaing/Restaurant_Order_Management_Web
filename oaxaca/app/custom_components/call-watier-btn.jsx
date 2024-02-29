@@ -13,7 +13,10 @@ const handleClick = () => {
 
 export default function CallWaiterButton() {
   return (
-    <Button className="text-white text-lg font-medium" onClick={handleClick}>
+    <Button
+      className="text-[#EF3C3C] bg-white text-lg font-medium"
+      onClick={handleClick}
+    >
       Call Waiter
     </Button>
   );

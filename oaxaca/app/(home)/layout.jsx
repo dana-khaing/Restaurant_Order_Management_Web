@@ -6,20 +6,20 @@ export default function HomeLayout({ children }) {
   return (
     <div>
       <div className="bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4">
-        <span>
+        <a href="/">
           <img
             src="images/logo_sample.png"
             alt="logo"
             className=" flex justify-center align-middle w-[12.5rem] h-11 "
           />
-        </span>
+        </a>
         <div>
           <NavList />
         </div>
         <div className="flex gap-3 items-center">
           <CallWaiterButton />
           <UserRound />
-          <Link href="/customer/login">Login</Link>
+          <a href="/customer/login">Login</a>
         </div>
       </div>
       {children}
