@@ -12,5 +12,9 @@ const handleClick = () => {
 };
 
 export default function CallWaiterButton() {
-  return <Button onClick={handleClick}>Call Waiter</Button>;
+  return (
+    <Button className="text-white text-lg font-medium" onClick={handleClick}>
+      Call Waiter
+    </Button>
+  );
 }
