@@ -1,5 +1,7 @@
 package com.oaxaca.waiter_summon_service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,5 +14,34 @@ public class WaiterSummonService {
   public WaiterSummonService(WaiterSummonRequestRepository waiterSummonRequestRepository) {
     this.waiterSummonRequestRepository = waiterSummonRequestRepository;
   }
+  
+  public List<WaiterSummonRequest> getAllWaiterSummonRequests() {
+    List<WaiterSummonRequest> allRequests = new ArrayList<>();
+    waiterSummonRequestRepository.findAll().forEach(allRequests::add);
+    return allRequests;
+  }
+  
+  public WaiterSummonRequest getWaiterSummonRequest(int id) {
+    return waiterSummonRequestRepository.findById(id).orElse(null);
+  }
+  
+  public void addWaiterSummonRequest(WaiterSummonRequest wsr) {
+    waiterSummonRequestRepository.save(wsr);
+  }
 
+  public void updateWaiterSummonRequest(WaiterSummonRequest wsr) {
+    waiterSummonRequestRepository.save(wsr);
+  }
+  
+  public void deleteWaiterSummonRequest(int id) {
+    waiterSummonRequestRepository.deleteById(id);
+  }
+  
+  public void markAsServed(int id) {
+    WaiterSummonRequest wsr = waiterSummonRequestRepository.findById(id).orElse(null);
+    if (wsr == null) {
+      return;
+    }
+    wsr.setIsCustomerServed(true);
+  }
 }
