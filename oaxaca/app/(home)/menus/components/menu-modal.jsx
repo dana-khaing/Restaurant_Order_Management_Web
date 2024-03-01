@@ -21,7 +21,7 @@ export default function MenuModal({ menu }) {
   const handleAddCartItem = async () => {
     const cartItems = (await fetchCart())?.items;
 
-    const existingItem = cartItems.find((item) => item.productId === menu.id);
+    const existingItem = cartItems?.find((item) => item.productId === menu.id);
 
     if (existingItem) {
       await updateCartItem(menu.id, existingItem.quantity + quantity);
