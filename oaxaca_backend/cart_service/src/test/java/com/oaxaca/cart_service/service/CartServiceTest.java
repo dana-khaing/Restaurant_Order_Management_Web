@@ -223,7 +223,7 @@ public class CartServiceTest {
         cart.getItems().add(existingItem);
 
         // Act
-        cartService.modifyItemQuantity(cart, 1, 2);
+        cartService.modifyItemQuantity("test", cart, 1, 2);
 
         // Assert
         assertEquals(2, cart.getItems().get(0).getQuantity());
@@ -234,7 +234,7 @@ public class CartServiceTest {
         // Arrange
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.modifyItemQuantity(null, 1, 2);
+            cartService.modifyItemQuantity("test",null, 1, 2);
         });
     }
 
@@ -245,7 +245,7 @@ public class CartServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.modifyItemQuantity(mockCart, -1, 2);
+            cartService.modifyItemQuantity("test",mockCart, -1, 2);
         });
     }
 
@@ -256,7 +256,7 @@ public class CartServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            cartService.modifyItemQuantity(mockCart, 1, 0);
+            cartService.modifyItemQuantity("test",mockCart, 1, 0);
         });
     }
 
