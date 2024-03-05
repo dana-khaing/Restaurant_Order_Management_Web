@@ -1,4 +1,4 @@
-package com.oaxaca.menu_service;
+package com.oaxaca.menu_service.model;
 
 import java.util.List;
 import jakarta.persistence.Column;
