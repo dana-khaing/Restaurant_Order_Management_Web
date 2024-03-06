@@ -40,6 +40,10 @@ public class MenuItem {
   @Column(name = "availability", nullable = false)
   private boolean availability;
 
+  // Customer - Food pictures
+  @Column(name = "imageURL", nullable = true)
+  private String imageURL; // If the product has no associated picture, imageURL will be null
+
   // Default no-argument constructor
   // This is required by JPA for database functionality to work
   public MenuItem() {
@@ -56,6 +60,22 @@ public class MenuItem {
     this.allergens = allergens;
     this.calories = calories;
     this.availability = availability;
+    
+    // No image provided
+    this.imageURL = null;
+  }
+
+  public MenuItem(int id, int category, String name, String description, float price,
+      List<String> allergens, int calories, boolean availability, String imageURL) {
+    this.id = id;
+    this.category = category;
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.allergens = allergens;
+    this.calories = calories;
+    this.availability = availability;
+    this.imageURL = imageURL;
   }
 
   public int getId() {
