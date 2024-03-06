@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ class TestMenuService {
 
   @Autowired
   private MenuService testMS;
+
+  private List<MenuItem> currentMenu;
+  private boolean capturedCurrentMenu = false;
 
   // Credit to Irene Vasquez for the menu & Michael Goodwin for allergies and calories of the menu
   MenuItem item1 = new MenuItem(10001, 1, "Tlayudas (Vegetarian option)",
@@ -65,10 +71,18 @@ class TestMenuService {
 
   @BeforeEach
   void populateDatabase() {
+    // Workaround to avoid using a static @BeforeAll method
+    if (!capturedCurrentMenu) {
+      currentMenu = testMS.getFullMenu();
+      capturedCurrentMenu = true;
+    }
+
     Arrays
         .asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11,
             item12, item13, item14, item15, item16, item17)
         .forEach(item -> testMS.addMenuItem(item));
+    
+    // Delete new item from Test 05
     testMS.deleteMenuItem(10018);
   }
 
@@ -145,8 +159,11 @@ class TestMenuService {
   void testGetFullMenu() { // Test 04
     try {
       assertEquals(testMS.getFullMenu().toString(),
-          Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,
-              item11, item12, item13, item14, item15, item16, item17).toString(),
+          Stream
+              .concat(currentMenu.stream(),
+                  Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9,
+                      item10, item11, item12, item13, item14, item15, item16, item17).stream())
+              .collect(Collectors.toList()).toString(),
           "Test that getFullMenu() returns the full menu");
     } catch (Exception e) {
       fail("Exception thrown while testing getting the full menu; " + e.getMessage());
@@ -164,9 +181,11 @@ class TestMenuService {
       testMS.addMenuItem(newItem);
       assertTrue(testMS.getMenuItem(10018).equals(newItem),
           "Test that the new menu item is present in the database after adding it");
-      assertEquals(testMS.getFullMenu().toString(),
-          Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,
-              item11, item12, item13, item14, item15, item16, item17, newItem).toString(),
+      assertEquals(testMS.getFullMenu().toString(), Stream
+          .concat(currentMenu.stream(),
+              Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,
+                  item11, item12, item13, item14, item15, item16, item17, newItem).stream())
+          .collect(Collectors.toList()).toString(),
           "Test that the full menu is returned correctly after adding the new item to the database");
     } catch (Exception e) {
       fail("Exception thrown while testing adding a new item to the menu; " + e.getMessage());
@@ -183,8 +202,11 @@ class TestMenuService {
       assertEquals(testMS.getMenuItem(10001), null,
           "Test that the first item has been deleted from the database");
       assertEquals(testMS.getFullMenu().toString(),
-          Arrays.asList(item2, item3, item4, item5, item6, item7, item8, item9, item10, item11,
-              item12, item13, item14, item15, item16, item17).toString(),
+          Stream
+              .concat(currentMenu.stream(),
+                  Arrays.asList(item2, item3, item4, item5, item6, item7, item8, item9, item10,
+                      item11, item12, item13, item14, item15, item16, item17).stream())
+              .collect(Collectors.toList()).toString(),
           "Test that the full menu is returned correctly without the first item, after it was deleted from the database");
     } catch (Exception e) {
       fail("Exception thrown while testing removing the first item from the menu; "
@@ -196,8 +218,9 @@ class TestMenuService {
   @Transactional
   void stressTest_AddRemoveMenuItems() { // Test 07
     try {
-      // Setup a duplicate list of the database for tracking what has been added and removed
+      // Setup a list mimicking the database for tracking what has been added and removed
       ArrayList<MenuItem> stressTestMenuList = new ArrayList<>();
+      currentMenu.forEach(item -> stressTestMenuList.add(item));
       Arrays
           .asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11,
               item12, item13, item14, item15, item16, item17)
@@ -234,8 +257,11 @@ class TestMenuService {
       }
 
       assertEquals(testMS.getFullMenu().toString(),
-          Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,
-              item11, item12, item13, item14, item15, item16, item17).toString(),
+          Stream
+              .concat(currentMenu.stream(),
+                  Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9,
+                      item10, item11, item12, item13, item14, item15, item16, item17).stream())
+              .collect(Collectors.toList()).toString(),
           "Test that the menu is now back to its original state before the stress test");
     } catch (Exception e) {
       fail("Exception thrown while stress testing adding and removing items from the menu; "
@@ -251,8 +277,11 @@ class TestMenuService {
       assertTrue(testMS.getMenuItem(10001).equals(item1),
           "Test that the first item is in the menu unmodified");
       assertEquals(testMS.getFullMenu().toString(),
-          Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10,
-              item11, item12, item13, item14, item15, item16, item17).toString(),
+          Stream
+              .concat(currentMenu.stream(),
+                  Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9,
+                      item10, item11, item12, item13, item14, item15, item16, item17).stream())
+              .collect(Collectors.toList()).toString(),
           "Test that the full menu is in the original state before the updating the first item");
 
       // Updating the menu
@@ -264,9 +293,11 @@ class TestMenuService {
       // Checking the menu has been updated correctly
       assertEquals(testMS.getMenuItem(10001).toString(), updatedItem1.toString(),
           "Test that the first item has now been updated");
-      assertEquals(testMS.getFullMenu().toString(),
-          Arrays.asList(updatedItem1, item2, item3, item4, item5, item6, item7, item8, item9,
-              item10, item11, item12, item13, item14, item15, item16, item17).toString(),
+      assertEquals(testMS.getFullMenu().toString(), Stream
+          .concat(currentMenu.stream(),
+              Arrays.asList(updatedItem1, item2, item3, item4, item5, item6, item7, item8, item9,
+                  item10, item11, item12, item13, item14, item15, item16, item17).stream())
+          .collect(Collectors.toList()).toString(),
           "Test that the menu now shows the updated first item");
     } catch (Exception e) {
       fail("Exception thrown while testing updating an existing item in the menu; "
