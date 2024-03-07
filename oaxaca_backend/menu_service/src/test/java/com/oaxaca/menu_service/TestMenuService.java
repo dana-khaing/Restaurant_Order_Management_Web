@@ -77,6 +77,7 @@ class TestMenuService {
       capturedCurrentMenu = true;
     }
 
+    System.out.println("[TestMenuService] => Refreshing test menu");
     Arrays
         .asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11,
             item12, item13, item14, item15, item16, item17)
@@ -88,17 +89,20 @@ class TestMenuService {
 
   @Test
   void testValidateMenuService() { // Test 01
+    System.out.println("[TestMenuService] => Test 01 testValidateMenuService started");
     try {
       assertTrue(testMS instanceof MenuService,
           "Test that a new MenuService instance was created successfully");
     } catch (Exception e) {
       fail("Exception thrown while trying to validate the MenuService instance; " + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 01 testValidateMenuService finished");
   }
 
   @Test
   @Transactional
   void testGetMenuItem_FirstItem() { // Test 02
+    System.out.println("[TestMenuService] => Test 02 testGetMenuItem_FirstItem started");
     try {
       assertEquals(item1.toString(), testMS.getMenuItem(10001).toString(),
           "Test that the MenuService returns the first item of the menu successfully");
@@ -107,11 +111,13 @@ class TestMenuService {
           "Exception thrown while testing getting the first item of the menu from the MenuService; "
               + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 02 testGetMenuItem_FirstItem finished");
   }
 
   @Test
   @Transactional
   void testGetMenuItem_AllItems() { // Test 03
+    System.out.println("[TestMenuService] => Test 03 testGetMenuItem_AllItems started");
     try {
       assertEquals(item1.toString(), testMS.getMenuItem(10001).toString(),
           "Test that the MenuService returns item 1 of the menu successfully");
@@ -152,11 +158,13 @@ class TestMenuService {
           "Exception thrown while testing getting the first item of the menu from a MenuService instance; "
               + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 03 testGetMenuItem_AllItems finished");
   }
 
   @Test
   @Transactional
   void testGetFullMenu() { // Test 04
+    System.out.println("[TestMenuService] => Test 04 testGetFullMenu started");
     try {
       assertEquals(testMS.getFullMenu().toString(),
           Stream
@@ -168,11 +176,13 @@ class TestMenuService {
     } catch (Exception e) {
       fail("Exception thrown while testing getting the full menu; " + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 04 testGetFullMenu finished");
   }
 
   @Test
   @Transactional
   void testAddNewMenuItem() { // Test 05
+    System.out.println("[TestMenuService] => Test 05 testAddNewMenuItem started");
     try {
       MenuItem newItem = new MenuItem(10018, 1, "NewDish", "Brand new dinner item", 10.00f,
           Arrays.asList(""), 100, true);
@@ -190,11 +200,13 @@ class TestMenuService {
     } catch (Exception e) {
       fail("Exception thrown while testing adding a new item to the menu; " + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 05 testAddNewMenuItem finished");
   }
 
   @Test
   @Transactional
   void testRemoveMenuItem() { // Test 06
+    System.out.println("[TestMenuService] => Test 06 testRemoveMenuItem started");
     try {
       assertTrue(testMS.getMenuItem(10001).equals(item1),
           "Test that the first item is already in the database");
@@ -212,11 +224,13 @@ class TestMenuService {
       fail("Exception thrown while testing removing the first item from the menu; "
           + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 06 testRemoveMenuItem finished");
   }
 
   @Test
   @Transactional
   void stressTest_AddRemoveMenuItems() { // Test 07
+    System.out.println("[TestMenuService] => Test 07 stressTest_AddRemoveMenuItems started");
     try {
       // Setup a list mimicking the database for tracking what has been added and removed
       ArrayList<MenuItem> stressTestMenuList = new ArrayList<>();
@@ -226,6 +240,7 @@ class TestMenuService {
               item12, item13, item14, item15, item16, item17)
           .forEach(item -> stressTestMenuList.add(item));
 
+      System.out.println("[TestMenuService] => Stress testing adding 2000 items to the database...");
       // Adding 2000 items to the database
       for (int i = 0; i < 2000; i++) {
         MenuItem newItem = new MenuItem(i + 11000, 1, "Stress Test Dish " + String.valueOf(i),
@@ -243,6 +258,7 @@ class TestMenuService {
             "Test that the " + String.valueOf(i) + "th item shows up in the full menu");
       }
 
+      System.out.println("[TestMenuService] => Stress testing deleting 2000 items from the database...");
       // Deleting 2000 items from the database
       for (int i = 0; i < 2000; i++) {
         stressTestMenuList
@@ -267,11 +283,13 @@ class TestMenuService {
       fail("Exception thrown while stress testing adding and removing items from the menu; "
           + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 07 stressTest_AddRemoveMenuItems finished");
   }
 
   @Test
   @Transactional
   void testUpdateMenuItem() { // Test 08
+    System.out.println("[TestMenuService] => Test 08 testUpdateMenuItem started");
     try {
       // Prerequisite checks
       assertTrue(testMS.getMenuItem(10001).equals(item1),
@@ -303,5 +321,6 @@ class TestMenuService {
       fail("Exception thrown while testing updating an existing item in the menu; "
           + e.getMessage());
     }
+    System.out.println("[TestMenuService] => Test 08 testUpdateMenuItem finished");
   }
 }
