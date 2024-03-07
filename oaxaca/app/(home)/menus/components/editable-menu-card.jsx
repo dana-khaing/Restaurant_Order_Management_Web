@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-const EditableMenuCard = ({ index, name: initialName, diet: initialDiet, onSave, onCancel }) => {
-  const [name, setName] = useState(initialName);
-  const [diet, setDiet] = useState(initialDiet);
+const EditableMenuItem = ({ item, onSave, onCancel }) => {
+    const [editedItem, setEditedItem] = useState(item);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
