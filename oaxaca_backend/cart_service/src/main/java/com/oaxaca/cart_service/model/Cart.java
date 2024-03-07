@@ -1,5 +1,6 @@
 package com.oaxaca.cart_service.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +11,11 @@ import org.springframework.data.redis.core.RedisHash;
 
 
 @RedisHash("Cart")
-public class Cart {
+public class Cart implements Serializable{ 
 
-   
 
     @Id
-    private Long id;
-
-    private Long userId;
+    private String id;
 
     private List<CartItem> items;
 
@@ -25,26 +23,18 @@ public class Cart {
         items = new ArrayList<>();
     }
 
-    public Cart(Long userId, List<CartItem> items) {
-        this.userId = userId;
+    public Cart(String id, List<CartItem> items) {
         this.items = items;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public String getId() {
+        return id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    } 
 
     public List<CartItem> getItems() {
         return items;

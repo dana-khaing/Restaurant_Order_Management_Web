@@ -1,5 +1,7 @@
 package com.oaxaca.cart_service.service;
 
+import java.util.ArrayList;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,12 @@ public class CartService {
     public Cart addCartItem(String sessionId, Cart cart, CartItem cartItem) {
 
         if (cart == null) {
-            cart = new Cart();
+            cart = new Cart(sessionId, new ArrayList<>());
 
+        }
+
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null");
         }
         if (cartItem == null) {
             throw new IllegalArgumentException("Cart item cannot be null");
@@ -42,10 +48,7 @@ public class CartService {
                 .findFirst().orElse(null);
 
         if (existingCartItem != null) {
-            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
-            existingCartItem.setPrice(cartItem.getPrice());
-            existingCartItem.setProductName(cartItem.getProductName());
-            redisTemplate.opsForValue().set(sessionId, cart);
+            throw new IllegalArgumentException("Item already exists in cart");
 
         } else {
             cart.getItems().add(cartItem);
@@ -61,6 +64,10 @@ public class CartService {
 
         if (cart == null) {
             throw new IllegalArgumentException("Cart cannot be null");
+        }
+
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null");
         }
 
         if (productId <= 0) {
@@ -82,7 +89,7 @@ public class CartService {
         return (Cart) redisTemplate.opsForValue().get(sessionId);
     }
 
-    public void modifyItemQuantity( Cart cart, int productId, int quantity) {
+    public void modifyItemQuantity(String sessionId, Cart cart, int productId, int quantity) {
 
         if (cart == null) {
             throw new IllegalArgumentException("Cart cannot be null");
@@ -102,7 +109,7 @@ public class CartService {
 
         if (existingCartItem != null) {
             existingCartItem.setQuantity(quantity);
-            redisTemplate.opsForValue().set("test", cart);
+            redisTemplate.opsForValue().set(sessionId, cart);
         }
 
     }

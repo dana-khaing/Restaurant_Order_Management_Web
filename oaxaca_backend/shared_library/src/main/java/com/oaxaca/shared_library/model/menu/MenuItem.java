@@ -13,7 +13,7 @@ public class MenuItem implements IMenuItem{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
     private int category;
     private String name;
     private String description;
@@ -21,7 +21,7 @@ public class MenuItem implements IMenuItem{
     private List<String> allergens;
     private int calories;
 
-    public MenuItem(int id, int category, String name, String description, float price,
+    public MenuItem(Long id, int category, String name, String description, float price,
         List<String> allergens, int calories) {
         this.id = id;
         this.category = category;
@@ -32,11 +32,11 @@ public class MenuItem implements IMenuItem{
         this.calories = calories;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
