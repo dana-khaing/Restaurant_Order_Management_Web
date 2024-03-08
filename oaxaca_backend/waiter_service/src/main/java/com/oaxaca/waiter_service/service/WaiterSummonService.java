@@ -1,9 +1,11 @@
-package com.oaxaca.waiter_summon_service;
+package com.oaxaca.waiter_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.oaxaca.waiter_service.model.WaiterSummonRequest;
+import com.oaxaca.waiter_service.repository.WaiterSummonRequestRepository;
 
 @Service
 public class WaiterSummonService {
