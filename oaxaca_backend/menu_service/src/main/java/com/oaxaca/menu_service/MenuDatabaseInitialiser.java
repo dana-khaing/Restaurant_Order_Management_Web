@@ -42,7 +42,8 @@ public class MenuDatabaseInitialiser implements CommandLineRunner {
       "Poblano peppers stuffed with Oaxacan cheese.", 10.99f, Arrays.asList("Dairy"), 457, true,
       "https://i.imgur.com/pbrI8Yq.jpg");
   MenuItem item10 = new MenuItem(10, 3, "Sikil P''ak (Pumpkin Seed Dip)",
-      "Dip made with pumpkin seeds, tomatoes, and spices.", 8.99f, Arrays.asList(), 351, true, "https://i.imgur.com/58dkmUd.jpg");
+      "Dip made with pumpkin seeds, tomatoes, and spices.", 8.99f, Arrays.asList(), 351, true,
+      "https://i.imgur.com/58dkmUd.jpg");
   MenuItem item11 = new MenuItem(11, 4, "Chocolate Oaxaqueño", "Oaxacan-style hot chocolate.",
       6.99f, Arrays.asList("Dairy"), 292, true, "https://i.imgur.com/JX6oK5v.jpg");
   MenuItem item12 =
@@ -56,19 +57,16 @@ public class MenuDatabaseInitialiser implements CommandLineRunner {
   MenuItem item15 = new MenuItem(15, 5, "Mezcal Cocktail", "Various mezcal-based cocktails.", 9.99f,
       Arrays.asList("None"), 253, true, "https://i.imgur.com/4EOAui8.jpg");
   MenuItem item16 = new MenuItem(16, 5, "Horchata", "Rice and based horchata.", 4.99f,
-      Arrays.asList("None"), 139, true);
+      Arrays.asList("None"), 139, true, "https://i.imgur.com/mfaDzvs.jpg");
   MenuItem item17 = new MenuItem(17, 5, "Coca-Cola", "Carbonated soft drink with ice", 2.80f,
-      Arrays.asList("None"), 210, true);
+      Arrays.asList("None"), 210, true, "https://i.imgur.com/zYCTtjY.jpg");
 
   @Override
   public void run(String[] args) throws Exception {
     // Check if database is empty
     if (menuRepository.count() == 0) {
       System.out.println(
-          "================================================================================\n"
-              + "Message from MenuDatabaseInitialiser:\n"
-              + "External database is empty or disconnected; Populating database with demo menu\n"
-              + "================================================================================");
+          "[MenuDatabaseInitialiser] => \033[0;91mIMPORTANT:\u001B[0m External database is empty or disconnected; Populating database with demo menu");
       Arrays
           .asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11,
               item12, item13, item14, item15, item16, item17)
