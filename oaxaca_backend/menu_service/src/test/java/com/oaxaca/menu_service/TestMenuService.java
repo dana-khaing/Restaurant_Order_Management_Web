@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oaxaca.menu_service.model.MenuItem;
+import com.oaxaca.menu_service.service.MenuService;
+
 @SpringBootTest
 class TestMenuService {
 

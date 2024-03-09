@@ -4,6 +4,9 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import com.oaxaca.menu_service.model.MenuItem;
+import com.oaxaca.menu_service.repository.MenuRepository;
+import com.oaxaca.menu_service.service.MenuService;
 
 /**
  * MenuDatabaseInitialiser is a class that initialises the database with a demo menu. Upon startup
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author Michael Goodwin
  */
+
 @Component
 public class MenuDatabaseInitialiser implements CommandLineRunner {
 

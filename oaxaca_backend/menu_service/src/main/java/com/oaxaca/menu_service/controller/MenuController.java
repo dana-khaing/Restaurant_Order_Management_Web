@@ -1,4 +1,4 @@
-package com.oaxaca.menu_service;
+package com.oaxaca.menu_service.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.oaxaca.menu_service.model.MenuItem;
+import com.oaxaca.menu_service.service.MenuService;
 
 /**
  * MenuController is a class that handles requests to the menu service. It behaves as a controller
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 
  * @author Michael Goodwin
  */
+
 @RestController
 public class MenuController {
 

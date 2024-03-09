@@ -1,6 +1,6 @@
 'use client';
 
-import { addToCart } from '@/app/actions/cart';
+import { addToCart, fetchCart, updateCartItem } from '@/app/actions/cart';
 import {
   DialogDescription,
   DialogHeader,
@@ -11,7 +11,6 @@ import { useState } from 'react';
 
 export default function MenuModal({ menu }) {
   const { name, price, allergens } = menu;
-  console.log(menu);
 
   const [quantity, setQuantity] = useState(1);
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
@@ -20,14 +19,21 @@ export default function MenuModal({ menu }) {
   };
 
   const handleAddCartItem = async () => {
-    await addToCart({
-      id: 1,
-      productId: menu.id,
-      quantity,
-      price,
-      productName: name,
-      dietaryRequirement: allergens.map((a) => a.name).join(', '),
-    });
+    const cartItems = (await fetchCart())?.items;
+
+    const existingItem = cartItems?.find((item) => item.productId === menu.id);
+
+    if (existingItem) {
+      await updateCartItem(menu.id, existingItem.quantity + quantity);
+    } else {
+      await addToCart({
+        productId: menu.id,
+        quantity,
+        price,
+        productName: name,
+        dietaryRequirement: allergens.map((a) => a.name).join(', '),
+      });
+    }
   };
   return (
     <DialogHeader>

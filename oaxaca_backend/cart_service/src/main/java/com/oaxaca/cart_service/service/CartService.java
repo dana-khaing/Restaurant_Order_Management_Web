@@ -89,7 +89,7 @@ public class CartService {
         return (Cart) redisTemplate.opsForValue().get(sessionId);
     }
 
-    public void modifyItemQuantity( Cart cart, int productId, int quantity) {
+    public void modifyItemQuantity(String sessionId, Cart cart, int productId, int quantity) {
 
         if (cart == null) {
             throw new IllegalArgumentException("Cart cannot be null");
@@ -109,7 +109,7 @@ public class CartService {
 
         if (existingCartItem != null) {
             existingCartItem.setQuantity(quantity);
-            redisTemplate.opsForValue().set("test", cart);
+            redisTemplate.opsForValue().set(sessionId, cart);
         }
 
     }

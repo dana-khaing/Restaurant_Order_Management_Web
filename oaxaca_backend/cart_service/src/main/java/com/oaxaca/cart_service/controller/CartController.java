@@ -46,7 +46,7 @@ public class CartController {
             return ResponseEntity.ok(Map.of("message", "Cart is empty"));
         }
 
-        return ResponseEntity.ok(Map.of("cart", cart));
+        return ResponseEntity.ok(Map.of("Cart: ", cart));
 
     }
 
@@ -110,7 +110,7 @@ public class CartController {
             return ResponseEntity.badRequest().body("Quantity must be greater than 0");
         }
 
-        cartService.modifyItemQuantity(currentCart, productId, quantity);
+        cartService.modifyItemQuantity(sessionId, currentCart, productId, quantity);
         return ResponseEntity.ok(Map.of("Cart: ", "Item quantity modified."));
     }
 

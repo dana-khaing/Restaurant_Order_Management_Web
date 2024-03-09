@@ -47,6 +47,9 @@ dependencies:
   date-fns:
     specifier: ^3.3.1
     version: 3.3.1
+  lucide:
+    specifier: ^0.343.0
+    version: 0.343.0
   lucide-react:
     specifier: ^0.316.0
     version: 0.316.0(react@18.2.0)
@@ -2451,6 +2454,10 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /lucide@0.343.0:
+    resolution: {integrity: sha512-ONkShIYlfTVZG3PUZdIRxIgdQgx1448/989/VDGWMqln4al0FfE21UN43zrySA5VmjqY4qWrPpRXSAsUFFZ1Fg==}
     dev: false
 
   /merge2@1.4.1:
