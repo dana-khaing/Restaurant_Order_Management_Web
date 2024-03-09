@@ -2,6 +2,7 @@ package com.oaxaca.menu_service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import com.oaxaca.menu_service.model.MenuItem;
 
 class TestMenuItem {
 
