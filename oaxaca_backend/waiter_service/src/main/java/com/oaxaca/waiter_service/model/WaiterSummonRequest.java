@@ -1,4 +1,4 @@
-package com.oaxaca.waiter_summon_service;
+package com.oaxaca.waiter_service.model;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
