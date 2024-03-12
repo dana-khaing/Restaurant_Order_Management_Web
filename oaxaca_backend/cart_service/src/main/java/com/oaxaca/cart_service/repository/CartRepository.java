@@ -6,14 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.oaxaca.cart_service.model.Cart;
 
-public interface CartRepository extends CrudRepository<Cart, Long>{
+public interface CartRepository extends CrudRepository<Cart, String>{
 
 
-    public Cart findByUserId(Long userId);
-
-    public void deleteByUserId(Long userId);
-
-    public void deleteById(Long id);
+  
 
     public Optional<Cart> findById(Long id);
     

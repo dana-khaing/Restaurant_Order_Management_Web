@@ -1,6 +1,9 @@
 package com.oaxaca.waiter_service.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +54,11 @@ public class WaiterOrderController {
     public ResponseEntity<Map<String, ?>> completeOrder(@PathVariable Long orderId){
         waiterOrderService.completeOrder(orderId);
         return ResponseEntity.ok(Map.of("message", "Order completed"));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Map<String, Page<Order>>> getAllOrders(Pageable pageable){
+        return ResponseEntity.ok(Map.of("orders", waiterOrderService.getAllOrders(pageable)));
     }
 
     
