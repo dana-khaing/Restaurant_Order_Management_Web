@@ -1,3 +1,7 @@
 import React, { useState } from 'react';
 
-function EditableMenuItem() { } 
+function EditableMenuItem() { 
+  const [activeFilters, setActiveFilters] = useState({
+    menuItem : false
+} );
+}
