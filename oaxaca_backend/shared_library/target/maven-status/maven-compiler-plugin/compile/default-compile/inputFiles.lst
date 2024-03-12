@@ -1,6 +1,4 @@
-/Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/shared_library/src/main/java/com/oaxaca/shared_library/model/order/Order.java
 /Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/shared_library/src/main/java/com/oaxaca/shared_library/model/order/OrderType.java
-/Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/shared_library/src/main/java/com/oaxaca/shared_library/model/order/OrderItem.java
 /Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/shared_library/src/main/java/com/oaxaca/shared_library/model/menu/MenuItem.java
 /Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/shared_library/src/main/java/com/oaxaca/shared_library/model/menu/IMenuItem.java
 /Users/botirkhaltaev/Desktop/TeamProject29/oaxaca_backend/shared_library/src/main/java/com/oaxaca/shared_library/model/order/IOrder.java
