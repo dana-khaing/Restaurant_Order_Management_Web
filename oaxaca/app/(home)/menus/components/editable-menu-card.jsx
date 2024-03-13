@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import MenuModal from './menu-modal';
-import { cn } from '@/lib/utils';
+import MenuCard from './menu-card';
+import { SERVICE_URLS } from '@/app/constants';
 
 function EditableMenuItem() { 
   const [activeFilters, setActiveFilters] = useState({
