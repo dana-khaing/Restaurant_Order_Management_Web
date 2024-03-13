@@ -4,14 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-class TestTable {
+class TestRestaurantTable {
 
   @Test
   void testCreateTable_NoWaiter() { // Test 01
     System.out.println("[TestTable] => Test 01 testCreateTable_NoWaiter started");
     try {
-      Table testTable_Waiterless = new Table(1);
-      assertTrue(testTable_Waiterless instanceof Table,
+      RestaurantTable testTable_Waiterless = new RestaurantTable(1);
+      assertTrue(testTable_Waiterless instanceof RestaurantTable,
           "Test that a new Table instance without a waiter was created successfully");
     } catch (Exception e) {
       fail("Exception " + e
@@ -25,8 +25,8 @@ class TestTable {
   void testCreateTable_WithWaiter() {
     System.out.println("[TestTable] => Test 02 testCreateTable_WithWaiter started");
     try {
-      Table testTable_WithWaiter = new Table(1, new Waiter());
-      assertTrue(testTable_WithWaiter instanceof Table,
+      RestaurantTable testTable_WithWaiter = new RestaurantTable(1, new Waiter());
+      assertTrue(testTable_WithWaiter instanceof RestaurantTable,
           "Test that a new Table instance with a waiter was created successfully");
     } catch (Exception e) {
       fail("Exception " + e + " thrown while testing creating an instance of Table with a waiter; "
@@ -39,7 +39,7 @@ class TestTable {
   void testGetTableNumber() {
     System.out.println("[TestTable] => Test 03 testGetTableNumber started");
     try {
-      Table testTable = new Table(5);
+      RestaurantTable testTable = new RestaurantTable(5);
       assertEquals(5, testTable.getTableNumber(),
           "Test that getTableNumber() returns the correct table number");
     } catch (Exception e) {
@@ -54,7 +54,7 @@ class TestTable {
     System.out.println("[TestTable] => Test 04 testSetTableNumber started");
     try {
       // First verify that the table number is some value
-      Table testTable = new Table(25);
+      RestaurantTable testTable = new RestaurantTable(25);
       assertEquals(25, testTable.getTableNumber(),
           "Test that getTableNumber() returns the correct table number");
       // Now test that setTableNumber() actually changes the value
@@ -75,7 +75,7 @@ class TestTable {
       Waiter assignedWaiter = new Waiter("testWaiter", "badPassword", "Tester", "Waiter",
           "testWaiter@notarealemail.com", "Mr Manager", "Test Restaurant", "1 Test Restaurant Road",
           LocalDate.now());
-      Table testTable = new Table(13, assignedWaiter);
+      RestaurantTable testTable = new RestaurantTable(13, assignedWaiter);
       assertTrue(testTable.getAssignedWaiter().equals(assignedWaiter),
           "Test that getAssignedWaiter() returns the correct waiter");
     } catch (Exception e) {
@@ -93,7 +93,7 @@ class TestTable {
       Waiter assignedWaiter = new Waiter("testWaiter", "badPassword", "Tester", "Waiter",
           "testWaiter@notarealemail.com", "Mr Manager", "Test Restaurant", "1 Test Restaurant Road",
           LocalDate.now());
-      Table testTable = new Table(55, assignedWaiter);
+      RestaurantTable testTable = new RestaurantTable(55, assignedWaiter);
       assertTrue(testTable.getAssignedWaiter().equals(assignedWaiter),
           "Test that getAssignedWaiter() returns the correct waiter");
       // Now test that setTableNumber() actually changes the value

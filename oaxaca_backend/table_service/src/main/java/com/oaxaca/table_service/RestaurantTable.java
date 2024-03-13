@@ -1,16 +1,17 @@
 package com.oaxaca.table_service;
 
-public class Table {
+public class RestaurantTable {
 
   private int tableNumber;
+  
   private Waiter assignedWaiter;
   
-  public Table(int tableNumber) {
+  public RestaurantTable(int tableNumber) {
     this.tableNumber = tableNumber;
     this.assignedWaiter = null;
   }
   
-  public Table(int tableNumber, Waiter assignedWaiter) {
+  public RestaurantTable(int tableNumber, Waiter assignedWaiter) {
     this.tableNumber = tableNumber;
     this.assignedWaiter = assignedWaiter;
   }
