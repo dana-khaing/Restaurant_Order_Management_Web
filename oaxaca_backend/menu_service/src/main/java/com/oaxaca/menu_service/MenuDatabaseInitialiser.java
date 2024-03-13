@@ -14,7 +14,7 @@ import com.oaxaca.menu_service.service.MenuService;
  * currently empty (embedded or external). If it is empty, it adds the demo menu through the menu
  * service, otherwise it does not make any modifications.
  * 
- * @author Michael Goodwin
+ * @author Michael Goodwin (michael.goodwin.2022@live.rhul.ac.uk)
  */
 
 @Component

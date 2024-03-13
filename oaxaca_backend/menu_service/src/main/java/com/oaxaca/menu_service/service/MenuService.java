@@ -11,7 +11,7 @@ import com.oaxaca.menu_service.repository.MenuRepository;
  * MenuService is a class for updating and retrieving records from the database. It is a Spring Boot
  * service, meaning that it is automatically started when the Spring Boot application is run.
  * 
- * @author Michael Goodwin
+ * @author Michael Goodwin (michael.goodwin.2022@live.rhul.ac.uk)
  */
 
 @Service
@@ -22,7 +22,8 @@ public class MenuService {
 
 
   /**
-   * Constructor for starting the MenuService service.
+   * Constructor for starting the MenuService service. This is automatically called by the Spring
+   * Boot application during startup.
    * 
    * @param menuRepository Repository for "menu" relation in database
    */
