@@ -14,9 +14,9 @@ import com.oaxaca.menu_service.service.MenuService;
 
 /**
  * MenuController is a class that handles requests to the menu service. It behaves as a controller
- * for the menu service.
+ * for the menu service, handling incoming requests and forwarding them to the menu service itself.
  * 
- * @author Michael Goodwin
+ * @author Michael Goodwin (michael.goodwin.2022@live.rhul.ac.uk)
  */
 
 @RestController
@@ -27,7 +27,8 @@ public class MenuController {
   private MenuService menuService;
 
   /**
-   * Returns full menu from menu service as a List of MenuItem objects.
+   * Returns the full menu from menu service as a List of MenuItem objects, or serialised JSON if
+   * requested over HTTP. Can be invoked by making a GET request to "http://localhost:8083/menu".
    * 
    * @return Full menu from menu service
    */
@@ -37,7 +38,12 @@ public class MenuController {
   }
 
   /**
-   * Returns a single MenuItem instance by Id from the menu service.
+   * Returns a single item on the menu by Id from the menu service if it exists, as a MenuItem
+   * instance, or serialised JSON if requested over HTTP. Can be invoked by making a GET request to
+   * "http://localhost:8083/menu/{id}", where id is the id number of the menu item.<br>
+   * <br>
+   * For example, "http://localhost:8083/menu/2" would return the menu item that matches the id of
+   * 2.
    * 
    * @param id Id of requested MenuItem
    * @return Requested MenuItem if it exists, otherwise null
@@ -48,9 +54,12 @@ public class MenuController {
   }
 
   /**
-   * Adds a new MenuItem to the database through the menu service.
+   * Adds a new menu item to the database through the menu service. Can be invoked by making a POST
+   * request to "http://localhost:8083/menu" with the body of the request containing the new
+   * MenuItem object formatted in serialised JSON.
    * 
-   * @param menuItem New MenuItem to add to database
+   * @param menuItem New MenuItem to add to database, imageURL can be omitted if no image for menu
+   *        item is available
    */
   @PostMapping("/menu")
   public void addMenuItem(@RequestBody MenuItem menuItem) {
@@ -58,9 +67,13 @@ public class MenuController {
   }
 
   /**
-   * Updates an existing MenuItem in the database through the menu service.
+   * Updates an existing MenuItem in the database through the menu service. Can be invoked by making
+   * a PUT request to "http://localhost:8083/menu/{id}", where id is the id number of the menu item
+   * to update, with the body of the request containing the whole updated MenuItem object formatted
+   * in serialised JSON.
    * 
-   * @param menuItem New MenuItem to overwrite the existing MenuItem with
+   * @param menuItem New MenuItem to overwrite the existing MenuItem with, imageURL can be omitted
+   *        if no image for the menu item is available
    * @param id Id of MenuItem to update in database
    */
   @PutMapping("/menu/{id}")
@@ -69,7 +82,9 @@ public class MenuController {
   }
 
   /**
-   * Deletes an existing MenuItem from the database through the menu service.
+   * Deletes an existing MenuItem from the database through the menu service. Can be invoked by
+   * making a DELETE request to "http://localhost:8083/menu/{id}", where id is the id number of the
+   * menu item to delete. The body of the request can be left empty.
    * 
    * @param id Id of MenuItem to delete from database
    */

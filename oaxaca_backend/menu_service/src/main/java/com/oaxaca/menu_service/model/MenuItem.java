@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
  * MenuItem is a class that represents one single item in the menu. It also represents the schema
  * for the "menu" relation in the database.
  * 
- * @author Michael Goodwin
+ * @author Michael Goodwin (michael.goodwin.2022@live.rhul.ac.uk)
  */
 
 @Entity
