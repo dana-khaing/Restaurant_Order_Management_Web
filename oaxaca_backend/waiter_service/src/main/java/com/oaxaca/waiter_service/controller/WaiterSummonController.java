@@ -1,4 +1,4 @@
-package com.oaxaca.waiter_summon_service;
+package com.oaxaca.waiter_service.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.oaxaca.waiter_service.model.WaiterSummonRequest;
+import com.oaxaca.waiter_service.service.WaiterSummonService;
 
 @RestController
 public class WaiterSummonController {
