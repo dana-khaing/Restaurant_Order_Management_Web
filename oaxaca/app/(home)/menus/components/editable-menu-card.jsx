@@ -4,15 +4,16 @@ import { SERVICE_URLS } from '@/app/constants';
 
 function EditableMenuItem(item) { 
     const { id, category, name, description, price, allergens, calories, availability } = item;
-    const response = fetch(`${SERVICE_URLS.MENU_SERVICE}/menu/${id}`, {
-      method: 'PUT',
-      headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(item),
-  });
+    const [activeFilters, setActiveFilters] = useState({
+      availability: false
+  } );
+    const toggleFilter = (filter) => {
+    setActiveFilters((prevFilters) => ({
+      ...prevFilters,
+      [filter]: !prevFilters[filter],
+    }));
+  };
   const updateItemAvailability = async () => {
-    // Clone item and update availability
     const updatedItem = { ...item, availability: false };
 
     try {
@@ -23,19 +24,19 @@ function EditableMenuItem(item) {
         },
         body: JSON.stringify(updatedItem),
       });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
     } catch (error) {
       console.error("Failed to update item:", error);
     }
   };
-  const [activeFilters, setActiveFilters] = useState({
-    availability: false
-} );
-  
-const toggleFilter = (filter) => {
-  setActiveFilters((prevFilters) => ({
-    ...prevFilters,
-    [filter]: !prevFilters[filter],
-  }));
-}; 
+  return (
+    <div>
+      <button onClick={updateItemAvailability}>Update Availability</button>
+    </div>
+  );
 }
+
+export default EditableMenuItem;
 
