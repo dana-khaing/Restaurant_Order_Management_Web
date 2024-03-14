@@ -80,4 +80,8 @@ public class WaiterOrderService {
 
     }
 
+    public Page<Order> getOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+        return orderRepository.findByOrderStatus(orderStatus, pageable);
+    }
+
 }

@@ -21,15 +21,12 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 
     public List<Order> findByOrderStatus(OrderStatus orderStatus);
 
-    public List<Order> findByOrderType(OrderType orderType);
-
-    public List<Order> findByCustomerNameAndOrderStatus(String customerName, OrderStatus orderStatus);
-
-    public List<Order> findByCustomerNameAndOrderType(String customerName, OrderType orderType);
-
-    public List<Order> findByOrderStatusAndOrderType(OrderStatus orderStatus, OrderType orderType);
+    public List<Order> findByOrderType(OrderType orderType); 
 
     public Page<Order> findAllByOrderByCreationDateDesc(Pageable pageable);
+
+    public Page<Order> findByOrderStatus(OrderStatus orderStatus, Pageable pageable);
+
 
 
 
