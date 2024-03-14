@@ -29,7 +29,8 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 
     public List<Order> findByOrderStatusAndOrderType(OrderStatus orderStatus, OrderType orderType);
 
-    public Page<Order> findAllOrderByCreationDateDesc(Pageable pageable);
+    public Page<Order> findAllByOrderByCreationDateDesc(Pageable pageable);
+
 
 
     

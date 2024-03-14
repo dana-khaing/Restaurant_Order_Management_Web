@@ -1,7 +1,6 @@
 package com.oaxaca.waiter_service.service;
 
 import java.util.Optional;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,7 +76,7 @@ public class WaiterOrderService {
     }
 
     public Page<Order> getAllOrders(Pageable pageable) {
-        return orderRepository.findAllOrderByCreationDateDesc(pageable);
+        return orderRepository.findAllByOrderByCreationDateDesc(pageable);
 
     }
 
