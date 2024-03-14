@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Link from "next/link";
 import CallWaiterButton from "../custom_components/call-watier-btn";
 import { NavList } from "./components/nav_list";
@@ -5,6 +6,13 @@ import Cart from "./components/cart";
 import { UserRound } from "lucide-react";
 import { fetchCart } from "../actions/cart";
 import Footer from "./components/footer";
+=======
+import CallWaiterButton from '../custom_components/call-watier-btn';
+import { NavList } from './components/nav_list';
+import Cart from './components/cart';
+import { UserRound } from 'lucide-react';
+import { fetchCart } from '../actions/cart';
+>>>>>>> feature/waiter-ui
 
 export default async function HomeLayout({ children }) {
   const cart = await fetchCart();
