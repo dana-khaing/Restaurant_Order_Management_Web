@@ -83,8 +83,8 @@ public class WaiterOrderControllerTest {
 
         mockMvc.perform(post("/waiter/order/confirm/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{\"message\":\"Order not found\"}"));
+                .andExpect(status().isNotFound())
+                .andExpect(content().json("{\"message\":\"Order cannot be found\"}"));
 
         verify(waiterOrderService, times(0)).saveOrder(any(Order.class));
         verify(waiterOrderService, times(0)).sendOrderToKitchen(anyLong());

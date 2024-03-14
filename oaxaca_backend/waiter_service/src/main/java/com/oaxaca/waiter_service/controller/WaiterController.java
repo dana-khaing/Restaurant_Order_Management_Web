@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/waiter")
@@ -41,6 +43,9 @@ public class WaiterController {
     @Autowired
     private RememberMeServices rememberMeServices;
 
+    @Operation(summary = "Register a new waiter", description = "Registers a new waiter")
+    @ApiResponse(responseCode = "200", description = "Waiter created successfully")
+    @ApiResponse(responseCode = "400", description = "Waiter creation failed: missing required fields")
     @PostMapping("/register")
     public ResponseEntity<?> createWaiter(@RequestBody Waiter waiter) {
         if (waiter == null) {
@@ -72,7 +77,10 @@ public class WaiterController {
         return ResponseEntity.ok().body(response);
 
     }
-
+    @Operation(summary = "Login a waiter", description = "Logs in a waiter")
+    @ApiResponse(responseCode = "200", description = "Waiter Logged in Successfully")
+    @ApiResponse(responseCode = "400", description = "Login failed: Missing details")
+    @ApiResponse(responseCode = "401", description = "Authentication failed")
     @PostMapping("/login")
     public ResponseEntity<?> loginWaiter(@RequestBody Waiter waiter, HttpServletRequest request,
             HttpServletResponse response) {
@@ -121,7 +129,9 @@ public class WaiterController {
         Authentication request = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(request);
     }
-
+    @Operation(summary = "Validate remember me", description = "Validates the remember me token")
+    @ApiResponse(responseCode = "200", description = "User authenticated with remember-me token")
+    @ApiResponse(responseCode = "401", description = "Invalid or missing remember-me token")
     @GetMapping("/validate-remember-me")
     public ResponseEntity<?> validateRememberMe(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = rememberMeServices.autoLogin(request, response);
