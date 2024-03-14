@@ -1,7 +1,9 @@
 import React from "react";
 import { UserRound } from "lucide-react";
+import Footer from "./components/footer";
 
 const KitchenLayOut = ({ children }) => {
+  const serverTime = new Date().toLocaleTimeString();
   return (
     <div>
       <div className="bg-[#5D5252] text-white text-lg font-medium flex justify-between items-center p-4 w-[100%]">
@@ -19,6 +21,7 @@ const KitchenLayOut = ({ children }) => {
         </div>
       </div>
       {children}
+      <Footer serverTime={serverTime} />
     </div>
   );
 };

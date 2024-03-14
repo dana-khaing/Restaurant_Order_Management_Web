@@ -10,7 +10,7 @@ export default async function HomeLayout({ children }) {
   const cart = await fetchCart();
   return (
     <div>
-      <div className="bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4">
+      <div className="bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-5">
         <a href="/">
           <img
             src="images/logo_sample.png"

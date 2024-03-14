@@ -1,3 +1,3 @@
 export default function KitchenHome() {
-  return <div>KitchenHome</div>;
+  return <div className=" h-[82vh]">KitchenHome</div>;
 }
