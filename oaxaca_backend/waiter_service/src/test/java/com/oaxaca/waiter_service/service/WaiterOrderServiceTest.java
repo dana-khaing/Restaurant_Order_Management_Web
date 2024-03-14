@@ -5,16 +5,18 @@ import com.oaxaca.shared_library.model.order.OrderType;
 import com.oaxaca.waiter_service.model.Order;
 import com.oaxaca.waiter_service.repository.OrderRepository;
 
-import jakarta.persistence.Enumerated;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,5 +102,90 @@ public class WaiterOrderServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> waiterOrderService.sendOrderToKitchen(1L));
+    }
+
+    @Test
+    public void testSaveOrderSuccess() {
+        // Arrange
+        Order order = new Order(OrderType.DINE_IN, OrderStatus.PENDING, "Jack");
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        // Act
+        waiterOrderService.saveOrder(order);
+
+        // Assert
+        Mockito.verify(orderRepository).save(order);
+    }
+
+    @Test
+    public void testSaveOrderNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> waiterOrderService.saveOrder(null));
+    }
+
+    @Test
+    public void testGetAllOrdersSuccess() {
+        // Arrange
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Order> orderPage = new PageImpl<>(
+                Collections.singletonList(new Order(OrderType.DINE_IN, OrderStatus.PENDING, "Jack")));
+        when(orderRepository.findAllByOrderByCreationDateDesc(pageable)).thenReturn(orderPage);
+
+        // Act
+        Page<Order> result = waiterOrderService.getAllOrders(pageable);
+
+        // Assert
+        assertEquals(orderPage, result);
+        Mockito.verify(orderRepository).findAllByOrderByCreationDateDesc(pageable);
+    }
+
+    @Test
+    public void testCancelOrderNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> waiterOrderService.cancelOrder(null));
+    }
+
+    @Test
+    public void testCompleteOrderNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> waiterOrderService.completeOrder(null));
+    }
+
+    @Test
+    public void testSendOrderToKitchenNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> waiterOrderService.sendOrderToKitchen(null));
+    }
+
+    @Test
+    public void testGetOrdersByStatusSuccess() {
+        // Arrange
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Order> orderPage = new PageImpl<>(
+                Collections.singletonList(new Order(OrderType.DINE_IN, OrderStatus.PENDING, "Jack")));
+        when(orderRepository.findByOrderStatus(OrderStatus.PENDING, pageable)).thenReturn(orderPage);
+
+        // Act
+        Page<Order> result = waiterOrderService.getOrdersByStatus(OrderStatus.PENDING, pageable);
+
+        // Assert
+        assertEquals(orderPage, result);
+        Mockito.verify(orderRepository).findByOrderStatus(OrderStatus.PENDING, pageable);
+    }
+
+    @Test
+    public void testGetOrdersByStatusNullStatus() {
+        // Arrange
+        Pageable pageable = PageRequest.of(0, 5);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> waiterOrderService.getOrdersByStatus(null, pageable));
+    }
+
+    @Test
+    public void testGetOrdersByStatusNullPageable() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> waiterOrderService.getOrdersByStatus(OrderStatus.PENDING, null));
     }
 }

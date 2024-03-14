@@ -8,6 +8,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.List;
+
+import com.oaxaca.shared_library.model.order.OrderStatus;
 import com.oaxaca.waiter_service.model.Order;
 import com.oaxaca.waiter_service.service.WaiterOrderService;
 
@@ -16,6 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -76,8 +83,8 @@ public class WaiterOrderControllerTest {
 
         mockMvc.perform(post("/waiter/order/confirm/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{\"message\":\"Order not found\"}"));
+                .andExpect(status().isNotFound())
+                .andExpect(content().json("{\"message\":\"Order cannot be found\"}"));
 
         verify(waiterOrderService, times(0)).saveOrder(any(Order.class));
         verify(waiterOrderService, times(0)).sendOrderToKitchen(anyLong());
@@ -115,5 +122,6 @@ public class WaiterOrderControllerTest {
 
         verify(waiterOrderService, times(1)).completeOrder(anyLong());
     }
+ 
 
 }
