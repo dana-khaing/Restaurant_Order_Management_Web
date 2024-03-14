@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.oaxaca.shared_library.model.order.OrderStatus;
 import com.oaxaca.waiter_service.model.Order;
 import com.oaxaca.waiter_service.service.WaiterOrderService;
 import java.util.Map;
@@ -59,6 +60,11 @@ public class WaiterOrderController {
     @GetMapping("/all")
     public ResponseEntity<Map<String, Page<Order>>> getAllOrders(Pageable pageable){
         return ResponseEntity.ok(Map.of("orders", waiterOrderService.getAllOrders(pageable)));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Map<String, Page<Order>>> getOrdersByStatus(@PathVariable String status, Pageable pageable){
+        return ResponseEntity.ok(Map.of("orders", waiterOrderService.getOrdersByStatus(OrderStatus.valueOf(status), pageable)));
     }
 
     
