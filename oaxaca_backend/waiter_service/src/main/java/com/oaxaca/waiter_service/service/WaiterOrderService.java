@@ -80,4 +80,13 @@ public class WaiterOrderService {
 
     }
 
+    public Page<Order> getOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+
+        if (orderStatus == null || pageable == null) {
+            throw new IllegalArgumentException("Order status and pageable cannot be null");
+        }
+
+        return orderRepository.findByOrderStatus(orderStatus, pageable);
+    }
+
 }
