@@ -12,18 +12,24 @@ function EditableMenuItem({ menu }) {
   const [isDeleted, setIsDeleted] = useState(false);
 
   const deleteItem = async () => {
-    try {
-      const response = await fetch(`${SERVICE_URLS.MENU_SERVICE}/menu/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      setIsDeleted(true);
-    } catch (error) {
-      console.error('Failed to delete item:', error);
+    const updatedItem = { ...menu, availability: false }; // Corrected variable name to 'menu'
+
+  try {
+    const response = await fetch(`${SERVICE_URLS.MENU_SERVICE}/menu/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedItem),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  };
+    // If the request is successful, you might want to update the UI or take further action
+  } catch (error) {
+    console.error("Failed to update item:", error);
+  }
+};
 
   return (
     <div className='relative max-w-64 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
