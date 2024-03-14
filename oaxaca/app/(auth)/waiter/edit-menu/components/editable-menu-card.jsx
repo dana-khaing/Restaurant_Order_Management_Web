@@ -5,41 +5,30 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import MenuModal from '@/app/(home)/menus/components/menu-modal';
 import { Cross1Icon } from '@radix-ui/react-icons';
+
 function EditableMenuItem({ menu }) {
   const { id, category, name, description, price, allergens, calories, availability } = menu;
   console.log(menu)
-  const [activeFilters, setActiveFilters] = useState({
-    availability: false
-  });
+  const [isDeleted, setIsDeleted] = useState(false);
 
-  const toggleFilter = (filter) => {
-    setActiveFilters((prevFilters) => ({
-      ...prevFilters,
-      [filter]: !prevFilters[filter],
-    }));
-  };
-  const updateItemAvailability = async () => {
-    const updatedItem = { ...item, availability: false };
-
+  const deleteItem = async () => {
     try {
       const response = await fetch(`${SERVICE_URLS.MENU_SERVICE}/menu/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedItem),
+        method: 'DELETE',
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+      setIsDeleted(true);
     } catch (error) {
-      console.error("Failed to update item:", error);
+      console.error('Failed to delete item:', error);
     }
   };
+
   return (
     <div className='relative max-w-64 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
       <img src='/images/burrito.jpeg' className='w-full h-40 rounded-t-xl' />
-      <Cross1Icon className='absolute right-2 top-2'/>
+      <Cross1Icon className='absolute right-2 top-2' onClick={deleteItem}/>
       <div className='p-2 flex-1 flex flex-col'>
         <h5 className='text-md font-semibold line-clamp-1'>{name}</h5>
         <span className='text-gray-600 text-sm'>£{price}</span>
@@ -74,7 +63,7 @@ function EditableMenuItem({ menu }) {
       </div>
     </div>
   );
-}
+ }
 
 export default EditableMenuItem;
 
