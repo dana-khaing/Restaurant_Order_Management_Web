@@ -1,5 +1,6 @@
 import React from "react";
 import SidePanel from "./components/sideBar";
+import OrderList from "./components/orderList";
 export default function KitchenHome() {
   return (
     <div className="my-0 flex justify-evenly w-screen">
@@ -10,7 +11,9 @@ export default function KitchenHome() {
         <p className="py-5 mx-5 flex justify-center text-lg font-bold text-[#5D5252]">
           Order List
         </p>
-        <div>Order</div>
+        <div>
+          <OrderList />
+        </div>
       </div>
     </div>
   );

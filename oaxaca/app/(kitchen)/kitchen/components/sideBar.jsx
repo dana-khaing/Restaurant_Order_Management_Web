@@ -11,7 +11,7 @@ const siderItem = [
 
 export default function SidePanel() {
   return (
-    <div className=" flex-col justify-center items-center text-center text-[#5D5252] h-full ">
+    <div className=" flex-col justify-center items-center text-center text-[#5D5252] h-[100%] ">
       <div className="flex-1">
         <h1 className=" font-bold text-lg mb-5"> DashBoard</h1>
 
