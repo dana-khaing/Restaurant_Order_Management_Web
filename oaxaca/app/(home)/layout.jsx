@@ -4,6 +4,7 @@ import { NavList } from "./components/nav_list";
 import Cart from "./components/cart";
 import { UserRound } from "lucide-react";
 import { fetchCart } from "../actions/cart";
+import Footer from "./components/footer";
 
 export default async function HomeLayout({ children }) {
   const cart = await fetchCart();
@@ -28,6 +29,7 @@ export default async function HomeLayout({ children }) {
         </div>
       </div>
       {children}
+      <Footer />
     </div>
   );
 }
