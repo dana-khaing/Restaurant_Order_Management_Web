@@ -5,13 +5,15 @@ import { cn } from '@/lib/utils';
 import MenuModal from '@/app/(home)/menus/components/menu-modal';
 import { Cross1Icon } from '@radix-ui/react-icons';
 
-function EditableMenuItem({ menu }) {
-  const { id, category, name, description, price, allergens } = menu;
-  console.log(menu);
-  const [isDeleted, setIsDeleted] = useState(false);
+function EditableMenuItem({ menu, setMenus }) {
+  const { id, name, description, price, allergens } = menu;
 
   const deleteItem = async () => {
     const updatedItem = { ...menu, availability: false }; // Corrected variable name to 'menu'
+
+    updatedItem.allergens = updatedItem.allergens.map(
+      (allergen) => allergen.name
+    );
 
     try {
       const response = await fetch(`${SERVICE_URLS.MENU_SERVICE}/menu/${id}`, {
@@ -24,6 +26,10 @@ function EditableMenuItem({ menu }) {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+
+      setMenus((prevMenus) =>
+        prevMenus.map((m) => (m.id === id ? updatedItem : m))
+      );
     } catch (error) {
       console.error('Failed to update item:', error);
     }

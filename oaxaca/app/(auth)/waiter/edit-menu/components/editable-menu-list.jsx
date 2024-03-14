@@ -35,10 +35,10 @@ function EditableMenuList({ dummyAllergens, selectedFilters }) {
           (m) =>
             !m.allergens.some((allergen) =>
               selectedFilters.includes(allergen.id)
-            )
+            ) && m.availability
         )
         .map((menu) => (
-          <EditableMenuItem key={menu.id} menu={menu} />
+          <EditableMenuItem key={menu.id} menu={menu} setMenus={setMenus} />
         ))}
     </div>
   );
