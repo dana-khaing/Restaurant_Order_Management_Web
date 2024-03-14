@@ -33,7 +33,7 @@ function EditableMenuList({ dummyAllergens, selectedFilters }) {
 
     return (
         <div className='w-5/6 grid lg:grid-cols-4 gap-8 md:grid-cols-3 sm:grid-cols-2 justify-center'>
-            {/* Change to EditableMenuComponent */}
+           
 
             {menus
                 .filter(

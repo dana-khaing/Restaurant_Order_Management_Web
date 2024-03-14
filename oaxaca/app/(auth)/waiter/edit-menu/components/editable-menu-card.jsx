@@ -25,7 +25,7 @@ function EditableMenuItem({ menu }) {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    // If the request is successful, you might want to update the UI or take further action
+  
   } catch (error) {
     console.error("Failed to update item:", error);
   }
