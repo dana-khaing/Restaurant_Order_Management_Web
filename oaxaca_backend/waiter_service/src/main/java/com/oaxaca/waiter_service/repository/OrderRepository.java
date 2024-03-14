@@ -1,5 +1,7 @@
 package com.oaxaca.waiter_service.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.oaxaca.shared_library.model.order.OrderStatus;
@@ -26,6 +28,9 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
     public List<Order> findByCustomerNameAndOrderType(String customerName, OrderType orderType);
 
     public List<Order> findByOrderStatusAndOrderType(OrderStatus orderStatus, OrderType orderType);
+
+    public Page<Order> findAllByOrderByCreationDateDesc(Pageable pageable);
+
 
 
     

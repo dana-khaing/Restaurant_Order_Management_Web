@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Order {
@@ -24,7 +25,6 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-
     @Enumerated(EnumType.STRING)
     private OrderType orderType;
 
@@ -32,6 +32,8 @@ public class Order {
     private OrderStatus orderStatus;
 
     private String customerName;
+
+    private LocalDate creationDate;
 
     @ElementCollection
     @Embedded
@@ -41,13 +43,11 @@ public class Order {
 
     }
 
-    public Order( OrderType orderType, OrderStatus orderStatus, String customerName) {
+    public Order(OrderType orderType, OrderStatus orderStatus, String customerName) {
         this.orderType = orderType;
         this.orderStatus = orderStatus;
         this.customerName = customerName;
     }
-
-  
 
     public OrderType getOrderType() {
         return orderType;
@@ -79,6 +79,28 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Order [customerName=" + customerName + ", id=" + id + ", orderItems=" + orderItems + ", orderStatus="
+                + orderStatus + ", orderType=" + orderType + "]";
     }
 
 }

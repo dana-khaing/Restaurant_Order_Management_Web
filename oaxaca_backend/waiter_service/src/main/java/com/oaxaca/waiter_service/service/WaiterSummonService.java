@@ -2,7 +2,6 @@ package com.oaxaca.waiter_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.oaxaca.waiter_service.model.WaiterSummonRequest;
 import com.oaxaca.waiter_service.repository.WaiterSummonRequestRepository;
@@ -12,7 +11,6 @@ public class WaiterSummonService {
   
   private WaiterSummonRequestRepository waiterSummonRequestRepository;
   
-  @Autowired
   public WaiterSummonService(WaiterSummonRequestRepository waiterSummonRequestRepository) {
     this.waiterSummonRequestRepository = waiterSummonRequestRepository;
   }
@@ -28,10 +26,18 @@ public class WaiterSummonService {
   }
   
   public void addWaiterSummonRequest(WaiterSummonRequest wsr) {
+
+    if(wsr == null) {
+      return;
+    }
+
     waiterSummonRequestRepository.save(wsr);
   }
 
   public void updateWaiterSummonRequest(WaiterSummonRequest wsr) {
+    if(wsr == null) {
+      return;
+    }
     waiterSummonRequestRepository.save(wsr);
   }
   
