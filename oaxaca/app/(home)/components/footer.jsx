@@ -44,7 +44,7 @@ const Links = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#EF3C3C] text-white text-center py-5 px-5 mt-5">
+    <footer className="bg-[#EF3C3C] text-white text-center py-[0.1rem]">
       <div className="flex m-5 divide-x-2">
         <div className="flex-1">
           {footers.map((footer) => (
