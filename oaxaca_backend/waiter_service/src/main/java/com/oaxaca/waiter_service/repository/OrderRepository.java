@@ -16,13 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 
     @SuppressWarnings("null")
     public Optional<Order> findById(Long id);
-
-    public List<Order> findByCustomerName(String customerName);
-
-    public List<Order> findByOrderStatus(OrderStatus orderStatus);
-
-    public List<Order> findByOrderType(OrderType orderType); 
-
+    
     public Page<Order> findAllByOrderByCreationDateDesc(Pageable pageable);
 
     public Page<Order> findByOrderStatus(OrderStatus orderStatus, Pageable pageable);
