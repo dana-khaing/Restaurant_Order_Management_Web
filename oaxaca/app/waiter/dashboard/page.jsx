@@ -65,10 +65,9 @@ export default function DashboardPage() {
                 </p>
                 <div className="grid grid-cols-1 gap-4">
                     {pendingOrders.map((order) => (
-                        <>
+                        <div className="space-y-4" key={order.id}>
                             <div className="flex items-center space-x-4">
                                 <div
-                                    key={order.id}
                                     className="flex items-center space-x-4"
                                 >
                                     <img
@@ -121,7 +120,7 @@ export default function DashboardPage() {
                                     Delete
                                 </button>
                             </div>
-                        </>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -134,10 +133,9 @@ export default function DashboardPage() {
                 </p>
                 <div className="grid grid-cols-1 gap-4">
                     {inProgressOrders.map((order) => (
-                        <>
-                            <div className="flex items-center space-x-4">
+                        <div key={order.id} className="space-y-4">
+                            <div className="flex items-center text-center space-x-4">
                                 <div
-                                    key={order.id}
                                     className="flex items-center space-x-4"
                                 >
                                     <img
@@ -190,7 +188,7 @@ export default function DashboardPage() {
                                     Delete
                                 </button>
                             </div>
-                        </>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -203,10 +201,9 @@ export default function DashboardPage() {
                 </p>
                 <div className="grid grid-cols-1 gap-4">
                     {deliveredOrders.map((order) => (
-                        <>
+                        <div className="space-y-4" key={order.id}>
                             <div className="flex items-center space-x-4">
                                 <div
-                                    key={order.id}
                                     className="flex items-center space-x-4"
                                 >
                                     <img
@@ -259,7 +256,7 @@ export default function DashboardPage() {
                                     Delete
                                 </button>
                             </div>
-                        </>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -272,10 +269,9 @@ export default function DashboardPage() {
                 </p>
                 <div className="grid grid-cols-1 gap-4">
                     {completedOrders.map((order) => (
-                        <>
+                        <div className="space-y-4" key={order.id}>
                             <div className="flex items-center space-x-4">
                                 <div
-                                    key={order.id}
                                     className="flex items-center space-x-4"
                                 >
                                     <img
@@ -328,7 +324,7 @@ export default function DashboardPage() {
                                     Delete
                                 </button>
                             </div>
-                        </>
+                        </div>
                     ))}
                 </div>
             </div>
