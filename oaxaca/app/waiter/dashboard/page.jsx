@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 export default function DashboardPage() {
-    const orders = [
+    const [orders, setOrders] = useState([
         {
             id: 1,
             table: 4,
@@ -42,7 +45,7 @@ export default function DashboardPage() {
             status: "completed",
             tableNumber: 5,
         },
-    ];
+    ]);
 
     const pendingOrders = orders.filter((order) => order.status === "pending");
     const inProgressOrders = orders.filter(
@@ -54,6 +57,20 @@ export default function DashboardPage() {
     const completedOrders = orders.filter(
         (order) => order.status === "completed"
     );
+
+    const handleDelete = (id) => {
+        setOrders(orders.filter((order) => order.id !== id));
+    }
+
+    const handleCancel = (id) => {
+        setOrders(orders.filter((order) => order.id !== id));
+    }
+
+    const sendOrderToKitchen = (id) => {
+        const order = orders.find((order) => order.id === id);
+        order.status = "in-progress";
+        setOrders([...orders]);
+    }
     return (
         <div className="grid grid-cols-1 p-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-yellow-200 p-4 rounded-lg">
@@ -67,9 +84,7 @@ export default function DashboardPage() {
                     {pendingOrders.map((order) => (
                         <div className="space-y-4" key={order.id}>
                             <div className="flex items-center space-x-4">
-                                <div
-                                    className="flex items-center space-x-4"
-                                >
+                                <div className="flex items-center space-x-4">
                                     <img
                                         alt="Image"
                                         className="rounded-full"
@@ -97,9 +112,9 @@ export default function DashboardPage() {
                                     </Link>
                                     <button
                                         className="text-sm font-medium underline text-yellow-700"
-                                        onClick={undefined}
+                                        onClick={() => sendOrderToKitchen(order.id)}
                                     >
-                                        Cancel
+                                        Send to Kitchen
                                     </button>
                                 </div>
                             </div>
@@ -115,7 +130,7 @@ export default function DashboardPage() {
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
-                                    onClick={undefined}
+                                    onClick={() => handleDelete(order.id)}
                                 >
                                     Delete
                                 </button>
@@ -135,9 +150,7 @@ export default function DashboardPage() {
                     {inProgressOrders.map((order) => (
                         <div key={order.id} className="space-y-4">
                             <div className="flex items-center text-center space-x-4">
-                                <div
-                                    className="flex items-center space-x-4"
-                                >
+                                <div className="flex items-center space-x-4">
                                     <img
                                         alt="Image"
                                         className="rounded-full"
@@ -165,7 +178,7 @@ export default function DashboardPage() {
                                     </Link>
                                     <button
                                         className="text-sm font-medium underline text-yellow-700"
-                                        onClick={undefined}
+                                        onClick={() => handleCancel(order.id)}
                                     >
                                         Cancel
                                     </button>
@@ -183,7 +196,7 @@ export default function DashboardPage() {
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
-                                    onClick={undefined}
+                                    onClick={() => handleDelete(order.id)}
                                 >
                                     Delete
                                 </button>
@@ -203,9 +216,7 @@ export default function DashboardPage() {
                     {deliveredOrders.map((order) => (
                         <div className="space-y-4" key={order.id}>
                             <div className="flex items-center space-x-4">
-                                <div
-                                    className="flex items-center space-x-4"
-                                >
+                                <div className="flex items-center space-x-4">
                                     <img
                                         alt="Image"
                                         className="rounded-full"
@@ -233,7 +244,7 @@ export default function DashboardPage() {
                                     </Link>
                                     <button
                                         className="text-sm font-medium underline text-yellow-700"
-                                        onClick={undefined}
+                                        onClick={() => handleCancel(order.id)}
                                     >
                                         Cancel
                                     </button>
@@ -251,7 +262,7 @@ export default function DashboardPage() {
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
-                                    onClick={undefined}
+                                    onClick={() => handleDelete(order.id)}
                                 >
                                     Delete
                                 </button>
@@ -271,9 +282,7 @@ export default function DashboardPage() {
                     {completedOrders.map((order) => (
                         <div className="space-y-4" key={order.id}>
                             <div className="flex items-center space-x-4">
-                                <div
-                                    className="flex items-center space-x-4"
-                                >
+                                <div className="flex items-center space-x-4">
                                     <img
                                         alt="Image"
                                         className="rounded-full"
@@ -301,7 +310,7 @@ export default function DashboardPage() {
                                     </Link>
                                     <button
                                         className="text-sm font-medium underline text-yellow-700"
-                                        onClick={undefined}
+                                        onClick={() => handleCancel(order.id)}
                                     >
                                         Cancel
                                     </button>
@@ -319,7 +328,7 @@ export default function DashboardPage() {
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
-                                    onClick={undefined}
+                                    onClick={() => handleDelete(order.id)}
                                 >
                                     Delete
                                 </button>
