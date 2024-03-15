@@ -71,6 +71,19 @@ export default function DashboardPage() {
         order.status = "in-progress";
         setOrders([...orders]);
     }
+
+    const handleDeliverOrder = (id) => {
+        const order = orders.find((order) => order.id === id);
+        order.status = "delivered";
+        setOrders([...orders]);
+    }
+
+    const handleCompleteOrder = (id) => {
+        const order = orders.find((order) => order.id === id);
+        order.status = "completed";
+        setOrders([...orders]);
+    }
+
     return (
         <div className="grid grid-cols-1 p-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-yellow-200 p-4 rounded-lg">
@@ -126,7 +139,7 @@ export default function DashboardPage() {
                                     Order #{order.id}
                                 </span>
                                 <span className="text-sm font-semibold">
-                                    {order.items.length} items
+                                    {order.items} items
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
@@ -178,9 +191,9 @@ export default function DashboardPage() {
                                     </Link>
                                     <button
                                         className="text-sm font-medium underline text-yellow-700"
-                                        onClick={() => handleCancel(order.id)}
+                                        onClick={() =>  handleDeliverOrder(order.id)}
                                     >
-                                        Cancel
+                                        Deliver order
                                     </button>
                                 </div>
                             </div>
@@ -192,7 +205,7 @@ export default function DashboardPage() {
                                     Order #{order.id}
                                 </span>
                                 <span className="text-sm font-semibold">
-                                    {order.items.length} items
+                                    {order.items} items
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
@@ -244,9 +257,9 @@ export default function DashboardPage() {
                                     </Link>
                                     <button
                                         className="text-sm font-medium underline text-yellow-700"
-                                        onClick={() => handleCancel(order.id)}
+                                        onClick={() => handleCompleteOrder(order.id)}
                                     >
-                                        Cancel
+                                        Complete order
                                     </button>
                                 </div>
                             </div>
@@ -258,7 +271,7 @@ export default function DashboardPage() {
                                     Order #{order.id}
                                 </span>
                                 <span className="text-sm font-semibold">
-                                    {order.items.length} items
+                                    {order.items} items
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
@@ -308,12 +321,6 @@ export default function DashboardPage() {
                                     >
                                         View
                                     </Link>
-                                    <button
-                                        className="text-sm font-medium underline text-yellow-700"
-                                        onClick={() => handleCancel(order.id)}
-                                    >
-                                        Cancel
-                                    </button>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-4">
@@ -324,7 +331,7 @@ export default function DashboardPage() {
                                     Order #{order.id}
                                 </span>
                                 <span className="text-sm font-semibold">
-                                    {order.items.length} items
+                                    {order.items} items
                                 </span>
                                 <button
                                     className="text-sm font-medium underline text-red-700"
