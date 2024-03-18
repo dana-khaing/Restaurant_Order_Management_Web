@@ -14,9 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.apple.eawt.Application;
 import com.oaxaca.order_service.dto.CartDto;
 import com.oaxaca.order_service.dto.CartItemDto;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
@@ -34,6 +36,9 @@ public class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    ApplicationEventPublisher applicationEventPublisher;
 
     @Test
     void testPlaceOrder() {
@@ -78,7 +83,7 @@ public class OrderServiceTest {
 
         String expectedMessage = "Cart cannot be null";
         String actualMessage = exception.getMessage();
-        
+
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
@@ -137,7 +142,7 @@ public class OrderServiceTest {
 
     @Test
     void testGetAllOrders() {
-        //Arrange
+        // Arrange
         Pageable pageable = mock(Pageable.class);
         Page<Order> mockedPage = mock(Page.class);
         when(orderRepository.findAllByOrderByCreationDateDesc(pageable)).thenReturn(mockedPage);
@@ -166,5 +171,101 @@ public class OrderServiceTest {
         verify(orderRepository, times(1)).findByOrderStatus(status, pageable);
     }
 
+    @Test
+    void testPlaceOrderWithNullOrderId() {
+        // Arrange
+        OrderDetailsDto orderDetailsDto = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.placeOrder(orderDetailsDto);
+        });
+
+        String expectedMessage = "Cart cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testCancelOrderWithNullOrderId() {
+        // Arrange
+        Long orderId = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.cancelOrder(orderId);
+        });
+
+        String expectedMessage = "Order id cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testCompleteOrderWithNullOrderId() {
+        // Arrange
+        Long orderId = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.completeOrder(orderId);
+        });
+
+        String expectedMessage = "Order id cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testSendOrderToKitchenWithNullOrderId() {
+        // Arrange
+        Long orderId = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.sendOrderToKitchen(orderId);
+        });
+
+        String expectedMessage = "Order id cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testGetAllOrdersWithNullPageable() {
+        // Arrange
+        Pageable pageable = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.getAllOrders(pageable);
+        });
+
+        String expectedMessage = "Pageable cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testGetOrdersByStatusWithNullArguments() {
+        // Arrange
+        OrderStatus status = null;
+        Pageable pageable = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.getOrdersByStatus(status, pageable);
+        });
+
+        String expectedMessage = "Order status and pageable cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
 }

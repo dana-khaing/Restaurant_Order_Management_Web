@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.context.ApplicationListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +20,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
+import com.oaxaca.order_service.event.OrderStatusUpdateEvent;
 import com.oaxaca.order_service.model.Order;
 
 @Service
-public class OrderWebSocketHandler extends TextWebSocketHandler {
+public class OrderWebSocketHandler extends TextWebSocketHandler implements ApplicationListener<OrderStatusUpdateEvent> {
 
     private Set<WebSocketSession> sessions = new HashSet<>();
 
@@ -47,6 +49,15 @@ public class OrderWebSocketHandler extends TextWebSocketHandler {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onApplicationEvent(@NonNull OrderStatusUpdateEvent event) {
+        try {
+            sendUpdatedOrders();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

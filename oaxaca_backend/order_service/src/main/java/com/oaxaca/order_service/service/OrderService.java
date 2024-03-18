@@ -31,7 +31,8 @@ public class OrderService {
 
     public Order placeOrder(OrderDetailsDto orderDetailsDto) {
 
-        if (orderDetailsDto.getCart() == null || orderDetailsDto.getCart().getItems() == null
+        if (orderDetailsDto == null || orderDetailsDto.getCart() == null || orderDetailsDto.getCart().getItems() == null
+
                 || orderDetailsDto.getCart().getItems().isEmpty()) {
             throw new IllegalArgumentException("Cart cannot be null");
         }
@@ -112,6 +113,10 @@ public class OrderService {
     }
 
     public Page<Order> getAllOrders(Pageable pageable) {
+        if( pageable == null) {
+            throw new IllegalArgumentException("Pageable cannot be null");
+        }
+
         return orderRepository.findAllByOrderByCreationDateDesc(pageable);
 
     }
