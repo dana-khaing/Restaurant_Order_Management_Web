@@ -61,10 +61,7 @@ export default function DashboardPage() {
     const handleDelete = (id) => {
         setOrders(orders.filter((order) => order.id !== id));
     }
-
-    const handleCancel = (id) => {
-        setOrders(orders.filter((order) => order.id !== id));
-    }
+ 
 
     const sendOrderToKitchen = (id) => {
         const order = orders.find((order) => order.id === id);
