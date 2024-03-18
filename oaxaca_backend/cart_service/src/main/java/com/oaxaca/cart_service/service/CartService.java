@@ -89,6 +89,7 @@ public class CartService {
         return (Cart) redisTemplate.opsForValue().get(sessionId);
     }
 
+    @SuppressWarnings("null")
     public void modifyItemQuantity(String sessionId, Cart cart, int productId, int quantity) {
 
         if (cart == null) {

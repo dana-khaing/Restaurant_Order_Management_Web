@@ -56,22 +56,18 @@ public class OrderService {
     }
 
     public void cancelOrder(Long orderId) {
-
         if (orderId == null) {
             throw new IllegalArgumentException("Order id cannot be null");
         }
 
-        Optional<Order> order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.isPresent()) {
-            throw new IllegalArgumentException("Order not found");
-        }
-        order.get().setOrderStatus(OrderStatus.CANCELLED);
-        orderRepository.save(order.get());
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
 
         orderRepository.deleteById(orderId);
         applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
-
     }
 
     public void completeOrder(Long orderId) {
@@ -113,7 +109,7 @@ public class OrderService {
     }
 
     public Page<Order> getAllOrders(Pageable pageable) {
-        if( pageable == null) {
+        if (pageable == null) {
             throw new IllegalArgumentException("Pageable cannot be null");
         }
 

@@ -32,7 +32,7 @@ public class CartControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Test
     public void testFetchCart() {
         // Arrange
@@ -61,7 +61,7 @@ public class CartControllerTest {
         assertEquals("Session ID cannot be null", result.getBody());
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testFetchCartWithEmptyCartReturnsOkMessage() {
         // Arrange
@@ -77,7 +77,7 @@ public class CartControllerTest {
         assertEquals("Cart is empty", ((Map) result.getBody()).get("message"));
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testFetchCartWithExistingCartReturnsOkCart() {
         // Arrange
@@ -154,7 +154,7 @@ public class CartControllerTest {
         assertEquals("Price must be greater than 0", result.getBody());
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testAddItemWithValidCartItemReturnsOkCart() {
         // Arrange
@@ -174,7 +174,7 @@ public class CartControllerTest {
         assertEquals("Cart updated.", ((Map) result.getBody()).get("Cart: "));
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testDeleteItemWithValidProductIdReturnsOkCart() {
         // Arrange

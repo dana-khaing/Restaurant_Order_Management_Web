@@ -104,6 +104,7 @@ public class WaiterOrderServiceTest {
         assertThrows(IllegalArgumentException.class, () -> waiterOrderService.sendOrderToKitchen(1L));
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testSaveOrderSuccess() {
         // Arrange
@@ -123,6 +124,7 @@ public class WaiterOrderServiceTest {
         assertThrows(IllegalArgumentException.class, () -> waiterOrderService.saveOrder(null));
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testGetAllOrdersSuccess() {
         // Arrange
@@ -157,6 +159,7 @@ public class WaiterOrderServiceTest {
         assertThrows(IllegalArgumentException.class, () -> waiterOrderService.sendOrderToKitchen(null));
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testGetOrdersByStatusSuccess() {
         // Arrange

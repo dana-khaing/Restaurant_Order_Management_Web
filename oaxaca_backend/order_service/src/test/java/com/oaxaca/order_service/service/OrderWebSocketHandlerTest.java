@@ -28,6 +28,7 @@ public class OrderWebSocketHandlerTest {
     @Mock
     private WebSocketSession session;
 
+    @SuppressWarnings("null")
     @Test
     public void testHandleTextMessage() throws Exception {
         // Arrange
@@ -45,6 +46,7 @@ public class OrderWebSocketHandlerTest {
         verify(orderService, times(1)).placeOrder(any(OrderDetailsDto.class)); // Use any() matcher
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testAfterConnectionEstablished() throws Exception {
         // Act
@@ -54,6 +56,7 @@ public class OrderWebSocketHandlerTest {
         // No exception means success
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testAfterConnectionClosed() throws Exception {
         // Act
@@ -63,6 +66,7 @@ public class OrderWebSocketHandlerTest {
         // No exception means success
     }
 
+    @SuppressWarnings({ "unused", "null" })
     @Test
     public void testSendOrderUpdate() throws Exception {
         // Arrange
