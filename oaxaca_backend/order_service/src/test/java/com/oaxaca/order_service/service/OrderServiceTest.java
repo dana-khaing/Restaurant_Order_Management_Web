@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,12 +17,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.apple.eawt.Application;
 import com.oaxaca.order_service.dto.CartDto;
 import com.oaxaca.order_service.dto.CartItemDto;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.model.Order;
-import com.oaxaca.order_service.model.OrderItem;
 import com.oaxaca.order_service.repository.OrderRepository;
 import com.oaxaca.shared_library.model.order.OrderStatus;
 import com.oaxaca.shared_library.model.order.OrderType;
