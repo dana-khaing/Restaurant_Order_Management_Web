@@ -45,6 +45,8 @@ public class OrderService {
 
         order.setOrderItems(orderItems);
 
+        order.setTotal(orderItems.stream().mapToDouble(OrderItem::getPrice).sum());
+
         return orderRepository.save(order);
     }
 
@@ -96,14 +98,6 @@ public class OrderService {
         Order orderToSend = order.get();
         orderToSend.setOrderStatus(OrderStatus.IN_PROGRESS);
         return orderRepository.save(orderToSend);
-    }
-
-    public void saveOrder(Order order) {
-        if (order == null) {
-            throw new IllegalArgumentException("Order cannot be null");
-        }
-
-        orderRepository.save(order);
     }
 
     public Page<Order> getAllOrders(Pageable pageable) {

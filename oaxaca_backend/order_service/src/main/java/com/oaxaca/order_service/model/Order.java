@@ -39,6 +39,8 @@ public class Order {
 
     private LocalDate creationDate;
 
+    private double total;
+
     private int tableNumber;
 
     @ElementCollection
@@ -111,6 +113,14 @@ public class Order {
 
     public void setTableNumber(int tableNumber) {
         this.tableNumber = tableNumber;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     @Override
