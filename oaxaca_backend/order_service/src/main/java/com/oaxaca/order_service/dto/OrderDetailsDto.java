@@ -17,6 +17,10 @@ public class OrderDetailsDto {
         this.orderType = OrderType.valueOf(orderType.toUpperCase());
     }
 
+    public OrderDetailsDto() {
+       
+    }
+
     public String getCustomerName() {
         return customerName;
     }
