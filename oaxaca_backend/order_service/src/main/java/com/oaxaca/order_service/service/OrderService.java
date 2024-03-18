@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.oaxaca.order_service.dto.CartItemDto;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
+import com.oaxaca.order_service.event.OrderStatusUpdateEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.model.OrderItem;
 import com.oaxaca.order_service.repository.OrderRepository;
@@ -20,9 +22,11 @@ import com.oaxaca.shared_library.model.order.OrderStatus;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public Order placeOrder(OrderDetailsDto orderDetailsDto) {
@@ -61,8 +65,11 @@ public class OrderService {
         if (!order.isPresent()) {
             throw new IllegalArgumentException("Order not found");
         }
+        order.get().setOrderStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order.get());
 
         orderRepository.deleteById(orderId);
+        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
 
     }
 
@@ -81,6 +88,7 @@ public class OrderService {
         Order orderToComplete = order.get();
         orderToComplete.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(orderToComplete);
+        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
     }
 
     public Order sendOrderToKitchen(Long orderId) {
@@ -97,7 +105,10 @@ public class OrderService {
 
         Order orderToSend = order.get();
         orderToSend.setOrderStatus(OrderStatus.IN_PROGRESS);
-        return orderRepository.save(orderToSend);
+        orderRepository.save(orderToSend);
+        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
+
+        return orderToSend;
     }
 
     public Page<Order> getAllOrders(Pageable pageable) {

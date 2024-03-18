@@ -1,16 +1,21 @@
 package com.oaxaca.order_service.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.oaxaca.order_service.dto.CartDto;
 import com.oaxaca.order_service.dto.CartItemDto;
@@ -32,29 +37,134 @@ public class OrderServiceTest {
 
     @Test
     void testPlaceOrder() {
-
         // Arrange
-        CartItemDto cartItemDto = new CartItemDto("test", "test", 0, 5f, null, 0, 3);
-        CartItemDto cartItemDto2 = new CartItemDto("test", "test", 0, 5f, null, 0, 1);
+        CartItemDto cartItemDto = new CartItemDto("Pizza", "Delicious pizza", 200, 15.5f, new ArrayList<>(), 1, 3);
+        CartItemDto cartItemDto2 = new CartItemDto("Soda", "Refreshing soda", 100, 2.5f, new ArrayList<>(), 2, 2);
         ArrayList<CartItemDto> items = new ArrayList<>();
         items.add(cartItemDto);
         items.add(cartItemDto2);
-        CartDto cartDto = new CartDto("test", items);
-        OrderDetailsDto orderDetailsDto = new OrderDetailsDto("test", 1, cartDto, "DINE_IN");
-        ArrayList<OrderItem> orderItems = new ArrayList<>();
-        orderItems.add(new OrderItem());
-        orderItems.add(new OrderItem());
-        Order expectedOrder = new Order(OrderType.DINE_IN, OrderStatus.PENDING, "test", 1, orderItems);
+        CartDto cartDto = new CartDto("Customer", items);
+        OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Customer", 1, cartDto, OrderType.DINE_IN.name());
+
+        Order mockedOrder = new Order();
+        mockedOrder.setId(1L);
+        mockedOrder.setCustomerName("Customer");
+        mockedOrder.setCreationDate(LocalDate.now());
+        mockedOrder.setOrderStatus(OrderStatus.PENDING);
+        mockedOrder.setOrderType(OrderType.DINE_IN);
+
+        when(orderRepository.save(any(Order.class))).thenReturn(mockedOrder);
+
         // Act
-
-        when(orderRepository.save(any(Order.class))).thenReturn(new Order());
-
         Order result = orderService.placeOrder(orderDetailsDto);
 
         // Assert
-
-        assertEquals(expectedOrder, result);
-
+        assertNotNull(result);
+        assertEquals("Customer", result.getCustomerName());
+        assertEquals(OrderStatus.PENDING, result.getOrderStatus());
+        assertEquals(OrderType.DINE_IN, result.getOrderType());
     }
+
+    @Test
+    void testPlaceOrderWithEmptyCart() {
+        // Arrange
+        CartDto cartDto = new CartDto("Customer", new ArrayList<>());
+        OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Customer", 1, cartDto, OrderType.DINE_IN.name());
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.placeOrder(orderDetailsDto);
+        });
+
+        String expectedMessage = "Cart cannot be null";
+        String actualMessage = exception.getMessage();
+        
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testCancelOrderNotFound() {
+        // Arrange
+        Long orderId = 999L;
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.cancelOrder(orderId);
+        });
+
+        String expectedMessage = "Order not found";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testCompleteOrderSuccess() {
+        // Arrange
+        Long orderId = 1L;
+        Order mockedOrder = new Order();
+        mockedOrder.setId(orderId);
+        mockedOrder.setOrderStatus(OrderStatus.PENDING);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(mockedOrder));
+        when(orderRepository.save(any(Order.class))).thenReturn(mockedOrder);
+
+        // Act
+        orderService.completeOrder(orderId);
+
+        // Assert
+        assertEquals(OrderStatus.COMPLETED, mockedOrder.getOrderStatus());
+    }
+
+    @Test
+    void testSendOrderToKitchen() {
+        // Arrange
+        Long orderId = 1L;
+        Order orderToSend = new Order();
+        orderToSend.setId(orderId);
+        orderToSend.setOrderStatus(OrderStatus.PENDING);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(orderToSend));
+        when(orderRepository.save(any(Order.class))).thenReturn(orderToSend);
+
+        // Act
+        Order result = orderService.sendOrderToKitchen(orderId);
+
+        // Assert
+        assertEquals(OrderStatus.IN_PROGRESS, result.getOrderStatus());
+    }
+
+    @Test
+    void testGetAllOrders() {
+        //Arrange
+        Pageable pageable = mock(Pageable.class);
+        Page<Order> mockedPage = mock(Page.class);
+        when(orderRepository.findAllByOrderByCreationDateDesc(pageable)).thenReturn(mockedPage);
+
+        // Act
+        Page<Order> result = orderService.getAllOrders(pageable);
+
+        // Assert
+        assertNotNull(result);
+        verify(orderRepository, times(1)).findAllByOrderByCreationDateDesc(pageable);
+    }
+
+    @Test
+    void testGetOrdersByStatus() {
+        // Arrange
+        OrderStatus status = OrderStatus.PENDING;
+        Pageable pageable = mock(Pageable.class);
+        Page<Order> mockedPage = mock(Page.class);
+        when(orderRepository.findByOrderStatus(status, pageable)).thenReturn(mockedPage);
+
+        // Act
+        Page<Order> result = orderService.getOrdersByStatus(status, pageable);
+
+        // Assert
+        assertNotNull(result);
+        verify(orderRepository, times(1)).findByOrderStatus(status, pageable);
+    }
+
 
 }

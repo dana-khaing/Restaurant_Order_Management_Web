@@ -73,7 +73,7 @@ public class OrderWebSocketHandlerTest {
         orderWebSocketHandler.afterConnectionEstablished(session);
 
         // Act
-        orderWebSocketHandler.sendOrderUpdate(order);
+        orderWebSocketHandler.sendUpdatedOrders();
 
         // Assert
         verify(session, times(1)).sendMessage(any(TextMessage.class));

@@ -2,8 +2,12 @@ package com.oaxaca.order_service.service;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
@@ -35,10 +39,10 @@ public class OrderWebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         ObjectMapper mapper = new ObjectMapper();
         OrderDetailsDto orderDetails = mapper.readValue(payload, OrderDetailsDto.class);
-        Order order = orderService.placeOrder(orderDetails);
+        orderService.placeOrder(orderDetails);
 
         try {
-            sendOrderUpdate(order);
+            sendUpdatedOrders();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,16 +60,20 @@ public class OrderWebSocketHandler extends TextWebSocketHandler {
         sessions.remove(session);
     }
 
-    public void sendOrderUpdate(Order order) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String orderJson = mapper.writeValueAsString(order);
+    public void sendUpdatedOrders() throws IOException {
+        Pageable pageable = PageRequest.of(0, 10); // Get the first 10 orders
 
-        if (orderJson == null) {
-            throw new IllegalArgumentException("Order cannot be null");
+        Page<Order> orders = orderService.getAllOrders(pageable);
+        ObjectMapper mapper = new ObjectMapper();
+        String ordersJson = mapper.writeValueAsString(orders);
+        if (ordersJson == null) {
+            return;
         }
 
+        TextMessage message = new TextMessage(ordersJson);
+
         for (WebSocketSession session : sessions) {
-            session.sendMessage(new TextMessage(orderJson));
+            session.sendMessage(message);
         }
     }
 
