@@ -112,7 +112,7 @@ public class CartControllerTest {
     public void testAddItemWithInvalidQuantityReturnsBadRequest() {
         // Arrange
         ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
-        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101, -1, 19.99f);  
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 1L, -1, 19.99f);  
         String sessionId = "test";
 
         // Act
@@ -127,7 +127,7 @@ public class CartControllerTest {
     public void testAddItemWithInvalidProductIdReturnsBadRequest() {
         // Arrange
         ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
-        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, -1, 2, 19.99f);  
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, -1L, 2, 19.99f);  
         String sessionId = "test";
 
         // Act
@@ -142,7 +142,7 @@ public class CartControllerTest {
     public void testAddItemWithInvalidPriceReturnsBadRequest() {
         // Arrange
         ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
-        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101, 2, 19.99f);  
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f);  
         menuItem.setPrice(0);
         String sessionId = "test";
 
@@ -159,7 +159,7 @@ public class CartControllerTest {
     public void testAddItemWithValidCartItemReturnsOkCart() {
         // Arrange
         ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
-        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 2, 3, 19.99f);  
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 2L, 3, 19.99f);  
   
         String sessionId = "test";
         Cart mockCart = new Cart();

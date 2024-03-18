@@ -32,11 +32,11 @@ public class MenuItem implements IMenuItem{
         this.calories = calories;
     }
 
-    public Long getId() {
+    public Long getProductId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setProductId(Long id) {
         this.id = id;
     }
 

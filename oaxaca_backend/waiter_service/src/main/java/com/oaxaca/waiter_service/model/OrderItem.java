@@ -15,7 +15,7 @@ public class OrderItem implements IOrderItem {
     private String name;
     private String description;
     private float price;
-
+    private Long productId;
     private List<String> allergens = new ArrayList<>();
     
     private int calories;
@@ -24,7 +24,7 @@ public class OrderItem implements IOrderItem {
     }
 
     public OrderItem(int category, String name, String description, float price,
-            List<String> allergens, int calories) {
+            List<String> allergens, int calories, Long productId) {
 
         this.category = category;
         this.name = name;
@@ -32,6 +32,7 @@ public class OrderItem implements IOrderItem {
         this.price = price;
         this.allergens = allergens;
         this.calories = calories;
+        this.productId = productId;
 
     }
 
@@ -87,6 +88,14 @@ public class OrderItem implements IOrderItem {
 
     public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
 }

@@ -8,14 +8,15 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import com.oaxaca.shared_library.model.menu.ICartItem;
 import com.oaxaca.shared_library.model.menu.IMenuItem;
 
 @RedisHash("CartItem")
-public class CartItem implements Serializable, IMenuItem {
+public class CartItem implements Serializable, ICartItem{
 
     @Id
     private String id;
-    private int productId;
+    private Long productId;
     private int quantity;
     private float price;
     private String productName;
@@ -24,7 +25,7 @@ public class CartItem implements Serializable, IMenuItem {
     private int calories;
     private int category;
 
-    public CartItem(String productName, String dietaryRequirement, List<String> allergens, int calories, int category, int productId, int quantity, float price) {
+    public CartItem(String productName, String dietaryRequirement, List<String> allergens, int calories, int category, Long productId, int quantity, float price) {
         this.id = UUID.randomUUID().toString();
         this.productName = productName;
         this.dietaryRequirement = dietaryRequirement;
@@ -98,12 +99,12 @@ public class CartItem implements Serializable, IMenuItem {
     public void setCalories(int calories) {
         this.calories = calories;
     }
-
-    public int getProductId() {
+    @Override
+    public Long getProductId() {
         return productId;
     }
-
-    public void setProductId(int productId) {
+    @Override
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 

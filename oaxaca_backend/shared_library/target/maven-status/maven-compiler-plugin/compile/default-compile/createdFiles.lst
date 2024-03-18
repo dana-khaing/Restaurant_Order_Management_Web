@@ -1,3 +1,4 @@
+com/oaxaca/shared_library/model/menu/ICartItem.class
 com/oaxaca/shared_library/model/order/IOrderItem.class
 com/oaxaca/shared_library/model/menu/IMenuItem.class
 com/oaxaca/shared_library/model/order/IOrder.class
