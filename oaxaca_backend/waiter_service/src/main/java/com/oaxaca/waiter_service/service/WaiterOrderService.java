@@ -3,6 +3,8 @@ package com.oaxaca.waiter_service.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.oaxaca.shared_library.model.order.OrderStatus;
@@ -71,6 +73,20 @@ public class WaiterOrderService {
         }
 
         orderRepository.save(order);
+    }
+
+    public Page<Order> getAllOrders(Pageable pageable) {
+        return orderRepository.findAllByOrderByCreationDateDesc(pageable);
+
+    }
+
+    public Page<Order> getOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+
+        if (orderStatus == null || pageable == null) {
+            throw new IllegalArgumentException("Order status and pageable cannot be null");
+        }
+
+        return orderRepository.findByOrderStatus(orderStatus, pageable);
     }
 
 }
