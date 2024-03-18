@@ -1,0 +1,122 @@
+package com.oaxaca.kitchen_staff_service.config;
+
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices.RememberMeTokenAlgorithm;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.oaxaca.kitchen_staff_service.model.KitchenStaff;
+import com.oaxaca.kitchen_staff_service.repository.KitchenStaffRepository;
+import com.oaxaca.kitchen_staff_service.service.KitchenStaffDetailsService;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+  @Value("${rememberMe.key}")
+  private String rememberMeKey;
+
+  @Autowired
+  private KitchenStaffRepository kitchenStaffRepository;
+
+  @Bean
+  AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+    authenticationProvider.setUserDetailsService(userDetailsService);
+    authenticationProvider.setPasswordEncoder(passwordEncoder());
+
+    return new ProviderManager(authenticationProvider);
+  }
+
+  @Bean
+  UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() {
+    UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter();
+    usernamePasswordAuthenticationFilter
+        .setAuthenticationManager(authenticationManager(userDetailsService(kitchenStaffRepository)));
+    usernamePasswordAuthenticationFilter.setRememberMeServices(rememberMeServices());
+    return usernamePasswordAuthenticationFilter;
+  }
+
+  @Bean
+  RememberMeServices rememberMeServices() {
+    RememberMeTokenAlgorithm encodingAlgorithm = RememberMeTokenAlgorithm.SHA256;
+    TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices(
+        rememberMeKey, userDetailsService(kitchenStaffRepository), encodingAlgorithm);
+    rememberMeServices.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
+    rememberMeServices.setTokenValiditySeconds(1209600);
+    rememberMeServices.setUseSecureCookie(false);
+
+    return rememberMeServices;
+
+  }
+
+  @Bean
+  RememberMeAuthenticationFilter rememberMeFilter() {
+    RememberMeAuthenticationFilter rememberMeFilter = new RememberMeAuthenticationFilter(
+        authenticationManager(userDetailsService(kitchenStaffRepository)), rememberMeServices());
+    return rememberMeFilter;
+  }
+
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // replace "*" with your frontend's origin
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(true); // this allows cookies to be sent cross-origin
+    configuration.setExposedHeaders(Arrays.asList("Set-Cookie")); // this includes the Set-Cookie header in the
+                                                                  // response
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/kitchen_staff/login", "/kitchen_staff/register", "kitchen_staff/validate-remember-me").permitAll()
+            .anyRequest().authenticated())
+        .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)
+        .rememberMe(rememberMe -> rememberMe.key(rememberMeKey).rememberMeServices(rememberMeServices()))
+        .sessionManagement(management -> management
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+    return http.build();
+  }
+
+  @Bean
+  KitchenStaffDetailsService userDetailsService(KitchenStaffRepository kitchenStaffRepository) {
+    KitchenStaff kitchenStaff = new KitchenStaff("jacky123", passwordEncoder().encode("password"), "Jack", "Brown",
+        "chef");
+    kitchenStaffRepository.save(kitchenStaff);
+    return new KitchenStaffDetailsService(kitchenStaffRepository);
+  }
+
+}
