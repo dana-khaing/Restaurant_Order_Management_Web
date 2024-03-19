@@ -10,7 +10,7 @@ const formSchema = z.object({
     orderType: z.enum(["Dine In", "Delivery"]),
 });
 import { fetchCart } from "@/app/actions/cart";
-
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -44,32 +44,40 @@ export default function OrderPage() {
         },
     });
 
+    const router = useRouter();
+
     // 2. Define a submit handler.
     async function onSubmit(values) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        const cart = await fetchCart();
-        console.log(values);
-        const order = {
-            ...values,
-            cart: cart,
-        };
 
-        const response = await fetch("/api/order", {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(order),
-        });
+        try {
+            const cart = await fetchCart();
+            console.log(values);
+            const order = {
+                ...values,
+                cart: cart,
+            };
 
-        if (!response.ok) {
-            const errorText = await response.json();
-            console.error(errorText);
-            return;
+            const response = await fetch("/api/order", {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(order),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.json();
+                console.error(errorText);
+                return;
+            }
+            const data = await response.json();
+
+            router.push(`/customer/order/${data.id}`);
+        } catch (error) {
+            console.error(error);
         }
-
-        const data = await response.json();
     }
 
     return (
