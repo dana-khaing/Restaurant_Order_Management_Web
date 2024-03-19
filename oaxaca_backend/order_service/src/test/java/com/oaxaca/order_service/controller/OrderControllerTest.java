@@ -1,6 +1,8 @@
 
 package com.oaxaca.order_service.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -83,6 +86,48 @@ public class OrderControllerTest {
     @Test
     public void testCompleteOrderWithNullId() throws Exception {
         mockMvc.perform(post("/orders/completeOrder/{orderId}", (Object) null)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testPlaceOrder() throws Exception {
+        OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
+
+        mockMvc.perform(post("/orders/placeOrder")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(orderDetailsDto)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSendOrderToKitchen() throws Exception {
+        doNothing().when(orderService).sendOrderToKitchen(anyLong());
+
+        mockMvc.perform(put("/orders/sendOrderToKitchen/{orderId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testDeliverOrder() throws Exception {
+        doNothing().when(orderService).deliverOrder(anyLong());
+
+        mockMvc.perform(put("/orders/deliverOrder/{orderId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSendOrderToKitchenWithNullId() throws Exception {
+        mockMvc.perform(post("/orders/sendOrderToKitchen/{orderId}", (Object) null)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testDeliverOrderWithNullId() throws Exception {
+        mockMvc.perform(post("/orders/deliverOrder/{orderId}", (Object) null)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

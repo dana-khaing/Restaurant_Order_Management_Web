@@ -53,7 +53,13 @@ public class OrderController {
 
     }
 
+    @PutMapping("/deliverOrder/{orderId}")
+    public ResponseEntity<Map<String, String>> deliverOrder(@PathVariable Long orderId) {
 
+        orderService.deliverOrder(orderId);
+        return ResponseEntity.ok(Map.of("message", "Order delivered successfully"));
+
+    }
 
     @PutMapping("/completeOrder/{orderId}")
     public ResponseEntity<Map<String, String>> completeOrder(@PathVariable Long orderId) {
