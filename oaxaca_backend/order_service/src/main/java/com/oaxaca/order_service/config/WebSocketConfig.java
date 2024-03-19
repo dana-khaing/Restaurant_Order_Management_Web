@@ -7,7 +7,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import com.oaxaca.order_service.service.OrderWebSocketHandler;
+import com.oaxaca.order_service.service.WaiterWebSocketService;
+
+
 
 
 @Configuration
@@ -16,10 +18,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
     @NonNull
-    private OrderWebSocketHandler orderWebSocketHandler;
+    private WaiterWebSocketService waiterWebSocketHandler; 
 
     @Override
     public void registerWebSocketHandlers(@NonNull WebSocketHandlerRegistry registry) {
-        registry.addHandler(orderWebSocketHandler, "/orders").setAllowedOrigins("*");
+        registry.addHandler(waiterWebSocketHandler, "/waiter-orders").setAllowedOrigins("*");
     }
 }

@@ -42,8 +42,18 @@ public class OrderController {
     @PostMapping("/placeOrder")
     public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto) {
 
-        return ResponseEntity.ok(Map.of("order", orderService.placeOrder(orderDetailsDto)));
+        return ResponseEntity.ok(Map.of("order", "Order placed successfully"));
     }
+
+    @PutMapping("/sendOrderToKitchen/{orderId}")
+    public ResponseEntity<Map<String, String>> sendOrderToKitchen(@PathVariable(required = false) Long orderId) {
+
+        orderService.sendOrderToKitchen(orderId);
+        return ResponseEntity.ok(Map.of("message", "Order sent to kitchen successfully"));
+
+    }
+
+
 
     @PutMapping("/completeOrder/{orderId}")
     public ResponseEntity<Map<String, String>> completeOrder(@PathVariable(required = false) Long orderId) {

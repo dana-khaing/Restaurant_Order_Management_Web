@@ -12,7 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.oaxaca.order_service.dto.CartItemDto;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
-import com.oaxaca.order_service.event.OrderStatusUpdateEvent;
+import com.oaxaca.order_service.event.OrderCancelledEvent;
+import com.oaxaca.order_service.event.OrderCompletedEvent;
+import com.oaxaca.order_service.event.OrderCreationEvent;
+import com.oaxaca.order_service.event.OrderDeliveredEvent;
+import com.oaxaca.order_service.event.OrderSentToKitchenEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.model.OrderItem;
 import com.oaxaca.order_service.repository.OrderRepository;
@@ -29,7 +33,7 @@ public class OrderService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public Order placeOrder(OrderDetailsDto orderDetailsDto) {
+    public void placeOrder(OrderDetailsDto orderDetailsDto) {
 
         if (orderDetailsDto == null || orderDetailsDto.getCart() == null || orderDetailsDto.getCart().getItems() == null
 
@@ -54,9 +58,8 @@ public class OrderService {
 
         orderRepository.save(order);
 
-        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, order.getId()));
+        applicationEventPublisher.publishEvent(new OrderCreationEvent(this, order.getId()));
 
-        return order;
     }
 
     public void cancelOrder(Long orderId) {
@@ -69,6 +72,8 @@ public class OrderService {
 
         order.setOrderStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
+
+        applicationEventPublisher.publishEvent(new OrderCancelledEvent(this, orderId));
 
         orderRepository.deleteById(orderId);
     }
@@ -88,9 +93,30 @@ public class OrderService {
         Order orderToComplete = order.get();
         orderToComplete.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(orderToComplete);
+
+        applicationEventPublisher.publishEvent(new OrderCompletedEvent(this, orderId));
     }
 
-    public Order sendOrderToKitchen(Long orderId) {
+    public void deliverOrder(Long orderId) {
+
+        if (orderId == null) {
+            throw new IllegalArgumentException("Order id cannot be null");
+        }
+
+        Optional<Order> order = orderRepository.findById(orderId);
+
+        if (!order.isPresent()) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        Order orderToDeliver = order.get();
+        orderToDeliver.setOrderStatus(OrderStatus.DELIVERED);
+        orderRepository.save(orderToDeliver);
+        applicationEventPublisher.publishEvent(new OrderDeliveredEvent(this, orderId));
+
+    }
+
+    public void sendOrderToKitchen(Long orderId) {
 
         if (orderId == null) {
             throw new IllegalArgumentException("Order id cannot be null");
@@ -105,9 +131,8 @@ public class OrderService {
         Order orderToSend = order.get();
         orderToSend.setOrderStatus(OrderStatus.IN_PROGRESS);
         orderRepository.save(orderToSend);
-        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
+        applicationEventPublisher.publishEvent(new OrderSentToKitchenEvent(this, orderId));
 
-        return orderToSend;
     }
 
     public Page<Order> getAllOrders(Pageable pageable) {

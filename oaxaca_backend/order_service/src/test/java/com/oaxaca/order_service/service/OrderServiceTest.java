@@ -59,13 +59,10 @@ public class OrderServiceTest {
         when(orderRepository.save(any(Order.class))).thenReturn(mockedOrder);
 
         // Act
-        Order result = orderService.placeOrder(orderDetailsDto);
+        orderService.placeOrder(orderDetailsDto);
 
         // Assert
-        assertNotNull(result);
-        assertEquals("Customer", result.getCustomerName());
-        assertEquals(OrderStatus.PENDING, result.getOrderStatus());
-        assertEquals(OrderType.DINE_IN, result.getOrderType());
+        verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test
@@ -134,10 +131,11 @@ public class OrderServiceTest {
         when(orderRepository.save(any(Order.class))).thenReturn(orderToSend);
 
         // Act
-        Order result = orderService.sendOrderToKitchen(orderId);
+        orderService.sendOrderToKitchen(orderId);
 
         // Assert
-        assertEquals(OrderStatus.IN_PROGRESS, result.getOrderStatus());
+        verify(orderRepository, times(1)).save(any(Order.class));
+        assertEquals(OrderStatus.IN_PROGRESS, orderToSend.getOrderStatus());
     }
 
     @Test
@@ -171,6 +169,7 @@ public class OrderServiceTest {
         // Assert
         assertNotNull(result);
         verify(orderRepository, times(1)).findByOrderStatus(status, pageable);
+
     }
 
     @Test
