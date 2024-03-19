@@ -48,7 +48,8 @@ public class CartService {
                 .findFirst().orElse(null);
 
         if (existingCartItem != null) {
-            throw new IllegalArgumentException("Item already exists in cart");
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
+            redisTemplate.opsForValue().set(sessionId, cart);
 
         } else {
             cart.getItems().add(cartItem);
