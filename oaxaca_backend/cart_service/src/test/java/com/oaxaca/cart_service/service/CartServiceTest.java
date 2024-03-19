@@ -142,9 +142,9 @@ public class CartServiceTest {
         CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
         
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            cartService.addCartItem("test", cart, newItem);
-        });
+        cartService.addCartItem("test", cart, newItem);
+        assertEquals(4, cart.getItems().get(0).getQuantity());
+
     }
 
     public void testDeleteItemCart(){
@@ -262,6 +262,8 @@ public class CartServiceTest {
             cartService.modifyItemQuantity("test",mockCart, 1, 0);
         });
     }
+
+    
 
    
 

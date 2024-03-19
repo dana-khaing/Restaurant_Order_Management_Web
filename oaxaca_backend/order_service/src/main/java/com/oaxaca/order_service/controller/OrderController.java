@@ -3,6 +3,7 @@ package com.oaxaca.order_service.controller;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.service.OrderPaymentService;
@@ -21,10 +23,12 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderPaymentService orderPaymentService;
+    private final RestTemplate restTemplate;
 
-    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService) {
+    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService, RestTemplate restTemplate) {
         this.orderService = orderService;
         this.orderPaymentService = orderPaymentService;
+        this.restTemplate = restTemplate;
     }
 
     @PutMapping("/cancel/{orderId}")
@@ -42,7 +46,9 @@ public class OrderController {
     }
 
     @PostMapping("/placeOrder")
-    public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto) {
+    public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto, @CookieValue("JSESSIONID") String sessionId){
+        restTemplate.delete("http://localhost:8081/cart/clearCart/" + sessionId);
+        orderService.placeOrder(orderDetailsDto);
 
         return ResponseEntity.ok(Map.of("order", "Order placed successfully"));
     }
