@@ -1,4 +1,4 @@
-package com.oaxaca.waiter_service.model;
+package com.oaxaca.order_service.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,13 @@ public class OrderItem implements IOrderItem {
     private String description;
     private float price;
     private Long productId;
-    private List<String> allergens = new ArrayList<>();
+    private List<String> allergens;
     private int quantity;
 
     private int calories;
 
     public OrderItem() {
+        this.allergens = new ArrayList<>();
     }
 
     public OrderItem(int category, String name, String description, float price,

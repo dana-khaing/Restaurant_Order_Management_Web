@@ -44,7 +44,7 @@ public class CartServiceTest {
         Cart mockCart = mock(Cart.class);
         CartItem mockCartItem = mock(CartItem.class);
         when(mockCartItem.getQuantity()).thenReturn(1);
-        when(mockCartItem.getProductId()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(1L);
         when(mockCartItem.getPrice()).thenReturn(1f);
 
         @SuppressWarnings("unchecked")
@@ -65,7 +65,7 @@ public class CartServiceTest {
         // Arrange
         CartItem mockCartItem = mock(CartItem.class);
         when(mockCartItem.getQuantity()).thenReturn(1);
-        when(mockCartItem.getProductId()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(1L);
         when(mockCartItem.getPrice()).thenReturn(1f);
 
         // Act
@@ -107,7 +107,7 @@ public class CartServiceTest {
         Cart mockCart = mock(Cart.class);
         CartItem mockCartItem = mock(CartItem.class);
         when(mockCartItem.getQuantity()).thenReturn(1);
-        when(mockCartItem.getProductId()).thenReturn(-1);
+        when(mockCartItem.getProductId()).thenReturn(-1L);
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
@@ -121,7 +121,7 @@ public class CartServiceTest {
         Cart mockCart = mock(Cart.class);
         CartItem mockCartItem = mock(CartItem.class);
         when(mockCartItem.getQuantity()).thenReturn(1);
-        when(mockCartItem.getProductId()).thenReturn(1);
+        when(mockCartItem.getProductId()).thenReturn(1L);
         when(mockCartItem.getPrice()).thenReturn(0f);
 
         // Act & Assert
@@ -135,11 +135,11 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
 
         cart.getItems().add(existingItem);
 
-        CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101, 2, 19.99f); 
+        CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
         
         // Assert
         assertThrows(IllegalArgumentException.class, () -> {
@@ -151,7 +151,7 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
 
         cart.getItems().add(existingItem);
 
@@ -221,7 +221,7 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
 
         cart.getItems().add(existingItem);
 

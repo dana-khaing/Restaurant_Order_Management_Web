@@ -5,6 +5,7 @@ import com.oaxaca.customer_service.repository.CustomerRepository;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.oaxaca.customer_service.exception.CustomerCreationFailedException;
@@ -40,7 +41,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer findCustomerById(Long id) {
+    public Customer findCustomerById(@NonNull Long id) {
         return customerRepository.findById(id).orElse(null);
     }
 

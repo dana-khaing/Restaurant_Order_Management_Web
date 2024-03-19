@@ -26,6 +26,7 @@ public class KitchenStaffServiceTest {
         kitchenStaffService = new KitchenStaffService(kitchenStaffRepository);
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testCreateKitchenStaffSuccess() {
         KitchenStaff kitchenStaff = new KitchenStaff("j123", "password", "John", "Doe", "Chef");

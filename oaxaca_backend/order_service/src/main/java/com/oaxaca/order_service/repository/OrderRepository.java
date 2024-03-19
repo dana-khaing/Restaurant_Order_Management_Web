@@ -1,27 +1,22 @@
-package com.oaxaca.waiter_service.repository;
+package com.oaxaca.order_service.repository;
+
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
 
+import com.oaxaca.order_service.model.Order;
 import com.oaxaca.shared_library.model.order.OrderStatus;
-import com.oaxaca.waiter_service.model.Order;
 
-import java.util.Optional;
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    @NonNull
+    public Optional<Order> findById(@NonNull Long id);
 
 
-public interface OrderRepository extends JpaRepository<Order, Long>{
-
-    @SuppressWarnings("null")
-    public Optional<Order> findById(Long id);
-    
     public Page<Order> findAllByOrderByCreationDateDesc(Pageable pageable);
 
     public Page<Order> findByOrderStatus(OrderStatus orderStatus, Pageable pageable);
 
-
-
-
-    
-    
 }

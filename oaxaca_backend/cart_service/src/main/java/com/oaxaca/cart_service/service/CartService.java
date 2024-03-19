@@ -43,7 +43,7 @@ public class CartService {
             throw new IllegalArgumentException("Price must be greater than 0");
         }
 
-        CartItem existingCartItem = cart.getItems().stream()
+        CartItem existingCartItem = (CartItem) cart.getItems().stream()
                 .filter(item -> item.getProductId() == cartItem.getProductId())
                 .findFirst().orElse(null);
 
@@ -89,6 +89,7 @@ public class CartService {
         return (Cart) redisTemplate.opsForValue().get(sessionId);
     }
 
+    @SuppressWarnings("null")
     public void modifyItemQuantity(String sessionId, Cart cart, int productId, int quantity) {
 
         if (cart == null) {

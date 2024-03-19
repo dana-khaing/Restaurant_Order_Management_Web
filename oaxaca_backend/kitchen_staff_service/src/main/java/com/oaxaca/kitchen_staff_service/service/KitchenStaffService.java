@@ -1,6 +1,7 @@
 package com.oaxaca.kitchen_staff_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.oaxaca.kitchen_staff_service.exception.KitchenStaffCreationFailedException;
@@ -31,7 +32,7 @@ public class KitchenStaffService {
         return kitchenStaffRepository.save(kitchenStaff);
     }
 
-    public KitchenStaff findKitchenStaffById(Long id) {
+    public KitchenStaff findKitchenStaffById(@NonNull Long id) {
         return kitchenStaffRepository.findById(id).orElse(null);
     }
 
