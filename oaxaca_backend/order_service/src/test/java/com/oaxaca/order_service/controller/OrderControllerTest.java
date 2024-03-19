@@ -4,6 +4,7 @@ package com.oaxaca.order_service.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.model.Order;
+import com.oaxaca.order_service.service.OrderPaymentService;
 import com.oaxaca.order_service.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -30,11 +31,13 @@ public class OrderControllerTest {
     @Mock
     private OrderService orderService;
 
+    @Mock
+    private OrderPaymentService orderPaymentService;
+
     @InjectMocks
     private OrderController orderController;
 
     @Mock
-
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -131,4 +134,27 @@ public class OrderControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void testPayForOrder() throws Exception {
+        when(orderPaymentService.payOrder(anyLong())).thenReturn(true);
+
+        mockMvc.perform(put("/orders/payForOrder/{orderId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testPayForOrderWithNullId() throws Exception {
+        mockMvc.perform(post("/orders/payForOrder/{orderId}", (Object) null)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testOrderControllerConstructor() {
+        OrderController controller = new OrderController(orderService, orderPaymentService);
+        assertNotNull(controller);
+    }
+
 }

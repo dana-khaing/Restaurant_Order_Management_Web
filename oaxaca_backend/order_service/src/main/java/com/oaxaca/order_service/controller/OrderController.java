@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oaxaca.order_service.dto.OrderDetailsDto;
+import com.oaxaca.order_service.service.OrderPaymentService;
 import com.oaxaca.order_service.service.OrderService;
 
 @RestController
@@ -19,11 +20,12 @@ import com.oaxaca.order_service.service.OrderService;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderPaymentService orderPaymentService;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService) {
         this.orderService = orderService;
+        this.orderPaymentService = orderPaymentService;
     }
-
 
     @PutMapping("/cancel/{orderId}")
     public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long orderId) {
@@ -66,6 +68,19 @@ public class OrderController {
 
         orderService.completeOrder(orderId);
         return ResponseEntity.ok(Map.of("message", "Order completed successfully"));
+
+    }
+
+    @PutMapping("/payForOrder/{orderId}")
+    public ResponseEntity<Map<String, String>> payForOrder(@PathVariable Long orderId) {
+
+        boolean paymentStatus = orderPaymentService.payOrder(orderId);
+
+        if (paymentStatus) {
+            return ResponseEntity.ok(Map.of("message", "Order paid successfully"));
+        } else {
+            return ResponseEntity.ok(Map.of("message", "Order payment failed"));
+        }
 
     }
 
