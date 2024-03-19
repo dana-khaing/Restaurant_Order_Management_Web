@@ -1,7 +1,9 @@
 package com.oaxaca.order_service.service;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import com.oaxaca.order_service.event.OrderPaidEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.repository.OrderRepository;
 import com.oaxaca.shared_library.model.order.OrderStatus;
@@ -10,9 +12,11 @@ import com.oaxaca.shared_library.model.order.OrderStatus;
 public class OrderPaymentService {
 
     private final OrderRepository orderRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public OrderPaymentService(OrderRepository orderRepository) {
+    public OrderPaymentService(OrderRepository orderRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public boolean payOrder(Long orderId) {
@@ -33,7 +37,8 @@ public class OrderPaymentService {
 
         order.setOrderStatus(OrderStatus.PAID);
         orderRepository.save(order);
-
+        applicationEventPublisher.publishEvent(new OrderPaidEvent(this, order.getId()));
+        
         return true;
 
     }
