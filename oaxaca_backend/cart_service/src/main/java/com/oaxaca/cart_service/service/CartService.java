@@ -116,4 +116,13 @@ public class CartService {
 
     }
 
+    public void clearCart(String sessionId) {
+
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null");
+        }
+
+        redisTemplate.delete(sessionId);
+    }
+
 }

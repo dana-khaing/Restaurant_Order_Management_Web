@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -151,10 +150,6 @@ public class OrderControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    public void testOrderControllerConstructor() {
-        OrderController controller = new OrderController(orderService, orderPaymentService);
-        assertNotNull(controller);
-    }
+
 
 }
