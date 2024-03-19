@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.oaxaca.order_service.dto.OrderDetailsDto;
+import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.service.OrderPaymentService;
 import com.oaxaca.order_service.service.OrderService;
 
@@ -48,9 +49,9 @@ public class OrderController {
     @PostMapping("/placeOrder")
     public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto, @CookieValue("JSESSIONID") String sessionId){
         restTemplate.delete("http://localhost:8081/cart/clearCart/" + sessionId);
-        orderService.placeOrder(orderDetailsDto);
+        Order order = orderService.placeOrder(orderDetailsDto);
 
-        return ResponseEntity.ok(Map.of("order", "Order placed successfully"));
+        return ResponseEntity.ok(Map.of("order", order));
     }
 
     @PutMapping("/sendOrderToKitchen/{orderId}")

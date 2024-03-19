@@ -33,7 +33,7 @@ public class OrderService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public void placeOrder(OrderDetailsDto orderDetailsDto) {
+    public Order placeOrder(OrderDetailsDto orderDetailsDto) {
 
         if (orderDetailsDto == null || orderDetailsDto.getCart() == null || orderDetailsDto.getCart().getItems() == null
 
@@ -59,6 +59,8 @@ public class OrderService {
         orderRepository.save(order);
 
         applicationEventPublisher.publishEvent(new OrderCreationEvent(this, order.getId()));
+
+        return order;
 
     }
 
