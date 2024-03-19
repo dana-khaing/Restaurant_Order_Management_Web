@@ -26,7 +26,8 @@ public class OrderController {
     private final OrderPaymentService orderPaymentService;
     private final RestTemplate restTemplate;
 
-    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService, RestTemplate restTemplate) {
+    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService,
+            RestTemplate restTemplate) {
         this.orderService = orderService;
         this.orderPaymentService = orderPaymentService;
         this.restTemplate = restTemplate;
@@ -47,9 +48,10 @@ public class OrderController {
     }
 
     @PostMapping("/placeOrder")
-    public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto, @CookieValue("JSESSIONID") String sessionId){
-        restTemplate.delete("http://localhost:8081/cart/clearCart/" + sessionId);
+    public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto,
+            @CookieValue("JSESSIONID") String sessionId) {
         Order order = orderService.placeOrder(orderDetailsDto);
+        restTemplate.delete("http://localhost:8081/cart/clearCart/" + sessionId);
 
         return ResponseEntity.ok(Map.of("order", order));
     }
