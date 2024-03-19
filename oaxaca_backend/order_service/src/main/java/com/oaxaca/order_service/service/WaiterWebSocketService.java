@@ -48,7 +48,9 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
 
         // Update waiters when a new order is created
         try {
-            notifyWaiters(order);
+            if (order != null) {
+                notifyWaiters(order);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +74,9 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
         // Update waiters when an order is cancelled
         Long order = event.getOrderId();
         try {
-            notifyWaiters(orderService.getOrderById(order));
+            if (orderService.getOrderById(order) != null) {
+                notifyWaiters(orderService.getOrderById(order));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,15 +104,21 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
         }
     }
 
-    private void notifyWaiters(Order order) throws IOException {
+    void notifyWaiters(Order order) throws IOException {
+        if (order == null) {
+            return;
+        }
+
         String message = objectMapper.writeValueAsString(order);
-        if(message == null || message.isEmpty())
+        if (message == null || message.isEmpty())
             return;
         // Send the message to all the waiters (WebSocketSessions)
 
         TextMessage textMessage = new TextMessage(message);
         for (WebSocketSession session : waiterSessions) {
-            session.sendMessage(textMessage);
+            if (session.isOpen()) {
+                session.sendMessage(textMessage);
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ public class OrderController {
 
 
     @PutMapping("/cancel/{orderId}")
-    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable(required = false) Long orderId) {
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long orderId) {
 
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok(Map.of("message", "Order cancelled successfully"));
@@ -34,7 +34,7 @@ public class OrderController {
     }
 
     @GetMapping("/findOrder/{orderId}")
-    public ResponseEntity<Map<String, ?>> findOrder(@PathVariable(required = false) Long orderId) {
+    public ResponseEntity<Map<String, ?>> findOrder(@PathVariable Long orderId) {
 
         return ResponseEntity.ok(Map.of("order", orderService.getOrderById(orderId)));
     }
@@ -46,7 +46,7 @@ public class OrderController {
     }
 
     @PutMapping("/sendOrderToKitchen/{orderId}")
-    public ResponseEntity<Map<String, String>> sendOrderToKitchen(@PathVariable(required = false) Long orderId) {
+    public ResponseEntity<Map<String, String>> sendOrderToKitchen(@PathVariable Long orderId) {
 
         orderService.sendOrderToKitchen(orderId);
         return ResponseEntity.ok(Map.of("message", "Order sent to kitchen successfully"));
@@ -56,7 +56,7 @@ public class OrderController {
 
 
     @PutMapping("/completeOrder/{orderId}")
-    public ResponseEntity<Map<String, String>> completeOrder(@PathVariable(required = false) Long orderId) {
+    public ResponseEntity<Map<String, String>> completeOrder(@PathVariable Long orderId) {
 
         orderService.completeOrder(orderId);
         return ResponseEntity.ok(Map.of("message", "Order completed successfully"));
