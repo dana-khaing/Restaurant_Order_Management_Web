@@ -16,7 +16,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +43,7 @@ public class OrderControllerTest {
     public void testCancelOrder() throws Exception {
         doNothing().when(orderService).cancelOrder(anyLong());
 
-        mockMvc.perform(post("/orders/cancel/{orderId}", 1L)
+        mockMvc.perform(put("/orders/cancel/{orderId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -50,7 +52,7 @@ public class OrderControllerTest {
     public void testFindOrder() throws Exception {
         when(orderService.getOrderById(anyLong())).thenReturn(new Order());
 
-        mockMvc.perform(post("/orders/findOrder/{orderId}", 1L)
+        mockMvc.perform(get("/orders/findOrder/{orderId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -59,7 +61,7 @@ public class OrderControllerTest {
     public void testCompleteOrder() throws Exception {
         doNothing().when(orderService).completeOrder(anyLong());
 
-        mockMvc.perform(post("/orders/completeOrder/{orderId}", 1L)
+        mockMvc.perform(put("/orders/completeOrder/{orderId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

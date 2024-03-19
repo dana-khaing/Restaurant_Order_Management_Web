@@ -3,6 +3,8 @@ package com.oaxaca.order_service.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
+import com.oaxaca.order_service.event.OrderCreationEvent;
+import com.oaxaca.order_service.event.OrderStatusUpdateEvent;
 import com.oaxaca.order_service.model.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,22 +31,56 @@ public class OrderWebSocketHandlerTest {
     @Mock
     private WebSocketSession session;
 
-    @SuppressWarnings("null")
+    @Mock
+    private OrderStatusUpdateEvent orderStatusUpdateEvent;
+
+    @Mock
+    private OrderCreationEvent orderCreationEvent;
+
+    @Mock
+    private Order order;
+
     @Test
-    public void testHandleTextMessage() throws Exception {
+    public void testHandleOrderStatusUpdateEvent() throws Exception {
         // Arrange
-        OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
-        Order order = new Order();
-        when(orderService.placeOrder(any(OrderDetailsDto.class))).thenReturn(order); // Use any() matcher
-        ObjectMapper mapper = new ObjectMapper();
-        String payload = mapper.writeValueAsString(orderDetailsDto);
-        TextMessage message = new TextMessage(payload);
+        when(orderStatusUpdateEvent.getOrderId()).thenReturn(1L);
+        when(orderService.getOrderById(anyLong())).thenReturn(order);
+        doNothing().when(session).sendMessage(any(TextMessage.class));
+        orderWebSocketHandler.afterConnectionEstablished(session);
 
         // Act
-        orderWebSocketHandler.handleTextMessage(session, message);
+        orderWebSocketHandler.handleOrderStatusUpdateEvent(orderStatusUpdateEvent);
 
         // Assert
-        verify(orderService, times(1)).placeOrder(any(OrderDetailsDto.class)); // Use any() matcher
+        verify(session, times(1)).sendMessage(any(TextMessage.class));
+    }
+
+    @Test
+    public void testHandleOrderCreationEvent() throws Exception {
+        // Arrange
+        when(orderCreationEvent.getOrderId()).thenReturn(1L);
+        when(orderService.getOrderById(anyLong())).thenReturn(order);
+        doNothing().when(session).sendMessage(any(TextMessage.class));
+        orderWebSocketHandler.afterConnectionEstablished(session);
+
+        // Act
+        orderWebSocketHandler.handleOrderCreationEvent(orderCreationEvent);
+
+        // Assert
+        verify(session, times(1)).sendMessage(any(TextMessage.class));
+    }
+
+    @Test
+    public void testSendUpdatedOrder() throws Exception {
+        // Arrange
+        doNothing().when(session).sendMessage(any(TextMessage.class));
+        orderWebSocketHandler.afterConnectionEstablished(session);
+
+        // Act
+        orderWebSocketHandler.sendUpdatedOrder(order);
+
+        // Assert
+        verify(session, times(1)).sendMessage(any(TextMessage.class));
     }
 
     @SuppressWarnings("null")
@@ -77,7 +114,7 @@ public class OrderWebSocketHandlerTest {
         orderWebSocketHandler.afterConnectionEstablished(session);
 
         // Act
-        orderWebSocketHandler.sendUpdatedOrders();
+        orderWebSocketHandler.sendUpdatedOrder(order);
 
         // Assert
         verify(session, times(1)).sendMessage(any(TextMessage.class));

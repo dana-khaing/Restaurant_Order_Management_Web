@@ -52,7 +52,11 @@ public class OrderService {
 
         order.setTotal(orderItems.stream().mapToDouble(OrderItem::getPrice).sum());
 
-        return orderRepository.save(order);
+        orderRepository.save(order);
+
+        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, order.getId()));
+
+        return order;
     }
 
     public void cancelOrder(Long orderId) {
