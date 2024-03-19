@@ -59,7 +59,7 @@ export default function OrderPage() {
                 cart: cart,
             };
 
-            const response = await fetch("/api/order", {
+            const response = await fetch("/api/order/place", {
                 headers: {
                     "Content-Type": "application/json",
                 },
