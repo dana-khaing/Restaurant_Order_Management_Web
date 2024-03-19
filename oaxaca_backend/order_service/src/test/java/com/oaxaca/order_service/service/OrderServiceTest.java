@@ -37,6 +37,7 @@ public class OrderServiceTest {
     @Mock
     ApplicationEventPublisher applicationEventPublisher;
 
+    @SuppressWarnings("null")
     @Test
     void testPlaceOrder() {
         // Arrange
@@ -101,6 +102,7 @@ public class OrderServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
+    @SuppressWarnings("null")
     @Test
     void testCompleteOrderSuccess() {
         // Arrange
@@ -119,6 +121,7 @@ public class OrderServiceTest {
         assertEquals(OrderStatus.COMPLETED, mockedOrder.getOrderStatus());
     }
 
+    @SuppressWarnings("null")
     @Test
     void testSendOrderToKitchen() {
         // Arrange
@@ -141,6 +144,7 @@ public class OrderServiceTest {
     void testGetAllOrders() {
         // Arrange
         Pageable pageable = mock(Pageable.class);
+        @SuppressWarnings("unchecked")
         Page<Order> mockedPage = mock(Page.class);
         when(orderRepository.findAllByOrderByCreationDateDesc(pageable)).thenReturn(mockedPage);
 
@@ -157,6 +161,7 @@ public class OrderServiceTest {
         // Arrange
         OrderStatus status = OrderStatus.PENDING;
         Pageable pageable = mock(Pageable.class);
+        @SuppressWarnings("unchecked")
         Page<Order> mockedPage = mock(Page.class);
         when(orderRepository.findByOrderStatus(status, pageable)).thenReturn(mockedPage);
 

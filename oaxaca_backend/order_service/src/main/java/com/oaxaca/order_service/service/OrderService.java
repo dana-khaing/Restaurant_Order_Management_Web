@@ -67,7 +67,6 @@ public class OrderService {
         orderRepository.save(order);
 
         orderRepository.deleteById(orderId);
-        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
     }
 
     public void completeOrder(Long orderId) {
@@ -85,7 +84,6 @@ public class OrderService {
         Order orderToComplete = order.get();
         orderToComplete.setOrderStatus(OrderStatus.COMPLETED);
         orderRepository.save(orderToComplete);
-        applicationEventPublisher.publishEvent(new OrderStatusUpdateEvent(this, orderId));
     }
 
     public Order sendOrderToKitchen(Long orderId) {
@@ -115,6 +113,15 @@ public class OrderService {
 
         return orderRepository.findAllByOrderByCreationDateDesc(pageable);
 
+    }
+
+    public Order getOrderById(Long orderId) {
+        if (orderId == null) {
+            throw new IllegalArgumentException("Order id cannot be null");
+        }
+
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     }
 
     public Page<Order> getOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {

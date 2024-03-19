@@ -71,7 +71,7 @@ public class OrderWebSocketHandler extends TextWebSocketHandler implements Appli
     }
 
     public void sendUpdatedOrders() throws IOException {
-        Pageable pageable = PageRequest.of(0, 10); // Get the first 10 orders
+        Pageable pageable = PageRequest.of(0, 10); 
 
         Page<Order> orders = orderService.getAllOrders(pageable);
         ObjectMapper mapper = new ObjectMapper();
