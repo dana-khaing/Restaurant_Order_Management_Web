@@ -20,34 +20,22 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long orderId) {
-
-        if (orderId == null) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Order id cannot be null"));
-        }
+    @PostMapping("/cancel/{orderId}")
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable(required = false) Long orderId) {
 
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok(Map.of("message", "Order cancelled successfully"));
 
     }
 
-    @PostMapping("/findOrder/{id}")
-    public ResponseEntity<Map<String, ?>> findOrder(@PathVariable Long orderId) {
-
-        if (orderId == null) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Order id cannot be null"));
-        }
+    @PostMapping("/findOrder/{orderId}")
+    public ResponseEntity<Map<String, ?>> findOrder(@PathVariable(required = false) Long orderId) {
 
         return ResponseEntity.ok(Map.of("order", orderService.getOrderById(orderId)));
     }
 
-    @PostMapping("/completeOrder/{id}")
-    public ResponseEntity<Map<String, String>> completeOrder(@PathVariable Long orderId) {
-
-        if (orderId == null) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Order id cannot be null"));
-        }
+    @PostMapping("/completeOrder/{orderId}")
+    public ResponseEntity<Map<String, String>> completeOrder(@PathVariable(required = false) Long orderId) {
 
         orderService.completeOrder(orderId);
         return ResponseEntity.ok(Map.of("message", "Order completed successfully"));
