@@ -1,8 +1,9 @@
 package com.oaxaca.shared_library.model.order;
 
-import com.oaxaca.shared_library.model.menu.IMenuItem;
+import com.oaxaca.shared_library.model.menu.ICartItem;
 
-public interface IOrderItem extends IMenuItem {
+public interface IOrderItem extends ICartItem {
+    
 
 
     

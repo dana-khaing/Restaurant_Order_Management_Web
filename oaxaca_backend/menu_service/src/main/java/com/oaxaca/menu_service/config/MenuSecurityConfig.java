@@ -29,9 +29,7 @@ public class MenuSecurityConfig {
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/menu").permitAll()
-            .anyRequest().authenticated())
+        .csrf(csrf -> csrf.disable())
         .cors(cors -> cors.configurationSource(corsConfigurationSource()));
     return http.build();
   }

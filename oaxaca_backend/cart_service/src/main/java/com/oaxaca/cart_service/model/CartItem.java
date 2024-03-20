@@ -1,80 +1,122 @@
 package com.oaxaca.cart_service.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import com.oaxaca.shared_library.model.menu.ICartItem;
+
 @RedisHash("CartItem")
-public class CartItem implements Serializable{
+public class CartItem implements Serializable, ICartItem {
 
     @Id
     private String id;
-    private int productId;
+    private Long productId;
     private int quantity;
-    private double price;
+    private float price;
     private String productName;
-    private String dietaryRequirement;
+    private List<String> allergens;
+    private int calories;
+    private int category;
+    private String description;
 
-    public CartItem(int productId, int quantity, double price, String productName, String dietaryRequirement) {
+    public CartItem(String productName, String description, List<String> allergens, int calories, int category,
+            Long productId, int quantity, float price) {
         this.id = UUID.randomUUID().toString();
+        this.productName = productName;
+        this.allergens = allergens;
+        this.calories = calories;
+        this.category = category;
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
-        this.productName = productName;
-        this.dietaryRequirement = dietaryRequirement;
+        this.description = description;
+
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public int getCategory() {
+        return category;
     }
 
-    public int getProductId() {
+    @Override
+    public String getName() {
+        return productName;
+    }
+
+    @Override
+    public float getPrice() {
+        return price;
+
+    }
+
+    @Override
+    public List<String> getAllergens() {
+        return allergens;
+    }
+
+    @Override
+    public int getCalories() {
+        return calories;
+    }
+
+    @Override
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.productName = name;
+
+    }
+
+    @Override
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    @Override
+    public void setAllergens(List<String> allergens) {
+        this.allergens = allergens;
+    }
+
+    @Override
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    @Override
+    public Long getProductId() {
         return productId;
     }
 
+    @Override
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    @Override
     public int getQuantity() {
         return quantity;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
+    @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    @Override
+    public String getDescription() {
+        return description;
     }
 
-    public String getProductName() {
-        return productName;
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    public String getDietaryRequirement() {
-        return dietaryRequirement;
-    }
-
-    public void setPrice(double d) {
-        this.price = d;
-    }
-
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setDietaryRequirement(String dietaryRequirement) {
-        this.dietaryRequirement = dietaryRequirement;
-    }
-
-
 
 }

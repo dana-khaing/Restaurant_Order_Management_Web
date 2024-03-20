@@ -10,7 +10,7 @@ import {
 import { useState } from 'react';
 
 export default function MenuModal({ menu }) {
-  const { name, price, allergens } = menu;
+  const { name, price, allergens, imageURL } = menu;
 
   const [quantity, setQuantity] = useState(1);
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
@@ -40,7 +40,7 @@ export default function MenuModal({ menu }) {
       <DialogTitle>{name}</DialogTitle>
       <DialogDescription>
         <img
-          src='/images/burrito.jpeg'
+          src={imageURL}
           className='w-full h-52 rounded-xl my-4'
         />
         <div className='flex items-center justify-between px-1'>

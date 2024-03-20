@@ -2,7 +2,8 @@ package com.oaxaca.menu_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import com.oaxaca.menu_service.model.MenuItem;
 import com.oaxaca.menu_service.repository.MenuRepository;
@@ -11,7 +12,7 @@ import com.oaxaca.menu_service.repository.MenuRepository;
  * MenuService is a class for updating and retrieving records from the database. It is a Spring Boot
  * service, meaning that it is automatically started when the Spring Boot application is run.
  * 
- * @author Michael Goodwin
+ * @author Michael Goodwin (michael.goodwin.2022@live.rhul.ac.uk)
  */
 
 @Service
@@ -22,11 +23,11 @@ public class MenuService {
 
 
   /**
-   * Constructor for starting the MenuService service.
+   * Constructor for starting the MenuService service. This is automatically called by the Spring
+   * Boot application during startup.
    * 
    * @param menuRepository Repository for "menu" relation in database
    */
-  @Autowired
   public MenuService(MenuRepository menuRepository) {
     this.menuRepository = menuRepository;
   }
@@ -57,7 +58,7 @@ public class MenuService {
    * 
    * @param menuItem New MenuItem to add to database
    */
-  public void addMenuItem(MenuItem menuItem) {
+  public void addMenuItem(@NonNull MenuItem menuItem) {
     menuRepository.save(menuItem);
   }
 
@@ -67,7 +68,7 @@ public class MenuService {
    * @param id Id of MenuItem to update
    * @param menuItem New MenuItem to overwrite existing MenuItem
    */
-  public void updateMenuItem(int id, MenuItem menuItem) {
+  public void updateMenuItem(int id,  @NonNull MenuItem menuItem) {
     menuRepository.save(menuItem);
   }
 

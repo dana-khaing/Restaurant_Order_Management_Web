@@ -11,6 +11,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import com.oaxaca.cart_service.model.Cart;
 import com.oaxaca.cart_service.model.CartItem;
@@ -29,7 +32,7 @@ public class CartControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Test
     public void testFetchCart() {
         // Arrange
@@ -58,7 +61,7 @@ public class CartControllerTest {
         assertEquals("Session ID cannot be null", result.getBody());
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testFetchCartWithEmptyCartReturnsOkMessage() {
         // Arrange
@@ -74,7 +77,7 @@ public class CartControllerTest {
         assertEquals("Cart is empty", ((Map) result.getBody()).get("message"));
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testFetchCartWithExistingCartReturnsOkCart() {
         // Arrange
@@ -108,7 +111,8 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithInvalidQuantityReturnsBadRequest() {
         // Arrange
-        CartItem menuItem = new CartItem( 0, 0, 1, "Test Product", "halal");
+        ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 1L, -1, 19.99f);  
         String sessionId = "test";
 
         // Act
@@ -122,7 +126,8 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithInvalidProductIdReturnsBadRequest() {
         // Arrange
-        CartItem menuItem = new CartItem(-1, 1, 1, "Test Product", "vegan");
+        ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, -1L, 2, 19.99f);  
         String sessionId = "test";
 
         // Act
@@ -136,7 +141,8 @@ public class CartControllerTest {
     @Test
     public void testAddItemWithInvalidPriceReturnsBadRequest() {
         // Arrange
-        CartItem menuItem = new CartItem(1, 1, -1, "Test Product", "vegan");
+        ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f);  
         menuItem.setPrice(0);
         String sessionId = "test";
 
@@ -148,11 +154,13 @@ public class CartControllerTest {
         assertEquals("Price must be greater than 0", result.getBody());
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testAddItemWithValidCartItemReturnsOkCart() {
         // Arrange
-        CartItem menuItem = new CartItem(1, 1, 1, "Test Product" ,"vegan");
+        ArrayList<String> allergens = new ArrayList<>(List.of("Nuts", "Gluten"));
+        CartItem menuItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 2L, 3, 19.99f);  
+  
         String sessionId = "test";
         Cart mockCart = new Cart();
         when(cartService.addCartItem(sessionId, mockCart, menuItem)).thenReturn(mockCart); 
@@ -166,7 +174,7 @@ public class CartControllerTest {
         assertEquals("Cart updated.", ((Map) result.getBody()).get("Cart: "));
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "null" })
     @Test
     public void testDeleteItemWithValidProductIdReturnsOkCart() {
         // Arrange

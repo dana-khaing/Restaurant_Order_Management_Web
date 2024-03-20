@@ -12,6 +12,9 @@ public interface IMenuItem {
     List<String> getAllergens();
     int getCalories();
 
+    Long getProductId();
+    void setProductId(Long productId);
+
     // Setters
     void setCategory(int category);
     void setName(String name);
