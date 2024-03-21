@@ -3,6 +3,7 @@ package com.oaxaca.table_service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,5 +28,10 @@ public class TableController {
   @PostMapping("/tables")
   public void addTable(@RequestBody RestaurantTable table) {
     tableService.addTable(table);
+  }
+  
+  @DeleteMapping("/tables/{tableNumber}")
+  public void deleteTable(@RequestBody int tableNumber) {
+    tableService.deleteTable(tableNumber);
   }
 }

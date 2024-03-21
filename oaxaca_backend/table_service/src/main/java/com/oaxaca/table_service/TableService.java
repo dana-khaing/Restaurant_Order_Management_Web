@@ -28,5 +28,9 @@ public class TableService {
   public void addTable(RestaurantTable table) {
     tableRepository.save(table);
   }
+  
+  public void deleteTable(int tableNumber) {
+    tableRepository.deleteById(tableNumber);
+  }
 
 }
