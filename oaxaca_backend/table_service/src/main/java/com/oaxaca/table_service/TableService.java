@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityManager;
 
 @Service
 public class TableService {
 
   public RestaurantTableRepository tableRepository;
+
+  @Autowired
+  private EntityManager entityManager;
 
   @Autowired
   public TableService(RestaurantTableRepository tableRepository) {
@@ -20,17 +24,32 @@ public class TableService {
     tableRepository.findAll().forEach(tables::add);
     return tables;
   }
-  
+
   public RestaurantTable getTableById(int id) {
     return tableRepository.findById(id).orElse(null);
   }
-  
+
   public void addTable(RestaurantTable table) {
     tableRepository.save(table);
   }
-  
+
   public void deleteTable(int tableNumber) {
     tableRepository.deleteById(tableNumber);
+  }
+
+  public void assignWaiterToTable(int tableNumber, int waiterId) {
+    RestaurantTable table = tableRepository.findById(tableNumber).orElse(null);
+    if (table == null) {
+      System.out
+          .println("[TableService] => Error while assigning waiter " + Integer.toString(waiterId)
+              + " to table " + Integer.toString(tableNumber) + " - Table not found in database");
+      return;
+    }
+
+    table.setAssignedWaiter(waiterId);
+    tableRepository.save(table);
+    System.out.println("Test");
+    return;
   }
 
 }

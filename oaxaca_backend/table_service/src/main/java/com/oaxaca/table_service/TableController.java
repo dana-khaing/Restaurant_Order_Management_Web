@@ -36,7 +36,8 @@ public class TableController {
   }
   
   @PostMapping("/tables/{tableNumber}/{waiterId}")
-  public void assignWaiterToTable(@PathVariable int tableNumber, @PathVariable Integer waiterId) {
+  public void assignWaiterToTable(@PathVariable int tableNumber, @PathVariable int waiterId) {
     tableService.assignWaiterToTable(tableNumber, waiterId);
   }
+  
 }
