@@ -38,6 +38,7 @@ public class TableService {
   }
 
   public void assignWaiterToTable(int tableNumber, int waiterId) {
+    // Check if the restaurant table exists in the database
     RestaurantTable table = tableRepository.findById(tableNumber).orElse(null);
     if (table == null) {
       System.out
@@ -46,10 +47,23 @@ public class TableService {
       return;
     }
 
+    // Assign waiter to restaurant table and write to database
     table.setAssignedWaiter(waiterId);
     tableRepository.save(table);
-    System.out.println("Test");
-    return;
+  }
+
+  public void unassignWaiterFromTable(int tableNumber) {
+    // Check if the restaurant table exists in the database
+    RestaurantTable table = tableRepository.findById(tableNumber).orElse(null);
+    if (table == null) {
+      System.out.println("[TableService] => Error while unassigning the waiter from table "
+          + Integer.toString(tableNumber) + " - Table not found in database");
+      return;
+    }
+
+    // Unassign waiter from restaurant table and write to database
+    table.setAssignedWaiter(null);
+    tableRepository.save(table);
   }
 
 }
