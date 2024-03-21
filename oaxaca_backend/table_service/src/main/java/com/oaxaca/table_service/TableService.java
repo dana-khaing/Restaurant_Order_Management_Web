@@ -20,5 +20,9 @@ public class TableService {
     tableRepository.findAll().forEach(tables::add);
     return tables;
   }
+  
+  public RestaurantTable getTableById(int id) {
+    return tableRepository.findById(id).orElse(null);
+  }
 
 }
