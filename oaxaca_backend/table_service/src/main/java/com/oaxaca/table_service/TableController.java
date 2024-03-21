@@ -10,32 +10,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/tables")
 public class TableController {
 
   @Autowired
   private TableService tableService;
 
-  @RequestMapping("/tables")
+  @RequestMapping("/allTables")
   public List<RestaurantTable> getAllTables() {
     return tableService.getAllTables();
   }
   
-  @RequestMapping("/tables/{id}")
+  @RequestMapping("/table/{id}")
   public RestaurantTable getTableById(@PathVariable int id) {
     return tableService.getTableById(id);
   }
   
-  @PostMapping("/tables")
+  @PostMapping("/addTable")
   public void addTable(@RequestBody RestaurantTable table) {
     tableService.addTable(table);
   }
   
-  @DeleteMapping("/tables/{tableNumber}")
+  @DeleteMapping("/deleteTable/{tableNumber}")
   public void deleteTable(@RequestBody int tableNumber) {
     tableService.deleteTable(tableNumber);
   }
   
-  @PostMapping("/tables/{tableNumber}/{waiterId}")
+  @PostMapping("/assignWaiter/{tableNumber}/{waiterId}")
   public void assignWaiterToTable(@PathVariable int tableNumber, @PathVariable int waiterId) {
     tableService.assignWaiterToTable(tableNumber, waiterId);
   }
