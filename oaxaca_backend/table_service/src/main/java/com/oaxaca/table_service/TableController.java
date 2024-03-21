@@ -4,6 +4,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -20,5 +22,10 @@ public class TableController {
   @RequestMapping("/tables/{id}")
   public RestaurantTable getTableById(@PathVariable int id) {
     return tableService.getTableById(id);
+  }
+  
+  @PostMapping("/tables")
+  public void addTable(@RequestBody RestaurantTable table) {
+    tableService.addTable(table);
   }
 }

@@ -24,5 +24,9 @@ public class TableService {
   public RestaurantTable getTableById(int id) {
     return tableRepository.findById(id).orElse(null);
   }
+  
+  public void addTable(RestaurantTable table) {
+    tableRepository.save(table);
+  }
 
 }
