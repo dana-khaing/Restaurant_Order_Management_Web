@@ -1,39 +1,39 @@
 package com.oaxaca.cart_service.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import com.oaxaca.shared_library.model.menu.IMenuItem;
+import com.oaxaca.shared_library.model.menu.ICartItem;
 
 @RedisHash("CartItem")
-public class CartItem implements Serializable, IMenuItem {
+public class CartItem implements Serializable, ICartItem {
 
     @Id
     private String id;
-    private int productId;
+    private Long productId;
     private int quantity;
     private float price;
     private String productName;
-    private String dietaryRequirement;
     private List<String> allergens;
     private int calories;
     private int category;
+    private String description;
 
-    public CartItem(String productName, String dietaryRequirement, List<String> allergens, int calories, int category, int productId, int quantity, float price) {
+    public CartItem(String productName, String description, List<String> allergens, int calories, int category,
+            Long productId, int quantity, float price) {
         this.id = UUID.randomUUID().toString();
         this.productName = productName;
-        this.dietaryRequirement = dietaryRequirement;
-        this.allergens = new ArrayList<>(allergens);
+        this.allergens = allergens;
         this.calories = calories;
         this.category = category;
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
+        this.description = description;
 
     }
 
@@ -45,11 +45,6 @@ public class CartItem implements Serializable, IMenuItem {
     @Override
     public String getName() {
         return productName;
-    }
-
-    @Override
-    public String getDescription() {
-        return dietaryRequirement;
     }
 
     @Override
@@ -80,11 +75,6 @@ public class CartItem implements Serializable, IMenuItem {
     }
 
     @Override
-    public void setDescription(String description) {
-        this.dietaryRequirement = description;
-    }
-
-    @Override
     public void setPrice(float price) {
         this.price = price;
     }
@@ -99,20 +89,34 @@ public class CartItem implements Serializable, IMenuItem {
         this.calories = calories;
     }
 
-    public int getProductId() {
+    @Override
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    @Override
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
+    @Override
     public int getQuantity() {
         return quantity;
     }
 
+    @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
