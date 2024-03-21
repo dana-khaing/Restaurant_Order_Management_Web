@@ -25,7 +25,7 @@ class TestRestaurantTable {
   void testCreateTable_WithWaiter() {
     System.out.println("[TestTable] => Test 02 testCreateTable_WithWaiter started");
     try {
-      RestaurantTable testTable_WithWaiter = new RestaurantTable(1, new Waiter());
+      RestaurantTable testTable_WithWaiter = new RestaurantTable(1, 2);
       assertTrue(testTable_WithWaiter instanceof RestaurantTable,
           "Test that a new Table instance with a waiter was created successfully");
     } catch (Exception e) {
@@ -72,9 +72,7 @@ class TestRestaurantTable {
   void testGetAssignedWaiter() {
     System.out.println("[TestTable] => Test 05 testGetAssignedWaiter started");
     try {
-      Waiter assignedWaiter = new Waiter("testWaiter", "badPassword", "Tester", "Waiter",
-          "testWaiter@notarealemail.com", "Mr Manager", "Test Restaurant", "1 Test Restaurant Road",
-          LocalDate.now());
+      Integer assignedWaiter = 5;
       RestaurantTable testTable = new RestaurantTable(13, assignedWaiter);
       assertTrue(testTable.getAssignedWaiter().equals(assignedWaiter),
           "Test that getAssignedWaiter() returns the correct waiter");
@@ -90,16 +88,12 @@ class TestRestaurantTable {
     System.out.println("[TestTable] => Test 06 testSetAssignedWaiter started");
     try {
       // First verify that the table has some assigned waiter
-      Waiter assignedWaiter = new Waiter("testWaiter", "badPassword", "Tester", "Waiter",
-          "testWaiter@notarealemail.com", "Mr Manager", "Test Restaurant", "1 Test Restaurant Road",
-          LocalDate.now());
+      Integer assignedWaiter = 18;
       RestaurantTable testTable = new RestaurantTable(55, assignedWaiter);
       assertTrue(testTable.getAssignedWaiter().equals(assignedWaiter),
           "Test that getAssignedWaiter() returns the correct waiter");
       // Now test that setTableNumber() actually changes the value
-      Waiter newAssignedWaiter = new Waiter("testWaiter2", "badPassword2", "Tester2", "Waiter2",
-          "testWaiter2@notarealemail.com", "Mr Manager 2", "Test Restaurant 2",
-          "2 Test Restaurant Road", LocalDate.now());
+      Integer newAssignedWaiter = 26;
       testTable.setAssignedWaiter(newAssignedWaiter);
       assertTrue(testTable.getAssignedWaiter().equals(newAssignedWaiter),
           "Test that getAssignedWaiter() returns the correct waiter after changing it");

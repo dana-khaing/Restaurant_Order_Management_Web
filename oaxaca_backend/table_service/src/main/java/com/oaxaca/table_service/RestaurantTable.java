@@ -1,5 +1,6 @@
 package com.oaxaca.table_service;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -12,8 +13,8 @@ public class RestaurantTable {
   @Id
   private int tableNumber;
   
-  @ManyToOne
-  private Waiter assignedWaiter;
+  @Column(name = "assignedWaiter", nullable = true)
+  private Integer assignedWaiter;
   
   public RestaurantTable() {
     
@@ -24,7 +25,7 @@ public class RestaurantTable {
     this.assignedWaiter = null;
   }
   
-  public RestaurantTable(int tableNumber, Waiter assignedWaiter) {
+  public RestaurantTable(int tableNumber, Integer assignedWaiter) {
     this.tableNumber = tableNumber;
     this.assignedWaiter = assignedWaiter;
   }
@@ -37,11 +38,11 @@ public class RestaurantTable {
     this.tableNumber = tableNumber;
   }
 
-  public Waiter getAssignedWaiter() {
+  public Integer getAssignedWaiter() {
     return assignedWaiter;
   }
 
-  public void setAssignedWaiter(Waiter assignedWaiter) {
+  public void setAssignedWaiter(Integer assignedWaiter) {
     this.assignedWaiter = assignedWaiter;
   }
   

@@ -35,4 +35,8 @@ public class TableController {
     tableService.deleteTable(tableNumber);
   }
   
+  @PostMapping("/tables/{tableNumber}/{waiterId}")
+  public void assignWaiterToTable(@PathVariable int tableNumber, @PathVariable Integer waiterId) {
+    tableService.assignWaiterToTable(tableNumber, waiterId);
+  }
 }
