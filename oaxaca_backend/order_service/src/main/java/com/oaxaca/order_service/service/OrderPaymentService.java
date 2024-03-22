@@ -24,6 +24,11 @@ public class OrderPaymentService {
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
+
+    static {
+        Stripe.apiKey = "sk_test_51Ow5wJRvay58z2uef8kWPF5aB2EUhpU5E2F4vcl9qOD9n9CjAy1q68qzb2dCWZhLqlDV5iZC7fnyEwxKZQSHt42300jgs2Po1t";
+    }
+
     public OrderPaymentService(OrderRepository orderRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
         this.applicationEventPublisher = applicationEventPublisher;
