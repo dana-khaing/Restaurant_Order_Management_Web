@@ -1,19 +1,23 @@
+import { SERVICE_URLS } from '@/app/constants';
 import { cookies } from 'next/headers';
 
-export default async function POST(request) {
+export async function POST(request) {
   const cookieStore = cookies();
   const JSESSIONID = cookieStore.get('JSESSIONID');
   const orderData = await request.json();
 
   try {
-    const response = await fetch('localhost:8085/orders/placeOrder', {
-      headers: {
-        'Content-Type': 'application/json',
-        Cookie: `JSESSIONID=${JSESSIONID}`,
-      },
-      method: 'POST',
-      body: JSON.stringify(orderData),
-    });
+    const response = await fetch(
+      `${SERVICE_URLS.ORDER_SERVICE}/orders/placeOrder`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Cookie: `JSESSIONID=${JSESSIONID}`,
+        },
+        method: 'POST',
+        body: JSON.stringify(orderData),
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.json();
@@ -27,6 +31,8 @@ export default async function POST(request) {
     }
 
     const data = await response.json();
+
+    console.log(data);
 
     return new Response(JSON.stringify(data), {
       headers: {
