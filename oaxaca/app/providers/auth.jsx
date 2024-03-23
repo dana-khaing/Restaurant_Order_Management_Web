@@ -29,8 +29,8 @@ export default function AuthProvider({ children }) {
         }
 
         // Then, safely parse the JSON
-        const data = await response.text();
-        console.log(data);
+        const data = await response.json();
+        setUser(data);
       } catch (error) {
         console.error('An error occurred:', error);
         toast({

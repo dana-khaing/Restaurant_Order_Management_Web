@@ -1,93 +1,96 @@
-"use server";
+'use server';
 
-import { cookies } from "next/headers";
-import { SERVICE_URLS } from "../constants";
-import { revalidatePath } from "next/cache";
+import { cookies } from 'next/headers';
+import { SERVICE_URLS } from '../constants';
+import { revalidatePath } from 'next/cache';
 
 export async function fetchCart() {
-    const cookieStore = cookies();
-    const jsessionId = cookieStore.get("JSESSIONID")?.value;
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-    try {
-        const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/fetch`, {
-            headers: {
-                Cookie: `JSESSIONID=${jsessionId}`,
-                "Content-Type": "application/json",
-            },
-        });
+  try {
+    const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/fetch`, {
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
-        const data = await res.json();
-        const cart = data["Cart: "]
-        const items = cart["items"];
+    const data = await res.json();
+    const cart = data['Cart: '];
 
-
-        return items;
-    } catch (e) {
-        console.log(e.message);
-        return [];
+    const items = cart['items'];
+    if (!items) {
+      return [];
     }
+
+    return items;
+  } catch (e) {
+    console.log(e.message);
+    return [];
+  }
 }
 
 export async function addToCart(item) {
-    const cookieStore = cookies();
-    const jsessionId = cookieStore.get("JSESSIONID")?.value;
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-    try {
-        const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/addItem`, {
-            method: "POST",
-            headers: {
-                Cookie: `JSESSIONID=${jsessionId}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(item),
-        });
+  try {
+    const res = await fetch(`${SERVICE_URLS.CART_SERVICE}/cart/addItem`, {
+      method: 'POST',
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(item),
+    });
 
-        if (!res.ok) {
-            const errorText = await res.json();
-            console.error("Failed to add item to cart: ", errorText);
-        }
-
-        const data = await res.json();
-        console.log("Item added to cart: ", data);
-
-        revalidatePath("/");
-    } catch (e) {
-        console.log(e);
+    if (!res.ok) {
+      const errorText = await res.json();
+      console.error('Failed to add item to cart: ', errorText);
     }
+
+    const data = await res.json();
+    console.log('Item added to cart: ', data);
+
+    revalidatePath('/');
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export async function updateCartItem(productId, quantity) {
-    const cookieStore = cookies();
-    const jsessionId = cookieStore.get("JSESSIONID")?.value;
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-    const res = await fetch(
-        `${SERVICE_URLS.CART_SERVICE}/cart/modifyItemQuantity/${productId}?quantity=${quantity}&productId=${productId}`,
-        {
-            method: "PUT",
-            headers: {
-                Cookie: `JSESSIONID=${jsessionId}`,
-                "Content-Type": "application/json",
-            },
-        }
-    );
+  const res = await fetch(
+    `${SERVICE_URLS.CART_SERVICE}/cart/modifyItemQuantity/${productId}?quantity=${quantity}&productId=${productId}`,
+    {
+      method: 'PUT',
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
-    revalidatePath("/");
+  revalidatePath('/');
 }
 
 export async function removeCartItem(productId) {
-    const cookieStore = cookies();
-    const jsessionId = cookieStore.get("JSESSIONID")?.value;
+  const cookieStore = cookies();
+  const jsessionId = cookieStore.get('JSESSIONID')?.value;
 
-    const res = await fetch(
-        `${SERVICE_URLS.CART_SERVICE}/cart/deleteItem?productId=${productId}`,
-        {
-            method: "DELETE",
-            headers: {
-                Cookie: `JSESSIONID=${jsessionId}`,
-                "Content-Type": "application/json",
-            },
-        }
-    );
+  const res = await fetch(
+    `${SERVICE_URLS.CART_SERVICE}/cart/deleteItem?productId=${productId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Cookie: `JSESSIONID=${jsessionId}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 
-    revalidatePath("/");
+  revalidatePath('/');
 }

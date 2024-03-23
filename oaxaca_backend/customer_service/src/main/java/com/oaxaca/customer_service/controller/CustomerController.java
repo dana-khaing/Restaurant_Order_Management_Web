@@ -115,13 +115,16 @@ public class CustomerController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCustomer(HttpServletRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return ResponseEntity.badRequest().body("No user logged in");
+    public ResponseEntity<?> getCustomer(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = rememberMeServices.autoLogin(request, response);
+
+        if (authentication != null && authentication instanceof RememberMeAuthenticationToken) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Customer customer = customerService.findCustomerByUsername(authentication.getName());
+            return ResponseEntity.ok(customer);
+        } else {
+            return ResponseEntity.badRequest().body("User not authenticated with remember-me token");
         }
-        Customer customer = customerService.findCustomerByUsername(authentication.getName());
-        return ResponseEntity.ok(customer);
     }
 
     @GetMapping("/find/id/{id}")
