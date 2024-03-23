@@ -45,7 +45,7 @@ public class CartControllerTest {
 
         // Assert
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(mockCart, ((Map<String, Cart>) result.getBody()).get("Cart: "));
+        assertEquals(mockCart, ((Map<String, Cart>) result.getBody()).get("cart"));
     }
 
     @Test
@@ -90,8 +90,8 @@ public class CartControllerTest {
 
         // Assert
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertTrue(((Map) result.getBody()).containsKey("Cart: "));
-        assertEquals(mockCart, ((Map) result.getBody()).get("Cart: "));
+        assertTrue(((Map) result.getBody()).containsKey("cart"));
+        assertEquals(mockCart, ((Map) result.getBody()).get("cart"));
     }
 
     @Test

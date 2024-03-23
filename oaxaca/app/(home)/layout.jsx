@@ -1,4 +1,3 @@
-import CallWaiterButton from '../custom_components/call-watier-btn';
 import { NavList } from './components/nav_list';
 import { fetchCart } from '../actions/cart';
 import Footer from './components/footer';
@@ -6,6 +5,7 @@ import UserProfile from './components/user-profile';
 
 export default async function HomeLayout({ children }) {
   const cart = await fetchCart();
+  console.log('cart', cart);
   return (
     <div>
       <div className='bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4'>

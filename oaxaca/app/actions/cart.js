@@ -18,7 +18,7 @@ export async function fetchCart() {
 
     const data = await res.json();
 
-    console.log(data['cart']);
+    console.log(data);
     return data['cart'];
   } catch (e) {
     console.log(e.message);
@@ -38,7 +38,6 @@ export async function addToCart(item) {
     },
     body: JSON.stringify(item),
   });
-
 
   revalidatePath('/');
 }

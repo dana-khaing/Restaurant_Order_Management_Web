@@ -54,7 +54,7 @@ export default function Cart({ cartItems }) {
                 />
                 <div className='flex justify-between w-full pl-2'>
                   <div className='flex flex-col gap-1'>
-                    <span className='font-semibold'>{item.productName}</span>
+                    <span className='font-semibold'>{item.name}</span>
                     <div className='flex gap-2 items-center'>
                       <span
                         onClick={() => decrementQuantity(item.productId)}

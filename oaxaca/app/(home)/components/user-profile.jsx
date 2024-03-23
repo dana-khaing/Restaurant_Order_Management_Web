@@ -9,7 +9,8 @@ import Link from 'next/link';
 
 export default function UserProfile({ cart }) {
   const { user, loginUser, logoutUser } = useContext(AuthContext);
-  console.log(user);
+
+  console.log(cart);
   return (
     <div className='flex gap-3 items-center'>
       {user ? (

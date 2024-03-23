@@ -1,9 +1,9 @@
 import { SERVICE_URLS } from '@/app/constants';
 import { cookies } from 'next/headers';
+
 export async function GET() {
   const cookieStore = cookies();
   const remember_me = cookieStore.get('remember-me');
-  console.log('RM', remember_me);
 
   if (!remember_me) {
     return new Response(
@@ -39,7 +39,7 @@ export async function GET() {
     }
 
     const response = await res.json();
-    console.log(response);
+    console.log('response', response);
     return new Response(JSON.stringify(response), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

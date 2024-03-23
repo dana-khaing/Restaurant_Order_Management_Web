@@ -31,7 +31,7 @@ export default function MenuModal({ menu }) {
         quantity,
         price,
         productName: name,
-        dietaryRequirement: allergens.map((a) => a.name).join(', '),
+        allergens: allergens.map((a) => a.name),
       });
     }
   };
@@ -39,10 +39,7 @@ export default function MenuModal({ menu }) {
     <DialogHeader>
       <DialogTitle>{name}</DialogTitle>
       <DialogDescription>
-        <img
-          src={imageURL}
-          className='w-full h-52 rounded-xl my-4'
-        />
+        <img src={imageURL} className='w-full h-52 rounded-xl my-4' />
         <div className='flex items-center justify-between px-1'>
           <span className='font-bold text-xl text-black line-clamp-1'>
             {name}
