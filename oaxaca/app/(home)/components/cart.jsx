@@ -27,6 +27,8 @@ export default function Cart({ cartItems }) {
     await updateCartItem(productId, item.quantity + 1);
   };
 
+  const disabled = cartItems?.length === 0;
+
   const goToConfirmOrder = () => {
     router.push('/customer/order');
   };
@@ -72,6 +74,13 @@ export default function Cart({ cartItems }) {
                     </div>
                   </div>
                   <span className='ml-2 text-gray-700'>£{item.price}</span>
+                  <Button
+                    className='w-full mt-4'
+                    onClick={goToConfirmOrder}
+                    disabled={disabled}
+                  >
+                    Checkout
+                  </Button>
                 </div>
               </div>
             ))}
