@@ -2,6 +2,9 @@ import { NavList } from './components/nav_list';
 import { fetchCart } from '../actions/cart';
 import Footer from './components/footer';
 import UserProfile from './components/user-profile';
+import CallWaiterButton from '../custom_components/call-watier-btn';
+import Cart from './components/cart';
+import { UserRound } from 'lucide-react';
 
 export default async function HomeLayout({ children }) {
   const cartItems = await fetchCart();

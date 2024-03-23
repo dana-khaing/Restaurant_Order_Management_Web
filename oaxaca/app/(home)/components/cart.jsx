@@ -1,8 +1,10 @@
+"use client";
+
 import { removeCartItem, updateCartItem } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ShoppingCart } from "lucide-react";
-import { useRouter } from "next/navigation"; d
+import { useRouter } from "next/navigation"; 
 
 export default function Cart({ cartItems }) {
   const router = useRouter();
