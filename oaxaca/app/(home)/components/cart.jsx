@@ -55,7 +55,7 @@ export default function Cart({ cartItems }) {
                             <div key={item.id} className="flex ">
                                 <img
                                     className="w-16 h-16 rounded-lg"
-                                    src="/images/burrito.jpeg"
+                                    src={item.imageUrl}
                                 />
                                 <div className="flex justify-between w-full pl-2">
                                     <div className="flex flex-col gap-1">

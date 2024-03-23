@@ -10,7 +10,7 @@ import {
 import { useState } from 'react';
 
 export default function MenuModal({ menu }) {
-  const { name, price, allergens, imageURL } = menu;
+  const { name, price, allergens, calories, category, description, imageURL } = menu;
 
   const [quantity, setQuantity] = useState(1);
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
@@ -32,14 +32,14 @@ export default function MenuModal({ menu }) {
       console.log('adding to cart');
       await addToCart({
         productId: menu.id,
-        quantity,
-        price,
+        quantity : quantity,
+        price : price,
         productName: name,
         allergens: allergens.map((a) => a.name),
-        calories: 100,
-        category: 1,
-        description: 'description',
-        image: imageURL,
+        calories: calories,
+        category: category,
+        description: description,
+        imageUrl: imageURL,
       });
     }
   };
