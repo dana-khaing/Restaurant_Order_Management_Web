@@ -41,8 +41,8 @@ public class OrderServiceTest {
     @Test
     void testPlaceOrder() {
         // Arrange
-        CartItemDto cartItemDto = new CartItemDto("Pizza", "Delicious pizza", 200, 15.5f, new ArrayList<>(), 1, 3);
-        CartItemDto cartItemDto2 = new CartItemDto("Soda", "Refreshing soda", 100, 2.5f, new ArrayList<>(), 2, 2);
+        CartItemDto cartItemDto = new CartItemDto("Pizza", "Delicious pizza", 200, 15.5f, new ArrayList<>(), 1, 3, "image");
+        CartItemDto cartItemDto2 = new CartItemDto("Soda", "Refreshing soda", 100, 2.5f, new ArrayList<>(), 2, 2, "image");
         ArrayList<CartItemDto> items = new ArrayList<>();
         items.add(cartItemDto);
         items.add(cartItemDto2);

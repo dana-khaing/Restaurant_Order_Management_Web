@@ -20,9 +20,11 @@ public class MenuItem implements IMenuItem{
     private float price;
     private List<String> allergens;
     private int calories;
+    private String imageUrl;
+
 
     public MenuItem(Long id, int category, String name, String description, float price,
-        List<String> allergens, int calories) {
+        List<String> allergens, int calories, String imageUrl) {
         this.id = id;
         this.category = category;
         this.name = name;
@@ -30,6 +32,7 @@ public class MenuItem implements IMenuItem{
         this.price = price;
         this.allergens = allergens;
         this.calories = calories;
+        this.imageUrl = imageUrl;
     }
 
     public Long getProductId() {
@@ -86,6 +89,14 @@ public class MenuItem implements IMenuItem{
 
     public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

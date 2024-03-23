@@ -135,11 +135,11 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
 
         cart.getItems().add(existingItem);
 
-        CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
         
         // Assert
         cartService.addCartItem("test", cart, newItem);
@@ -151,7 +151,7 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
 
         cart.getItems().add(existingItem);
 
@@ -221,7 +221,7 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
 
         cart.getItems().add(existingItem);
 

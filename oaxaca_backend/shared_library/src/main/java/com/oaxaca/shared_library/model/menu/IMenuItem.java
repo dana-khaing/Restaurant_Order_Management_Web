@@ -11,6 +11,7 @@ public interface IMenuItem {
     float getPrice();
     List<String> getAllergens();
     int getCalories();
+    String getImageUrl();
 
     Long getProductId();
     void setProductId(Long productId);
@@ -22,6 +23,7 @@ public interface IMenuItem {
     void setPrice(float price);
     void setAllergens(List<String> allergens);
     void setCalories(int calories);
+    void setImageUrl(String imageUrl);
 
     // Utility Methods
     @Override
