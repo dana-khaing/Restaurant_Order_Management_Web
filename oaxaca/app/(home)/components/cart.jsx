@@ -7,6 +7,7 @@ import { ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation"; // Keeping as per your request
 
 export default function Cart({ cartItems }) {
+    console.log("cartItems", cartItems);
   const router = useRouter();
 
   const decrementQuantity = async (productId) => {

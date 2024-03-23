@@ -8,6 +8,7 @@ import { UserRound } from 'lucide-react';
 
 export default async function HomeLayout({ children }) {
   const cartItems = await fetchCart();
+  console.log("Fetch cart items", cartItems)
     
   return (
     <div>
