@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 
 export default function Cart({ cartItems }) {
     const router = useRouter();
+    console.log(cartItems);
 
     const decrementQuantity = async (productId) => {
         const item = cartItems.find((item) => item.productId === productId);
@@ -59,7 +60,7 @@ export default function Cart({ cartItems }) {
                                 <div className="flex justify-between w-full pl-2">
                                     <div className="flex flex-col gap-1">
                                         <span className="font-semibold">
-                                            {item.productName}
+                                            {item.name}
                                         </span>
                                         <div className="flex gap-2 items-center">
                                             <span

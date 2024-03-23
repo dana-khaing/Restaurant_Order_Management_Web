@@ -7,7 +7,7 @@ import { fetchCart } from "../actions/cart";
 import Footer from "./components/footer";
 
 export default async function HomeLayout({ children }) {
-  const cart = await fetchCart();
+  const cartItems = await fetchCart();
   return (
     <div>
       <div className="bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4">
@@ -23,7 +23,7 @@ export default async function HomeLayout({ children }) {
         </div>
         <div className="flex gap-3 items-center">
           <CallWaiterButton />
-          <Cart cartItems={cart} />
+          <Cart cartItems={cartItems} />
           <UserRound />
           <a href="/customer/login">Login</a>
         </div>
