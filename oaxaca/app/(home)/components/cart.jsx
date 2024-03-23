@@ -1,8 +1,17 @@
 "use client";
+"use client";
 
 import { removeCartItem, updateCartItem } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
+import { removeCartItem, updateCartItem } from "@/app/actions/cart";
+import { Button } from "@/components/ui/button";
 import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
     Popover,
     PopoverContent,
     PopoverTrigger,
@@ -21,7 +30,27 @@ export default function Cart({ cartItems }) {
             await removeCartItem(productId);
         }
     };
+    const router = useRouter();
 
+    const decrementQuantity = async (productId) => {
+        const item = cartItems.find((item) => item.productId === productId);
+        if (item.quantity > 1) {
+            await updateCartItem(productId, item.quantity - 1);
+        } else {
+            await removeCartItem(productId);
+        }
+    };
+
+    const incrementQuantity = async (productId) => {
+        const item = cartItems.find((item) => item.productId === productId);
+        await updateCartItem(productId, item.quantity + 1);
+    };
+
+    const goToConfirmOrder = () => {
+        router.push("/customer/order");
+    };
+
+    const disabled = cartItems?.length === 0;
     const incrementQuantity = async (productId) => {
         const item = cartItems.find((item) => item.productId === productId);
         await updateCartItem(productId, item.quantity + 1);
@@ -98,7 +127,7 @@ export default function Cart({ cartItems }) {
                             )?.toFixed(2) || 0}
                         </span>
                     </div>
-                    <Button className="w-full mt-4" onClick={goToConfirmOrder}>
+                    <Button className="w-full mt-4" onClick={goToConfirmOrder} disabled={disabled}>
                         Checkout
                     </Button>
                 </div>

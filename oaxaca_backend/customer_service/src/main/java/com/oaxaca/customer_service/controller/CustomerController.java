@@ -105,6 +105,25 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutCustomer(HttpServletRequest request, HttpServletResponse response) {
+        rememberMeServices.loginFail(request, response);
+        SecurityContextHolder.clearContext();
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "Customer logged out successfully");
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCustomer(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.badRequest().body("No user logged in");
+        }
+        Customer customer = customerService.findCustomerByUsername(authentication.getName());
+        return ResponseEntity.ok(customer);
+    }
+
     @GetMapping("/find/id/{id}")
     public Customer findCustomerById(@PathVariable Long id) {
         return customerService.findCustomerById(id);

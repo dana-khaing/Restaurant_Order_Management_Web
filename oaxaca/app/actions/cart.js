@@ -39,6 +39,7 @@ export async function addToCart(item) {
     body: JSON.stringify(item),
   });
 
+
   revalidatePath('/');
 }
 

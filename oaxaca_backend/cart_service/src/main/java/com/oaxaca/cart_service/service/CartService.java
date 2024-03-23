@@ -84,7 +84,7 @@ public class CartService {
     public Cart fetchCart(String sessionId) {
 
         if (sessionId == null) {
-            throw new IllegalArgumentException("Session ID cannot be null");
+           return new Cart(); 
         }
 
         return (Cart) redisTemplate.opsForValue().get(sessionId);
