@@ -4,8 +4,7 @@ import Footer from './components/footer';
 import UserProfile from './components/user-profile';
 
 export default async function HomeLayout({ children }) {
-  const cart = await fetchCart();
-  console.log('cart', cart);
+  const cartItems = await fetchCart();
   return (
     <div>
       <div className='bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4'>
@@ -19,8 +18,12 @@ export default async function HomeLayout({ children }) {
         <div>
           <NavList />
         </div>
-
-        <UserProfile cart={cart} />
+        <div className="flex gap-3 items-center">
+          <CallWaiterButton />
+          <Cart cartItems={cartItems} />
+          <UserRound />
+          <a href="/customer/login">Login</a>
+        </div>
       </div>
       {children}
       <Footer />
