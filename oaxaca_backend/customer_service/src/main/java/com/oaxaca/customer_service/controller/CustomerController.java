@@ -114,6 +114,16 @@ public class CustomerController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getCustomer(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.badRequest().body("No user logged in");
+        }
+        Customer customer = customerService.findCustomerByUsername(authentication.getName());
+        return ResponseEntity.ok(customer);
+    }
+
     @GetMapping("/find/id/{id}")
     public Customer findCustomerById(@PathVariable Long id) {
         return customerService.findCustomerById(id);
