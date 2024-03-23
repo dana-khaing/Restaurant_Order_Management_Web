@@ -39,6 +39,7 @@ export default function MenuModal({ menu }) {
         calories: 100,
         category: 1,
         description: 'description',
+        image: imageURL,
       });
     }
   };

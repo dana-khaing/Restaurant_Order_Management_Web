@@ -8,6 +8,7 @@ import Footer from "./components/footer";
 
 export default async function HomeLayout({ children }) {
   const cartItems = await fetchCart();
+    
   return (
     <div>
       <div className="bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4">

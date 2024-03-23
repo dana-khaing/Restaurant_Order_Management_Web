@@ -12,11 +12,12 @@ public class CartItemDto implements Serializable {
     private int calories;
     private String description;
     private int quantity;
+    private String imageUrl;
 
     public CartItemDto() {
     }
 
-    public CartItemDto(String productName, String description, int category, float price, List<String> allergens, int calories, int quantity) {
+    public CartItemDto(String productName, String description, int category, float price, List<String> allergens, int calories, int quantity, String imageUrl) {
         this.productName = productName;
         this.description = description;
         this.category = category;
@@ -24,6 +25,8 @@ public class CartItemDto implements Serializable {
         this.allergens = allergens;
         this.calories = calories;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
+
     }
 
     public String getProductName() {
@@ -80,6 +83,13 @@ public class CartItemDto implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }
