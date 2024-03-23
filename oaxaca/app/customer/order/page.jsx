@@ -46,11 +46,7 @@ export default function OrderPage() {
 
     const router = useRouter();
 
-    // 2. Define a submit handler.
     async function onSubmit(values) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-
         try {
             const cart = await fetchCart();
             console.log(values);
