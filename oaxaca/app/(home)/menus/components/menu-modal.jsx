@@ -31,7 +31,7 @@ export default function MenuModal({ menu }) {
         quantity,
         price,
         productName: name,
-        dietaryRequirement: allergens.map((a) => a.name).join(', '),
+        allergens: allergens.map((a) => a.name)
       });
     }
   };
