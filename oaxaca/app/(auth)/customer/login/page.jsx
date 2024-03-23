@@ -22,10 +22,14 @@ import SocialLinks from '@/app/custom_components/auth/SocialLinks';
 import AuthHeader from '@/app/custom_components/auth/AuthHeader';
 import AuthBanner from '@/app/custom_components/auth/AuthBanner';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '@/app/providers/auth';
 
 export default function CustomerLoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
+
+  const { loginUser } = useContext(AuthContext);
 
   const form = useForm({
     defaultValues: {
@@ -108,13 +112,17 @@ export default function CustomerLoginPage() {
         description: 'Logged in successfully',
       });
 
+      loginUser({
+        username: values.username,
+        password: values.password,
+        role: 'customer',
+      });
+
       router.push('/menus');
     } catch (error) {
       console.log(error);
     }
   }
-
-  const { toast } = useToast();
 
   return (
     <main className='flex flex-col justify-center w-full items-center gap-6 lg:flex-row'>
