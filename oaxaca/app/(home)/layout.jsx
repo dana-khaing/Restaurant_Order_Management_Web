@@ -23,7 +23,7 @@ export default async function HomeLayout({ children }) {
         </div>
         <div className="flex gap-3 items-center">
           <CallWaiterButton />
-          <Cart cartItems={cart?.items} />
+          <Cart cartItems={cart} />
           <UserRound />
           <a href="/customer/login">Login</a>
         </div>

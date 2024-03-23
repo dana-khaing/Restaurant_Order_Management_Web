@@ -18,20 +18,27 @@ export default function MenuModal({ menu }) {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
+
+
   const handleAddCartItem = async () => {
     const cartItems = (await fetchCart())?.items;
+    console.log(cartItems);
 
     const existingItem = cartItems?.find((item) => item.productId === menu.id);
 
     if (existingItem) {
       await updateCartItem(menu.id, existingItem.quantity + quantity);
     } else {
+      console.log('adding to cart');
       await addToCart({
         productId: menu.id,
         quantity,
         price,
         productName: name,
-        allergens: allergens.map((a) => a.name)
+        allergens: allergens.map((a) => a.name),
+        calories: 100,
+        category: 1,
+        description: 'description',
       });
     }
   };
