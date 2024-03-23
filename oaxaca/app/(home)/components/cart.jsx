@@ -1,3 +1,5 @@
+"use client";
+
 import { removeCartItem, updateCartItem } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
