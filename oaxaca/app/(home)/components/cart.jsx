@@ -31,6 +31,8 @@ export default function Cart({ cartItems }) {
         router.push("/customer/order");
     };
 
+    const disabled = cartItems?.length === 0;
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -98,7 +100,7 @@ export default function Cart({ cartItems }) {
                             )?.toFixed(2) || 0}
                         </span>
                     </div>
-                    <Button className="w-full mt-4" onClick={goToConfirmOrder}>
+                    <Button className="w-full mt-4" onClick={goToConfirmOrder} disabled={disabled}>
                         Checkout
                     </Button>
                 </div>
