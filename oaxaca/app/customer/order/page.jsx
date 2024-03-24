@@ -3,12 +3,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { UserRound } from "lucide-react";
-const formSchema = z.object({
-    customerName: z.string(),
-    tableNumber: z.string(),
-    orderType: z.enum(["Dine In", "Delivery"]),
-});
 import { fetchCart } from "@/app/actions/cart";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,6 +16,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import React from "react";
 
 import {
     Select,
@@ -30,10 +25,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import Footer from "@/app/(home)/components/footer";
-import { NavList } from "@/app/(home)/components/nav_list";
+import OrderContext from "@/app/custom_components/context/OrderContext";
 
 export default function OrderPage() {
+    const formSchema = z.object({
+        customerName: z.string(),
+        tableNumber: z.string(),
+        orderType: z.enum(["Dine In", "Delivery"]),
+    });
+
     // 1. Define your form.
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -44,16 +44,43 @@ export default function OrderPage() {
         },
     });
 
+    const { setOrder } = React.useContext(OrderContext);
+
+
     const router = useRouter();
+
+    function convertOrderType(orderTypeString) {
+        let orderType;
+        switch (orderTypeString) {
+            case "Dine In":
+                orderType = "DINE_IN";
+                break;
+            case "Delivery":
+                orderType = "DELIVERY";
+                break;
+            case "Takeaway":
+                orderType = "TAKEAWAY";
+                break;
+            default:
+                break;
+        }
+
+        return orderType;
+    }
 
     async function onSubmit(values) {
         try {
-            const cart = await fetchCart();
-            console.log(values);
-            const order = {
+            const orderType = convertOrderType(values.orderType);
+            const processedValues = {
                 ...values,
+                orderType: orderType,
+            };
+            const cart = await fetchCart();
+            const order = {
+                ...processedValues,
                 cart: cart,
             };
+            console.log(order);
 
             const response = await fetch("/api/order/place", {
                 headers: {
@@ -69,8 +96,11 @@ export default function OrderPage() {
                 return;
             }
             const data = await response.json();
+            setOrder(data.order);
+            console.log("Response:" ,data);
 
-            router.push(`/customer/order/${data.id}`);
+
+            router.push(`/customer/order/${data.order.id}`);
         } catch (error) {
             console.error(error);
         }

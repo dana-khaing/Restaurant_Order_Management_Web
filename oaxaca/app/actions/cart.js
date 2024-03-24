@@ -18,10 +18,9 @@ export async function fetchCart() {
 
         const data = await res.json();
         const cart = data["Cart: "]
-        const items = cart["items"];
 
 
-        return items;
+        return cart;
     } catch (e) {
         console.log(e.message);
         return [];

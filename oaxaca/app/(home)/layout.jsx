@@ -7,7 +7,7 @@ import { fetchCart } from "../actions/cart";
 import Footer from "./components/footer";
 
 export default async function HomeLayout({ children }) {
-  const cartItems = await fetchCart();
+  const cart = await fetchCart();
     
   return (
     <div>
@@ -24,7 +24,7 @@ export default async function HomeLayout({ children }) {
         </div>
         <div className="flex gap-3 items-center">
           <CallWaiterButton />
-          <Cart cartItems={cartItems} />
+          <Cart cartItems={cart?.items} />
           <UserRound />
           <a href="/customer/login">Login</a>
         </div>

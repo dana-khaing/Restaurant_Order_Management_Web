@@ -1,15 +1,16 @@
 import { cookies } from "next/headers";
 
-export default async function POST(request) {
+export  async function POST(request) {
     const cookieStore = cookies();
     const JSESSIONID = cookieStore.get("JSESSIONID");
     const orderData = await request.json();
+    console.log(JSESSIONID);
 
     try {
-        const response = await fetch("localhost:8085/orders/placeOrder", {
+        const response = await fetch("http://localhost:8085/orders/placeOrder", {
             headers: {
                 "Content-Type": "application/json",
-                "Cookie": `JSESSIONID=${JSESSIONID}`,
+                "Cookie": `JSESSIONID=${JSESSIONID.value}`,
             },
             method: "POST",
             body: JSON.stringify(orderData),
