@@ -2,6 +2,7 @@ package com.oaxaca.customer_service.config.oauth;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -18,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+    
+    @Value("${app.redirect-url}")
+    private String redirectUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -27,6 +31,6 @@ public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         AppUser appUser = AppUser.fromGoogleUser(oidcUser);
         AppAuthenticationToken token = new AppAuthenticationToken(appUser);
         SecurityContextHolder.getContext().setAuthentication(token);
-        response.sendRedirect("http://localhost:3000/customer/home");
+        response.sendRedirect(redirectUrl);
     }
 }
