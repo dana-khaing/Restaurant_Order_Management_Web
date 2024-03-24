@@ -25,7 +25,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import OrderContext from "@/app/custom_components/context/OrderContext";
 
 export default function OrderPage() {
     const formSchema = z.object({
@@ -43,9 +42,6 @@ export default function OrderPage() {
             orderType: "Dine In",
         },
     });
-
-    const { setOrder } = React.useContext(OrderContext);
-
 
     const router = useRouter();
 
@@ -96,9 +92,7 @@ export default function OrderPage() {
                 return;
             }
             const data = await response.json();
-            setOrder(data.order);
-            console.log("Response:" ,data);
-
+            console.log("Response:", data);
 
             router.push(`/customer/order/${data.order.id}`);
         } catch (error) {
