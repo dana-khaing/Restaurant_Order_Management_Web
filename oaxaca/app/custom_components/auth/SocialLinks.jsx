@@ -8,8 +8,9 @@ export default function SocialLinks() {
   const router = useRouter();
 
   function googleSignIn() {
-    router.push("http://localhost:8080/oauth2/authorization/google");
-  }
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    router.push(`${baseUrl}/oauth2/authorization/google`);
+  } 
 
   return (
     <div className="flex flex-col items-center gap-6">
