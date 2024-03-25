@@ -154,11 +154,13 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     }
 
-    public Page<Order> getOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+    public Page<Order> getOrdersByStatus(String status, Pageable pageable) {
 
-        if (orderStatus == null || pageable == null) {
+        if (status == null || pageable == null) {
             throw new IllegalArgumentException("Order status and pageable cannot be null");
         }
+
+        OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
 
         return orderRepository.findByOrderStatus(orderStatus, pageable);
     }

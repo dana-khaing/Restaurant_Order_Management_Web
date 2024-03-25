@@ -95,9 +95,13 @@ public class OrderController {
         }
 
     }
-
+    @GetMapping("/fetchAllOrders")
     public ResponseEntity<Map<String, ?>> fetchAllOrders(Pageable pageable) {
         return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders(pageable)));
+    }
+    @GetMapping("/fetchOrdersByStatus/{status}")
+    public ResponseEntity<Map<String, ?>> fetchOrdersByStatus(@PathVariable String status, Pageable pageable) {
+        return ResponseEntity.ok(Map.of("orders", orderService.getOrdersByStatus(status, pageable)));
     }
 
 }

@@ -140,18 +140,19 @@ public class OrderServiceTest {
     @Test
     void testGetOrdersByStatus() {
         // Arrange
-        OrderStatus status = OrderStatus.PENDING;
+        String status = "PENDING";
+        OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
         Pageable pageable = mock(Pageable.class);
         @SuppressWarnings("unchecked")
         Page<Order> mockedPage = mock(Page.class);
-        when(orderRepository.findByOrderStatus(status, pageable)).thenReturn(mockedPage);
+        when(orderRepository.findByOrderStatus(orderStatus, pageable)).thenReturn(mockedPage);
 
         // Act
         Page<Order> result = orderService.getOrdersByStatus(status, pageable);
 
         // Assert
         assertNotNull(result);
-        verify(orderRepository, times(1)).findByOrderStatus(status, pageable);
+        verify(orderRepository, times(1)).findByOrderStatus(orderStatus, pageable);
 
     }
 
@@ -223,7 +224,7 @@ public class OrderServiceTest {
     @Test
     void testGetOrdersByStatusWithNullArguments() {
         // Arrange
-        OrderStatus status = null;
+        String status = null;
         Pageable pageable = null;
 
         // Act & Assert
