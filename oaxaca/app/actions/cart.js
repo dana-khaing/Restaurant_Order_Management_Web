@@ -16,19 +16,15 @@ export async function fetchCart() {
       },
     });
 
-    const data = await res.json();
-    const cart = data['Cart: '];
+        const data = await res.json();
+        const cart = data["Cart: "]
 
-    const items = cart['items'];
-    if (!items) {
-      return [];
+
+        return cart;
+    } catch (e) {
+        console.log(e.message);
+        return [];
     }
-
-    return items;
-  } catch (e) {
-    console.log(e.message);
-    return [];
-  }
 }
 
 export async function addToCart(item) {

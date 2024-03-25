@@ -51,7 +51,7 @@ public class OrderController {
     public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto,
             @CookieValue("JSESSIONID") String sessionId) {
         Order order = orderService.placeOrder(orderDetailsDto);
-        restTemplate.delete("http://localhost:8081/cart/clearCart/" + sessionId);
+        restTemplate.delete("http://localhost:8084/cart/clearCart/" + sessionId);
 
         return ResponseEntity.ok(Map.of("order", order));
     }

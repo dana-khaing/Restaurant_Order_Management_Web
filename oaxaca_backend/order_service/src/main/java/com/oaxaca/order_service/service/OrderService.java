@@ -48,6 +48,7 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderType(orderDetailsDto.getOrderType());
 
+
         List<OrderItem> orderItems = orderDetailsDto.getCart().getItems().stream()
                 .map(this::convertToOrderItem)
                 .collect(Collectors.toList());
@@ -170,7 +171,11 @@ public class OrderService {
         orderItem.setCategory(cartDto.getCategory());
         orderItem.setDescription(cartDto.getDescription());
         orderItem.setPrice(cartDto.getPrice());
-        orderItem.setName(cartDto.getProductName());
+        orderItem.setName(cartDto.getName());
+        orderItem.setAllergens(cartDto.getAllergens());
+        orderItem.setQuantity(cartDto.getQuantity());
+        orderItem.setProductId(cartDto.getProductId());
+        orderItem.setImageUrl(cartDto.getImageUrl());
 
         return orderItem;
     }

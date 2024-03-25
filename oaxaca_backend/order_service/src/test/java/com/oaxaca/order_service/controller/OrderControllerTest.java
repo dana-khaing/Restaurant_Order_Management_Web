@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -47,6 +48,7 @@ public class OrderControllerTest {
     @Mock
     private OrderPaymentService orderPaymentService;
 
+ 
     @Mock
     private RestTemplate restTemplate;
 
@@ -113,14 +115,13 @@ public class OrderControllerTest {
     public void testPlaceOrder() throws Exception {
 
         // Arrange
-        CartItemDto cartItemDto = new CartItemDto("Pizza", "Delicious pizza", 200, 15.5f, new ArrayList<>(), 1, 3, "image");
-        CartItemDto cartItemDto2 = new CartItemDto("Soda", "Refreshing soda", 100, 2.5f, new ArrayList<>(), 2, 2, "image");
+        CartItemDto cartItemDto = new CartItemDto("Pizza", "Delicious pizza", 200, 15.5f, new ArrayList<>(), 1, 3, "image", 1L);
+        CartItemDto cartItemDto2 = new CartItemDto("Soda", "Refreshing soda", 100, 2.5f, new ArrayList<>(), 2, 2, "image", 1L);
         ArrayList<CartItemDto> items = new ArrayList<>();
         items.add(cartItemDto);
         items.add(cartItemDto2);
         CartDto cartDto = new CartDto("Customer", items);
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto("Customer", 1, cartDto, OrderType.DINE_IN.name());
-
         mockMvc.perform(post("/orders/placeOrder")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(orderDetailsDto))

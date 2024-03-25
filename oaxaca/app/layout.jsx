@@ -6,8 +6,8 @@ import AuthProvider from './providers/auth';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'OAXACA Restaurant',
-  description: '',
+    title: "OAXACA Restaurant",
+    description: "",
 };
 
 export default function RootLayout({ children }) {
