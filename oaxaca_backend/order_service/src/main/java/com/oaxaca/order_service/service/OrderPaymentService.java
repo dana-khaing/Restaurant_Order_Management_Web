@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import com.oaxaca.order_service.event.OrderPaidEvent;
+import com.oaxaca.order_service.event.OrderCompletedEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.repository.OrderRepository;
 import com.oaxaca.shared_library.model.order.OrderStatus;
@@ -66,9 +66,9 @@ public class OrderPaymentService {
             Charge charge = Charge.create(chargeParams);
 
             if (charge.getPaid()) {
-                order.setOrderStatus(OrderStatus.PAID);
+                order.setOrderStatus(OrderStatus.COMPLETED);
                 orderRepository.save(order);
-                applicationEventPublisher.publishEvent(new OrderPaidEvent(this, order.getId()));
+                applicationEventPublisher.publishEvent(new OrderCompletedEvent(this, order.getId()));
 
                 return true;
             }

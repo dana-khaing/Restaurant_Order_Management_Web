@@ -78,12 +78,8 @@ class CustomerWebSocketServiceTest {
         verify(orderService, times(1)).getOrderById(1L);
     }
 
-    @Test
-    void handleOrderPaidEvent_NotifiesCustomer() {
-        customerWebSocketService.handleOrderPaidEvent(new OrderPaidEvent(this, 1L));
-        verify(orderService, times(1)).getOrderById(1L);
-    }
 
+    @SuppressWarnings("null")
     @Test
     void notifyCustomer_SendsMessageToCustomer() throws IOException {
         Order order = new Order();

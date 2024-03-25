@@ -107,7 +107,7 @@ export default async function OrderConfirmPage({ params }) {
 }
 
 function OrderProgress({ currentStage }) {
-    const stages = ['Confirmed', 'Prepared', 'Delivered'];
+    const stages = ['PENDING', 'IN PROGRESS'];
 
     return (
         <div className="grid gap-2">

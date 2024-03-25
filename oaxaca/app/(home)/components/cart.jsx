@@ -82,7 +82,7 @@ export default function Cart({ cartItems }) {
           <span className='text-right text-lg font-semibold'>
             Total: £
             {cartItems
-              .reduce((prev, item) => prev + item.quantity * item.price, 0)
+              ?.reduce((prev, item) => prev + item.quantity * item.price, 0)
               .toFixed(2) || 0}
           </span>
           <Button

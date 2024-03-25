@@ -11,7 +11,8 @@ import com.oaxaca.order_service.event.OrderCancelledEvent;
 import com.oaxaca.order_service.event.OrderCompletedEvent;
 import com.oaxaca.order_service.event.OrderCreationEvent;
 import com.oaxaca.order_service.event.OrderDeliveredEvent;
-import com.oaxaca.order_service.event.OrderPaidEvent;
+import com.oaxaca.order_service.event.OrderPreparedEvent;
+import com.oaxaca.order_service.event.OrderSentToKitchenEvent;
 import com.oaxaca.order_service.model.Order;
 
 import java.io.IOException;
@@ -37,6 +38,10 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
 
     public void removeSession(WebSocketSession session) {
         waiterSessions.remove(session);
+    }
+
+    public Set<WebSocketSession> getSessions() {
+        return waiterSessions;
     }
 
     @EventListener
@@ -94,18 +99,41 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
     }
 
     @EventListener
-    public void handleOrderPaidEvent(OrderPaidEvent event) {
-        // Update waiters when an order is paid
-        Long order = event.getOrderId();
+    public void handleOrderSentToKitchenEvent(OrderSentToKitchenEvent event) {
+        Long orderId = event.getOrderId();
+        Order order = orderService
+                .getOrderById(orderId);
+
+        // Update waiters when a new order is sent to kitchen
         try {
-            notifyWaiters(orderService.getOrderById(order));
+            if (order != null) {
+                notifyWaiters(order);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @EventListener
+    public void handleOrderPreparedEvent(OrderPreparedEvent event) {
+        Long orderId = event.getOrderId();
+        Order order = orderService
+                .getOrderById(orderId);
+
+        // Update waiters when a new order is prepared
+        try {
+            if (order != null) {
+                notifyWaiters(order);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     void notifyWaiters(Order order) throws IOException {
-        if (order == null) {
+        if (order == null || waiterSessions.isEmpty()) {
             return;
         }
 

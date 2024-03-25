@@ -72,13 +72,7 @@ public class OrderController {
 
     }
 
-    @PutMapping("/completeOrder/{orderId}")
-    public ResponseEntity<Map<String, String>> completeOrder(@PathVariable Long orderId) {
-
-        orderService.completeOrder(orderId);
-        return ResponseEntity.ok(Map.of("message", "Order completed successfully"));
-
-    }
+   
 
     @PutMapping("/payForOrder/{orderId}")
     public ResponseEntity<Map<String, String>> payForOrder(@PathVariable Long orderId) {

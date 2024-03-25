@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 export async function POST(request) {
   const cookieStore = cookies();
-  const JSESSIONID = cookieStore.get('JSESSIONID');
+  const JSESSIONID = cookieStore.get('JSESSIONID')?.value;
   const orderData = await request.json();
 
   try {

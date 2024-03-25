@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oaxaca.order_service.event.OrderSentToKitchenEvent;
 import com.oaxaca.order_service.model.Order;
 
+@Service
 public class KitchenStaffWebSocketService extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;

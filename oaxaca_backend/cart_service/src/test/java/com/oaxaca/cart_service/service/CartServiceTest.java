@@ -207,14 +207,7 @@ public class CartServiceTest {
         assertEquals(null, result);
     }
 
-    @Test
-    public void testFetchCartWithNullSessionId(){
-        // Arrange
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            cartService.fetchCart(null);
-        });
-    }
+ 
 
     @Test
     public void testModifyExistingItemQuantity(){

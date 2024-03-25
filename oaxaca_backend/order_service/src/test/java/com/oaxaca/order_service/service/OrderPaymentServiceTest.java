@@ -2,7 +2,7 @@ package com.oaxaca.order_service.service;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
-import com.oaxaca.order_service.event.OrderPaidEvent;
+import com.oaxaca.order_service.event.OrderCompletedEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.repository.OrderRepository;
 import com.oaxaca.shared_library.model.order.OrderStatus;
@@ -43,6 +43,7 @@ class OrderPaymentServiceTest {
         assertFalse(result);
     }
 
+    @SuppressWarnings("null")
     @Test
     void payOrder_OrderDoesNotExist_ReturnsFalse() {
         when(orderRepository.findById(any(Long.class))).thenReturn(Optional.empty());
@@ -50,6 +51,7 @@ class OrderPaymentServiceTest {
         assertFalse(result);
     }
 
+    @SuppressWarnings("null")
     @Test
     void payOrder_SuccessfulPayment_ReturnsTrueAndPublishesEvent() throws StripeException {
         Order mockOrder = new Order();
@@ -67,7 +69,7 @@ class OrderPaymentServiceTest {
 
             assertTrue(result);
             verify(orderRepository, times(1)).save(mockOrder);
-            verify(applicationEventPublisher, times(1)).publishEvent(any(OrderPaidEvent.class));
+            verify(applicationEventPublisher, times(1)).publishEvent(any(OrderCompletedEvent.class));
         }
     }
 }

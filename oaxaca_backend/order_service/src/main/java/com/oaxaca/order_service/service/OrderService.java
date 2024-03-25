@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.oaxaca.order_service.dto.CartItemDto;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.event.OrderCancelledEvent;
-import com.oaxaca.order_service.event.OrderCompletedEvent;
 import com.oaxaca.order_service.event.OrderCreationEvent;
 import com.oaxaca.order_service.event.OrderDeliveredEvent;
+import com.oaxaca.order_service.event.OrderPreparedEvent;
 import com.oaxaca.order_service.event.OrderSentToKitchenEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.model.OrderItem;
@@ -79,26 +79,7 @@ public class OrderService {
         applicationEventPublisher.publishEvent(new OrderCancelledEvent(this, orderId));
 
         orderRepository.deleteById(orderId);
-    }
-
-    public void completeOrder(Long orderId) {
-
-        if (orderId == null) {
-            throw new IllegalArgumentException("Order id cannot be null");
-        }
-
-        Optional<Order> order = orderRepository.findById(orderId);
-
-        if (!order.isPresent()) {
-            throw new IllegalArgumentException("Order not found");
-        }
-
-        Order orderToComplete = order.get();
-        orderToComplete.setOrderStatus(OrderStatus.COMPLETED);
-        orderRepository.save(orderToComplete);
-
-        applicationEventPublisher.publishEvent(new OrderCompletedEvent(this, orderId));
-    }
+    } 
 
     public void deliverOrder(Long orderId) {
 
@@ -117,6 +98,23 @@ public class OrderService {
         orderRepository.save(orderToDeliver);
         applicationEventPublisher.publishEvent(new OrderDeliveredEvent(this, orderId));
 
+    }
+
+    public void notifyPreparedOrder(Long orderId){
+        if (orderId == null) {
+            throw new IllegalArgumentException("Order id cannot be null");
+        }
+
+        Optional<Order> order = orderRepository.findById(orderId);
+
+        if (!order.isPresent()) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        Order orderToDeliver = order.get();
+        orderToDeliver.setOrderStatus(OrderStatus.PREPARED);
+        orderRepository.save(orderToDeliver);
+        applicationEventPublisher.publishEvent(new OrderPreparedEvent(this, orderId));
     }
 
     public void sendOrderToKitchen(Long orderId) {

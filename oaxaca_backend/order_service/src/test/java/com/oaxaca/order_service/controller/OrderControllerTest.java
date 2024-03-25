@@ -8,7 +8,6 @@ import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.service.OrderPaymentService;
 import com.oaxaca.order_service.service.OrderService;
-import com.oaxaca.shared_library.model.order.OrderStatus;
 import com.oaxaca.shared_library.model.order.OrderType;
 
 import jakarta.servlet.http.Cookie;
@@ -19,15 +18,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,9 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderControllerTest {
@@ -63,6 +57,7 @@ public class OrderControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testCancelOrder() throws Exception {
         doNothing().when(orderService).cancelOrder(anyLong());
@@ -72,6 +67,7 @@ public class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testFindOrder() throws Exception {
         when(orderService.getOrderById(anyLong())).thenReturn(new Order());
@@ -81,15 +77,8 @@ public class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void testCompleteOrder() throws Exception {
-        doNothing().when(orderService).completeOrder(anyLong());
 
-        mockMvc.perform(put("/orders/completeOrder/{orderId}", 1L)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
+    @SuppressWarnings("null")
     @Test
     public void testCancelOrderWithNullId() throws Exception {
         mockMvc.perform(post("/orders/cancel/{orderId}", (Object) null)
@@ -97,6 +86,7 @@ public class OrderControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testFindOrderWithNullId() throws Exception {
         mockMvc.perform(post("/orders/findOrder/{orderId}", (Object) null)
@@ -104,6 +94,7 @@ public class OrderControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testCompleteOrderWithNullId() throws Exception {
         mockMvc.perform(post("/orders/completeOrder/{orderId}", (Object) null)
@@ -111,6 +102,7 @@ public class OrderControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testPlaceOrder() throws Exception {
 
@@ -129,6 +121,7 @@ public class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testSendOrderToKitchen() throws Exception {
         doNothing().when(orderService).sendOrderToKitchen(anyLong());
@@ -138,6 +131,7 @@ public class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testDeliverOrder() throws Exception {
         doNothing().when(orderService).deliverOrder(anyLong());
@@ -147,6 +141,7 @@ public class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testSendOrderToKitchenWithNullId() throws Exception {
         mockMvc.perform(post("/orders/sendOrderToKitchen/{orderId}", (Object) null)
@@ -154,6 +149,7 @@ public class OrderControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testDeliverOrderWithNullId() throws Exception {
         mockMvc.perform(post("/orders/deliverOrder/{orderId}", (Object) null)
@@ -161,6 +157,7 @@ public class OrderControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testPayForOrder() throws Exception {
         when(orderPaymentService.payOrder(anyLong())).thenReturn(true);
@@ -170,6 +167,7 @@ public class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("null")
     @Test
     public void testPayForOrderWithNullId() throws Exception {
         mockMvc.perform(post("/orders/payForOrder/{orderId}", (Object) null)

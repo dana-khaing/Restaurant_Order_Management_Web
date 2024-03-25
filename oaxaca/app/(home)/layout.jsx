@@ -5,6 +5,7 @@ import UserProfile from './components/user-profile';
 
 export default async function HomeLayout({ children }) {
   const cart = await fetchCart();
+  console.log('Cart:', cart);
   const cartItems = cart?.items;
 
   return (

@@ -99,24 +99,7 @@ public class OrderServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    @SuppressWarnings("null")
-    @Test
-    void testCompleteOrderSuccess() {
-        // Arrange
-        Long orderId = 1L;
-        Order mockedOrder = new Order();
-        mockedOrder.setId(orderId);
-        mockedOrder.setOrderStatus(OrderStatus.PENDING);
-
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(mockedOrder));
-        when(orderRepository.save(any(Order.class))).thenReturn(mockedOrder);
-
-        // Act
-        orderService.completeOrder(orderId);
-
-        // Assert
-        assertEquals(OrderStatus.COMPLETED, mockedOrder.getOrderStatus());
-    }
+  
 
     @SuppressWarnings("null")
     @Test
@@ -203,22 +186,7 @@ public class OrderServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
-
-    @Test
-    void testCompleteOrderWithNullOrderId() {
-        // Arrange
-        Long orderId = null;
-
-        // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderService.completeOrder(orderId);
-        });
-
-        String expectedMessage = "Order id cannot be null";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
+ 
 
     @Test
     void testSendOrderToKitchenWithNullOrderId() {
@@ -264,6 +232,131 @@ public class OrderServiceTest {
         });
 
         String expectedMessage = "Order status and pageable cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+
+    @SuppressWarnings("null")
+    @Test
+    void testDeliverOrder() {
+        // Arrange
+        Long orderId = 1L;
+        Order orderToDeliver = new Order();
+        orderToDeliver.setId(orderId);
+        orderToDeliver.setOrderStatus(OrderStatus.PREPARED);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(orderToDeliver));
+        when(orderRepository.save(any(Order.class))).thenReturn(orderToDeliver);
+
+        // Act
+        orderService.deliverOrder(orderId);
+
+        // Assert
+        verify(orderRepository, times(1)).save(any(Order.class));
+        assertEquals(OrderStatus.DELIVERED, orderToDeliver.getOrderStatus());
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    void testNotifyPreparedOrder() {
+        // Arrange
+        Long orderId = 1L;
+        Order orderToNotify = new Order();
+        orderToNotify.setId(orderId);
+        orderToNotify.setOrderStatus(OrderStatus.IN_PROGRESS);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(orderToNotify));
+        when(orderRepository.save(any(Order.class))).thenReturn(orderToNotify);
+
+        // Act
+        orderService.notifyPreparedOrder(orderId);
+
+        // Assert
+        verify(orderRepository, times(1)).save(any(Order.class));
+        assertEquals(OrderStatus.PREPARED, orderToNotify.getOrderStatus());
+    }
+
+    @Test
+    void testGetOrderById() {
+        // Arrange
+        Long orderId = 1L;
+        Order order = new Order();
+        order.setId(orderId);
+        order.setOrderStatus(OrderStatus.PENDING);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+
+        // Act
+        Order result = orderService.getOrderById(orderId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(orderId, result.getId());
+        verify(orderRepository, times(1)).findById(orderId);
+    }
+
+    @Test
+    void testGetOrderByIdNotFound() {
+        // Arrange
+        Long orderId = 999L;
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.getOrderById(orderId);
+        });
+
+        String expectedMessage = "Order not found";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testDeliverOrderWithNullOrderId() {
+        // Arrange
+        Long orderId = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.deliverOrder(orderId);
+        });
+
+        String expectedMessage = "Order id cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testNotifyPreparedOrderWithNullOrderId() {
+        // Arrange
+        Long orderId = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.notifyPreparedOrder(orderId);
+        });
+
+        String expectedMessage = "Order id cannot be null";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testGetOrderByIdWithNullOrderId() {
+        // Arrange
+        Long orderId = null;
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.getOrderById(orderId);
+        });
+
+        String expectedMessage = "Order id cannot be null";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

@@ -59,11 +59,7 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
         notifyCustomer(event.getOrderId());
     }
 
-    @EventListener
-    public void handleOrderPaidEvent(OrderPaidEvent event) {
-        notifyCustomer(event.getOrderId());
-    }
-
+   
     void notifyCustomer(Long orderId) {
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
