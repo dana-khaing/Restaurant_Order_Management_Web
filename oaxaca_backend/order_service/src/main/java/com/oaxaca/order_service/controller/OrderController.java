@@ -2,6 +2,7 @@ package com.oaxaca.order_service.controller;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,6 +73,14 @@ public class OrderController {
 
     }
 
+    @PutMapping("/preparedOrder/{orderId}")
+    public ResponseEntity<Map<String, String>> preparedOrder(@PathVariable Long orderId) {
+
+        orderService.notifyPreparedOrder(orderId);
+        return ResponseEntity.ok(Map.of("message", "Order prepared successfully"));
+
+    }
+
    
 
     @PutMapping("/payForOrder/{orderId}")
@@ -85,6 +94,10 @@ public class OrderController {
             return ResponseEntity.ok(Map.of("message", "Order payment failed"));
         }
 
+    }
+
+    public ResponseEntity<Map<String, ?>> fetchAllOrders(Pageable pageable) {
+        return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders(pageable)));
     }
 
 }
