@@ -4,7 +4,8 @@ import Footer from './components/footer';
 import UserProfile from './components/user-profile';
 
 export default async function HomeLayout({ children }) {
-  const cartItems = await fetchCart();
+  const cart = await fetchCart();
+  const cartItems = cart?.items;
 
   return (
     <div>

@@ -23,7 +23,7 @@ export async function fetchCart() {
         return cart;
     } catch (e) {
         console.log(e.message);
-        return [];
+        return {};
     }
 }
 
