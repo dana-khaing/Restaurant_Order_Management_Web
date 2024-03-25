@@ -105,6 +105,28 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutCustomer(HttpServletRequest request, HttpServletResponse response) {
+        rememberMeServices.loginFail(request, response);
+        SecurityContextHolder.clearContext();
+        Map<String, String> result = new HashMap<>();
+        result.put("message", "Customer logged out successfully");
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCustomer(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = rememberMeServices.autoLogin(request, response);
+
+        if (authentication != null && authentication instanceof RememberMeAuthenticationToken) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Customer customer = customerService.findCustomerByUsername(authentication.getName());
+            return ResponseEntity.ok(customer);
+        } else {
+            return ResponseEntity.badRequest().body("User not authenticated with remember-me token");
+        }
+    }
+
     @GetMapping("/find/id/{id}")
     public Customer findCustomerById(@PathVariable Long id) {
         return customerService.findCustomerById(id);

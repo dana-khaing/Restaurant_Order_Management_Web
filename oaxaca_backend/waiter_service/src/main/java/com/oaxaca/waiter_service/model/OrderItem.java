@@ -17,6 +17,7 @@ public class OrderItem implements IOrderItem {
     private Long productId;
     private List<String> allergens = new ArrayList<>();
     private int quantity;
+    private String imageUrl;
 
     private int calories;
 
@@ -24,7 +25,7 @@ public class OrderItem implements IOrderItem {
     }
 
     public OrderItem(int category, String name, String description, float price,
-            List<String> allergens, int calories, Long productId, int quantity) {
+            List<String> allergens, int calories, Long productId, int quantity, String imageUrl) {
 
         this.category = category;
         this.name = name;
@@ -34,6 +35,7 @@ public class OrderItem implements IOrderItem {
         this.calories = calories;
         this.productId = productId;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
 
     }
 
@@ -121,6 +123,16 @@ public class OrderItem implements IOrderItem {
     @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }

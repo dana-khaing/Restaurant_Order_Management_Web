@@ -5,18 +5,29 @@ import java.util.List;
 
 import com.oaxaca.shared_library.model.order.IOrderItem;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class OrderItem implements IOrderItem {
 
+    @Column(nullable = false)
     private int category;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private float price;
+    @Column(nullable = false)
     private Long productId;
+    @Column
     private List<String> allergens;
+    @Column(nullable = false)
     private int quantity;
+    @Column(nullable = false)
+    private String imageUrl;
+
 
     private int calories;
 
@@ -25,7 +36,7 @@ public class OrderItem implements IOrderItem {
     }
 
     public OrderItem(int category, String name, String description, float price,
-            List<String> allergens, int calories, Long productId, int quantity) {
+            List<String> allergens, int calories, Long productId, int quantity, String imageUrl) {
 
         this.category = category;
         this.name = name;
@@ -35,6 +46,7 @@ public class OrderItem implements IOrderItem {
         this.calories = calories;
         this.productId = productId;
         this.quantity = quantity;
+        this.imageUrl = imageUrl;
 
     }
 
@@ -122,6 +134,16 @@ public class OrderItem implements IOrderItem {
     @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }

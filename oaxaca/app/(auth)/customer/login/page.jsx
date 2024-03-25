@@ -22,10 +22,14 @@ import SocialLinks from '@/app/custom_components/auth/SocialLinks';
 import AuthHeader from '@/app/custom_components/auth/AuthHeader';
 import AuthBanner from '@/app/custom_components/auth/AuthBanner';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '@/app/providers/auth';
 
 export default function CustomerLoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
+
+  const { loginUser } = useContext(AuthContext);
 
   const form = useForm({
     defaultValues: {
@@ -42,42 +46,6 @@ export default function CustomerLoginPage() {
     ),
     mode: 'onBlur',
   });
-
-  useEffect(() => {
-    async function validateRememberMeToken() {
-      try {
-        const response = await fetch('/api/auth/customer/login/validate', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
-
-        // First, check if the response is OK
-        if (!response.ok) {
-          const errorText = await response.text(); // Get the error message as text
-          console.error('Error:', errorText);
-
-          return;
-        }
-
-        // Then, safely parse the JSON
-        const data = await response.text();
-        console.log('Success:', data);
-        toast({
-          title: 'Logged in successfully',
-          description: 'Redirecting to home page.',
-        });
-        router.push('/menus');
-      } catch (error) {
-        console.error('An error occurred:', error);
-        toast({
-          title: 'Sign up failed.',
-          description: 'Please try again.',
-        });
-      }
-    }
-
-    validateRememberMeToken();
-  }, []);
 
   async function onSubmit(values) {
     const endpoint = values.remember_me
@@ -108,13 +76,17 @@ export default function CustomerLoginPage() {
         description: 'Logged in successfully',
       });
 
+      loginUser({
+        username: values.username,
+        password: values.password,
+        role: 'customer',
+      });
+
       router.push('/menus');
     } catch (error) {
       console.log(error);
     }
   }
-
-  const { toast } = useToast();
 
   return (
     <main className='flex flex-col justify-center w-full items-center gap-6 lg:flex-row'>

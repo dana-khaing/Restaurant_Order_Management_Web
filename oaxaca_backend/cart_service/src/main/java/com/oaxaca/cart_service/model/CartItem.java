@@ -22,9 +22,10 @@ public class CartItem implements Serializable, ICartItem {
     private int calories;
     private int category;
     private String description;
+    private String imageUrl;
 
     public CartItem(String productName, String description, List<String> allergens, int calories, int category,
-            Long productId, int quantity, float price) {
+            Long productId, int quantity, float price, String imageUrl) {
         this.id = UUID.randomUUID().toString();
         this.productName = productName;
         this.allergens = allergens;
@@ -34,6 +35,7 @@ public class CartItem implements Serializable, ICartItem {
         this.quantity = quantity;
         this.price = price;
         this.description = description;
+        this.imageUrl = imageUrl;
 
     }
 
@@ -117,6 +119,16 @@ public class CartItem implements Serializable, ICartItem {
     @Override
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }

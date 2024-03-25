@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.oaxaca.order_service.dto.CartItemDto;
 import com.oaxaca.order_service.dto.OrderDetailsDto;
 import com.oaxaca.order_service.event.OrderCancelledEvent;
-import com.oaxaca.order_service.event.OrderCompletedEvent;
 import com.oaxaca.order_service.event.OrderCreationEvent;
 import com.oaxaca.order_service.event.OrderDeliveredEvent;
+import com.oaxaca.order_service.event.OrderPreparedEvent;
 import com.oaxaca.order_service.event.OrderSentToKitchenEvent;
 import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.model.OrderItem;
@@ -33,7 +33,7 @@ public class OrderService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public void placeOrder(OrderDetailsDto orderDetailsDto) {
+    public Order placeOrder(OrderDetailsDto orderDetailsDto) {
 
         if (orderDetailsDto == null || orderDetailsDto.getCart() == null || orderDetailsDto.getCart().getItems() == null
 
@@ -48,6 +48,7 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderType(orderDetailsDto.getOrderType());
 
+
         List<OrderItem> orderItems = orderDetailsDto.getCart().getItems().stream()
                 .map(this::convertToOrderItem)
                 .collect(Collectors.toList());
@@ -59,6 +60,8 @@ public class OrderService {
         orderRepository.save(order);
 
         applicationEventPublisher.publishEvent(new OrderCreationEvent(this, order.getId()));
+
+        return order;
 
     }
 
@@ -76,26 +79,7 @@ public class OrderService {
         applicationEventPublisher.publishEvent(new OrderCancelledEvent(this, orderId));
 
         orderRepository.deleteById(orderId);
-    }
-
-    public void completeOrder(Long orderId) {
-
-        if (orderId == null) {
-            throw new IllegalArgumentException("Order id cannot be null");
-        }
-
-        Optional<Order> order = orderRepository.findById(orderId);
-
-        if (!order.isPresent()) {
-            throw new IllegalArgumentException("Order not found");
-        }
-
-        Order orderToComplete = order.get();
-        orderToComplete.setOrderStatus(OrderStatus.COMPLETED);
-        orderRepository.save(orderToComplete);
-
-        applicationEventPublisher.publishEvent(new OrderCompletedEvent(this, orderId));
-    }
+    } 
 
     public void deliverOrder(Long orderId) {
 
@@ -114,6 +98,23 @@ public class OrderService {
         orderRepository.save(orderToDeliver);
         applicationEventPublisher.publishEvent(new OrderDeliveredEvent(this, orderId));
 
+    }
+
+    public void notifyPreparedOrder(Long orderId){
+        if (orderId == null) {
+            throw new IllegalArgumentException("Order id cannot be null");
+        }
+
+        Optional<Order> order = orderRepository.findById(orderId);
+
+        if (!order.isPresent()) {
+            throw new IllegalArgumentException("Order not found");
+        }
+
+        Order orderToDeliver = order.get();
+        orderToDeliver.setOrderStatus(OrderStatus.PREPARED);
+        orderRepository.save(orderToDeliver);
+        applicationEventPublisher.publishEvent(new OrderPreparedEvent(this, orderId));
     }
 
     public void sendOrderToKitchen(Long orderId) {
@@ -153,11 +154,13 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     }
 
-    public Page<Order> getOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+    public Page<Order> getOrdersByStatus(String status, Pageable pageable) {
 
-        if (orderStatus == null || pageable == null) {
+        if (status == null || pageable == null) {
             throw new IllegalArgumentException("Order status and pageable cannot be null");
         }
+
+        OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
 
         return orderRepository.findByOrderStatus(orderStatus, pageable);
     }
@@ -168,7 +171,11 @@ public class OrderService {
         orderItem.setCategory(cartDto.getCategory());
         orderItem.setDescription(cartDto.getDescription());
         orderItem.setPrice(cartDto.getPrice());
-        orderItem.setName(cartDto.getProductName());
+        orderItem.setName(cartDto.getName());
+        orderItem.setAllergens(cartDto.getAllergens());
+        orderItem.setQuantity(cartDto.getQuantity());
+        orderItem.setProductId(cartDto.getProductId());
+        orderItem.setImageUrl(cartDto.getImageUrl());
 
         return orderItem;
     }

@@ -135,23 +135,23 @@ public class CartServiceTest {
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
 
         cart.getItems().add(existingItem);
 
-        CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem newItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
         
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            cartService.addCartItem("test", cart, newItem);
-        });
+        cartService.addCartItem("test", cart, newItem);
+        assertEquals(4, cart.getItems().get(0).getQuantity());
+
     }
 
     public void testDeleteItemCart(){
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
 
         cart.getItems().add(existingItem);
 
@@ -207,21 +207,14 @@ public class CartServiceTest {
         assertEquals(null, result);
     }
 
-    @Test
-    public void testFetchCartWithNullSessionId(){
-        // Arrange
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            cartService.fetchCart(null);
-        });
-    }
+ 
 
     @Test
     public void testModifyExistingItemQuantity(){
         // Arrange
         Cart cart = new Cart();
         List<String> allergens = List.of("Nuts", "Gluten");
-        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f); 
+        CartItem existingItem = new CartItem("Test Product", "Vegan", allergens, 200, 1, 101L, 2, 19.99f, "image"); 
 
         cart.getItems().add(existingItem);
 
@@ -262,6 +255,8 @@ public class CartServiceTest {
             cartService.modifyItemQuantity("test",mockCart, 1, 0);
         });
     }
+
+    
 
    
 

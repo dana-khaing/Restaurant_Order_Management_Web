@@ -2,11 +2,11 @@ package com.oaxaca.order_service.event;
 
 import org.springframework.context.ApplicationEvent;
 
-public class OrderStatusUpdateEvent extends ApplicationEvent{
+public class OrderPreparedEvent extends ApplicationEvent{
 
     private final Long orderId;
 
-    public OrderStatusUpdateEvent(Object source, Long orderId) {
+    public OrderPreparedEvent(Object source, Long orderId) {
         super(source);
         this.orderId = orderId;
     }
@@ -14,5 +14,6 @@ public class OrderStatusUpdateEvent extends ApplicationEvent{
     public Long getOrderId() {
         return orderId;
     }
+
     
 }

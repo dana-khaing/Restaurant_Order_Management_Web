@@ -16,13 +16,16 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(`${SERVICE_URLS.CUSTOMER_SERVICE}/customer/me`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Cookie: `remember-me=${remember_me.value}`,
-      },
-    });
+    const res = await fetch(
+      `${SERVICE_URLS.CUSTOMER_SERVICE}/customer/logout`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Cookie: `remember-me=${remember_me.value}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       console.error(await res.text()); // Log or handle error response as text
@@ -37,16 +40,9 @@ export async function GET() {
 
     const response = await res.json();
 
-    const user = {
-      id: response.id,
-      username: response.username,
-      name: response.name,
-      email: response.email,
-      address: response.address,
-      phone: response.phone,
-    };
+    cookieStore.delete('remember-me');
 
-    return new Response(JSON.stringify(user), {
+    return new Response(JSON.stringify(response), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });

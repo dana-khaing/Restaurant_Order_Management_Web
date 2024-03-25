@@ -48,7 +48,8 @@ public class CartService {
                 .findFirst().orElse(null);
 
         if (existingCartItem != null) {
-            throw new IllegalArgumentException("Item already exists in cart");
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
+            redisTemplate.opsForValue().set(sessionId, cart);
 
         } else {
             cart.getItems().add(cartItem);
@@ -83,7 +84,7 @@ public class CartService {
     public Cart fetchCart(String sessionId) {
 
         if (sessionId == null) {
-            throw new IllegalArgumentException("Session ID cannot be null");
+           return new Cart(); 
         }
 
         return (Cart) redisTemplate.opsForValue().get(sessionId);
@@ -113,6 +114,15 @@ public class CartService {
             redisTemplate.opsForValue().set(sessionId, cart);
         }
 
+    }
+
+    public void clearCart(String sessionId) {
+
+        if (sessionId == null) {
+            throw new IllegalArgumentException("Session ID cannot be null");
+        }
+
+        redisTemplate.delete(sessionId);
     }
 
 }

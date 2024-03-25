@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -112,6 +113,16 @@ public class CartController {
 
         cartService.modifyItemQuantity(sessionId, currentCart, productId, quantity);
         return ResponseEntity.ok(Map.of("Cart: ", "Item quantity modified."));
+    }
+
+    @DeleteMapping("/clearCart/{sessionId}")
+    @Operation(summary = "Clear cart", description = "Clears the cart for the current session")
+    @ApiResponse(responseCode = "200", description = "Cart cleared")
+    @ApiResponse(responseCode = "400", description = "Cart is empty")
+    public ResponseEntity<?> clearCart(@PathVariable String sessionId) {
+
+        cartService.clearCart(sessionId);
+        return ResponseEntity.ok(Map.of("Cart: ", "Cart cleared."));
     }
 
 }

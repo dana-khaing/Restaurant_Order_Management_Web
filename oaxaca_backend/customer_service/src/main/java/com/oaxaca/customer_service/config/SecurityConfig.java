@@ -70,7 +70,7 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // replace "*" with your frontend's origin
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://oaxaca.hopto.org")); // replace "*" with your frontend's origin
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true); // this allows cookies to be sent cross-origin
@@ -95,7 +95,7 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/customer/login", "/customer/register", "/customer/validate-remember-me").permitAll())
+            .requestMatchers("/customer/login", "/customer/register", "/customer/validate-remember-me", "/customer/me", "/customer/logout").permitAll())
 
         .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
         .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)

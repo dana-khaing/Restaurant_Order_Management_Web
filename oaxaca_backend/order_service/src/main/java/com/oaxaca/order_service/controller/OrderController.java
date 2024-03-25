@@ -2,7 +2,9 @@ package com.oaxaca.order_service.controller;
 
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.oaxaca.order_service.dto.OrderDetailsDto;
+import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.service.OrderPaymentService;
 import com.oaxaca.order_service.service.OrderService;
 
@@ -21,10 +25,13 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderPaymentService orderPaymentService;
+    private final RestTemplate restTemplate;
 
-    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService) {
+    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService,
+            RestTemplate restTemplate) {
         this.orderService = orderService;
         this.orderPaymentService = orderPaymentService;
+        this.restTemplate = restTemplate;
     }
 
     @PutMapping("/cancel/{orderId}")
@@ -42,9 +49,12 @@ public class OrderController {
     }
 
     @PostMapping("/placeOrder")
-    public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto) {
+    public ResponseEntity<Map<String, ?>> placeOrder(@RequestBody OrderDetailsDto orderDetailsDto,
+            @CookieValue("JSESSIONID") String sessionId) {
+        Order order = orderService.placeOrder(orderDetailsDto);
+        restTemplate.delete("http://localhost:8084/cart/clearCart/" + sessionId);
 
-        return ResponseEntity.ok(Map.of("order", "Order placed successfully"));
+        return ResponseEntity.ok(Map.of("order", order));
     }
 
     @PutMapping("/sendOrderToKitchen/{orderId}")
@@ -63,13 +73,15 @@ public class OrderController {
 
     }
 
-    @PutMapping("/completeOrder/{orderId}")
-    public ResponseEntity<Map<String, String>> completeOrder(@PathVariable Long orderId) {
+    @PutMapping("/preparedOrder/{orderId}")
+    public ResponseEntity<Map<String, String>> preparedOrder(@PathVariable Long orderId) {
 
-        orderService.completeOrder(orderId);
-        return ResponseEntity.ok(Map.of("message", "Order completed successfully"));
+        orderService.notifyPreparedOrder(orderId);
+        return ResponseEntity.ok(Map.of("message", "Order prepared successfully"));
 
     }
+
+   
 
     @PutMapping("/payForOrder/{orderId}")
     public ResponseEntity<Map<String, String>> payForOrder(@PathVariable Long orderId) {
@@ -82,6 +94,14 @@ public class OrderController {
             return ResponseEntity.ok(Map.of("message", "Order payment failed"));
         }
 
+    }
+    @GetMapping("/fetchAllOrders")
+    public ResponseEntity<Map<String, ?>> fetchAllOrders(Pageable pageable) {
+        return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders(pageable)));
+    }
+    @GetMapping("/fetchOrdersByStatus/{status}")
+    public ResponseEntity<Map<String, ?>> fetchOrdersByStatus(@PathVariable String status, Pageable pageable) {
+        return ResponseEntity.ok(Map.of("orders", orderService.getOrdersByStatus(status, pageable)));
     }
 
 }

@@ -10,7 +10,7 @@ import {
 import { useState } from 'react';
 
 export default function MenuModal({ menu }) {
-  const { name, price, allergens, imageURL } = menu;
+  const { name, price, allergens, calories, category, description, imageURL } = menu;
 
   const [quantity, setQuantity] = useState(1);
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
@@ -18,20 +18,28 @@ export default function MenuModal({ menu }) {
     if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
+
+
   const handleAddCartItem = async () => {
     const cartItems = (await fetchCart())?.items;
+    console.log(cartItems);
 
     const existingItem = cartItems?.find((item) => item.productId === menu.id);
 
     if (existingItem) {
       await updateCartItem(menu.id, existingItem.quantity + quantity);
     } else {
+      console.log('adding to cart');
       await addToCart({
         productId: menu.id,
-        quantity,
-        price,
+        quantity : quantity,
+        price : price,
         productName: name,
-        dietaryRequirement: allergens.map((a) => a.name).join(', '),
+        allergens: allergens.map((a) => a.name),
+        calories: calories,
+        category: category,
+        description: description,
+        imageUrl: imageURL,
       });
     }
   };
@@ -39,10 +47,7 @@ export default function MenuModal({ menu }) {
     <DialogHeader>
       <DialogTitle>{name}</DialogTitle>
       <DialogDescription>
-        <img
-          src={imageURL}
-          className='w-full h-52 rounded-xl my-4'
-        />
+        <img src={imageURL} className='w-full h-52 rounded-xl my-4' />
         <div className='flex items-center justify-between px-1'>
           <span className='font-bold text-xl text-black line-clamp-1'>
             {name}

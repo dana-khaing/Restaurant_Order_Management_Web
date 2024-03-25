@@ -1,14 +1,18 @@
 'use client';
 
 import { removeCartItem, updateCartItem } from '@/app/actions/cart';
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { ShoppingCart } from 'lucide-react';
+import { useRouter } from 'next/navigation'; // Keeping as per your request
 
 export default function Cart({ cartItems }) {
+  const router = useRouter();
+
   const decrementQuantity = async (productId) => {
     const item = cartItems.find((item) => item.productId === productId);
     if (item.quantity > 1) {
@@ -23,10 +27,16 @@ export default function Cart({ cartItems }) {
     await updateCartItem(productId, item.quantity + 1);
   };
 
+  const disabled = cartItems?.length === 0;
+
+  const goToConfirmOrder = () => {
+    router.push('/customer/order');
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button variant='outline' className='relative mr-3'>
+        <button className='relative mr-3'>
           <span className='absolute -right-2 -top-2 inline-block h-5 w-5 rounded-full bg-gray-300 text-center text-xs font-medium leading-5 text-black'>
             {cartItems?.length || 0}
           </span>
@@ -42,11 +52,12 @@ export default function Cart({ cartItems }) {
               <div key={item.id} className='flex '>
                 <img
                   className='w-16 h-16 rounded-lg'
-                  src='/images/burrito.jpeg'
+                  src={item.imageUrl}
+                  alt='Item'
                 />
                 <div className='flex justify-between w-full pl-2'>
                   <div className='flex flex-col gap-1'>
-                    <span className='font-semibold'>{item.productName}</span>
+                    <span className='font-semibold'>{item.name}</span>
                     <div className='flex gap-2 items-center'>
                       <span
                         onClick={() => decrementQuantity(item.productId)}
@@ -67,16 +78,20 @@ export default function Cart({ cartItems }) {
                 </div>
               </div>
             ))}
-            <span className='text-right text-lg font-semibold'>
-              Total:{' '}
-              {Number(
-                cartItems?.reduce(
-                  (prev, item) => prev + item.quantity * item.price,
-                  0
-                )
-              )?.toFixed(2) || 0}
-            </span>
           </div>
+          <span className='text-right text-lg font-semibold'>
+            Total: £
+            {cartItems
+              ?.reduce((prev, item) => prev + item.quantity * item.price, 0)
+              .toFixed(2) || 0}
+          </span>
+          <Button
+            className='w-full mt-4'
+            onClick={goToConfirmOrder}
+            disabled={disabled}
+          >
+            Checkout
+          </Button>
         </div>
       </PopoverContent>
     </Popover>
