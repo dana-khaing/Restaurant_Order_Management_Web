@@ -54,6 +54,8 @@ export default function MenuModal({ menu }) {
           </span>
           <span className='text-gray-600'>£{price}</span>
         </div>
+        
+
 
         <div className='flex justify-between items-end'>
           <div className='flex gap-3 items-center text-xl text-black mt-4'>
