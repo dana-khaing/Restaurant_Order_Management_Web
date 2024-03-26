@@ -55,8 +55,8 @@ export default function MenuModal({ menu }) {
           <span className='text-gray-600'>£{price}</span>
         </div>
         <span className='line-clamp-2 text-sm mb-3 text-gray-500'>{description}</span>
-        <p className='line-clamp-1 text-gray-700 text-sm mb-2' style={{ fontSize: '12px' }}>Calories: {calories}</p>
-      
+        <p className='line-clamp-1 text-gray-700 text-sm mb-2' style={{ fontSize: '14px' }}>Calories: {calories}</p>
+        
         
 
 
