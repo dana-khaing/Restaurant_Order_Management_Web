@@ -3,7 +3,7 @@ import MenuModal from './menu-modal';
 import { cn } from '@/lib/utils';
 
 function MenuCard({ menu }) {
-  const { name, description, price, allergens, imageURL } = menu;
+  const { name, description, price, allergens, imageURL, calories } = menu;
   return (
     <div className='max-w-64 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
       <img src={imageURL} className='w-full h-40 rounded-t-xl' />
