@@ -3,13 +3,14 @@ import MenuModal from './menu-modal';
 import { cn } from '@/lib/utils';
 
 function MenuCard({ menu }) {
-  const { name, description, price, allergens, imageURL } = menu;
+  const { name, description, price, allergens, imageURL, calories } = menu;
   return (
     <div className='max-w-64 min-w-44 border border-[#EF3C3C] rounded-xl flex flex-col'>
       <img src={imageURL} className='w-full h-40 rounded-t-xl' />
       <div className='p-2 flex-1 flex flex-col'>
         <h5 className='text-md font-semibold line-clamp-1'>{name}</h5>
         <span className='text-gray-600 text-sm'>£{price}</span>
+        <p className='text-gray-700 text-sm mb-2' style={{ fontSize: '12px' }}>Calories: {calories}</p>
 
         <div className='my-1'>
           {allergens.map((allergen) => (
@@ -22,7 +23,7 @@ function MenuCard({ menu }) {
           ))}
         </div>
 
-        <p className='line-clamp-1 text-sm mb-2 text-gray-500'>{description}</p>
+        <p className='line-clamp-1 text-sm mb-3 text-gray-500'>{description}</p>
 
         <Dialog>
           <DialogTrigger asChild>

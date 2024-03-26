@@ -49,11 +49,16 @@ export default function MenuModal({ menu }) {
       <DialogDescription>
         <img src={imageURL} className='w-full h-52 rounded-xl my-4' />
         <div className='flex items-center justify-between px-1'>
-          <span className='font-bold text-xl text-black line-clamp-1'>
+          <span className='font-bold text-xl text-black line-clamp-2'>
             {name}
           </span>
           <span className='text-gray-600'>£{price}</span>
         </div>
+        <span className='line-clamp-2 text-sm mb-3 text-gray-500'>{description}</span>
+        <p className='line-clamp-1 text-gray-700 text-sm mb-2' style={{ fontSize: '14px' }}>Calories: {calories}</p>
+        
+        
+
 
         <div className='flex justify-between items-end'>
           <div className='flex gap-3 items-center text-xl text-black mt-4'>
