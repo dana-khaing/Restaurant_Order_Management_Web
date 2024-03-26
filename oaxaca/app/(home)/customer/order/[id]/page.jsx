@@ -86,39 +86,13 @@ export default async function OrderConfirmPage({ params }) {
             <Separator className='my-2' />
             <div className='flex items-center font-medium'>
               <div>Total</div>
-              <div className='ml-auto'>£{data.order.total}</div>
+              <div className='ml-auto'>£{data.order.total.toFixed(2)}</div>
             </div>
           </div>
         </CardContent>
-        <CardFooter>
-          <OrderProgress currentStage='Prepared' />
-        </CardFooter>
+       
       </Card>
     </section>
   );
 }
 
-function OrderProgress({ currentStage }) {
-  const stages = ['PENDING', 'IN PROGRESS'];
-
-  return (
-    <div className='grid gap-2'>
-      {stages.map((stage, index) => {
-        let color;
-        if (currentStage === stage) {
-          color = 'text-green-500'; // Current stage color
-        } else if (stages.indexOf(currentStage) > index) {
-          color = 'text-blue-500'; // Completed stage color
-        } else {
-          color = 'text-gray-500'; // Future stage color
-        }
-
-        return (
-          <div key={index} className={`text-sm ${color} font-bold`}>
-            {stage}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
