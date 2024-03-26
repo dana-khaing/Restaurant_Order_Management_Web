@@ -136,13 +136,17 @@ public class OrderService {
 
     }
 
-    public Page<Order> getAllOrders(Pageable pageable) {
+    public Page<Order> getAllOrdersPaged(Pageable pageable) {
         if (pageable == null) {
             throw new IllegalArgumentException("Pageable cannot be null");
         }
 
         return orderRepository.findAllByOrderByCreationDateDesc(pageable);
 
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
     }
 
     public Order getOrderById(Long orderId) {

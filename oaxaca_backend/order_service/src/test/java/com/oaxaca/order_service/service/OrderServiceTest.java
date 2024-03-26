@@ -130,7 +130,8 @@ public class OrderServiceTest {
         when(orderRepository.findAllByOrderByCreationDateDesc(pageable)).thenReturn(mockedPage);
 
         // Act
-        Page<Order> result = orderService.getAllOrders(pageable);
+        
+        Page<Order> result = orderService.getAllOrdersPaged(pageable);
 
         // Assert
         assertNotNull(result);
@@ -212,7 +213,7 @@ public class OrderServiceTest {
 
         // Act & Assert
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderService.getAllOrders(pageable);
+            orderService.getAllOrdersPaged(pageable);
         });
 
         String expectedMessage = "Pageable cannot be null";

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -95,12 +96,17 @@ public class OrderController {
         }
 
     }
-    @GetMapping("/fetchAllOrders")
+    @GetMapping("/fetchAllPagedOrders")
     public ResponseEntity<Map<String, ?>> fetchAllOrders(Pageable pageable) {
-        return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders(pageable)));
+        return ResponseEntity.ok(Map.of("orders", orderService.getAllOrdersPaged(pageable)));
+    }
+
+    @GetMapping("/fetchAllOrders")
+    public ResponseEntity<Map<String, ?>> fetchAllOrders() {
+        return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders()));
     }
     @GetMapping("/fetchOrdersByStatus/{status}")
-    public ResponseEntity<Map<String, ?>> fetchOrdersByStatus(@PathVariable String status, Pageable pageable) {
+    public ResponseEntity<Map<String, ?>> fetchOrdersByStatus(@PathVariable String status, @RequestParam Pageable pageable) {
         return ResponseEntity.ok(Map.of("orders", orderService.getOrdersByStatus(status, pageable)));
     }
 
