@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -35,10 +36,22 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
     void removeSession(WebSocketSession session) {
         sessions.remove(session);
     }
+    
 
-    Set<WebSocketSession> getSessions() {
+    public Set<WebSocketSession> getSessions() {
         return sessions;
     }
+
+    @Override
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) {
+        addSession(session);
+    }
+
+    @Override
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
+        removeSession(session);
+    }
+
 
     @EventListener
     void handleOrderSentToKitchenEvent(OrderSentToKitchenEvent event) {

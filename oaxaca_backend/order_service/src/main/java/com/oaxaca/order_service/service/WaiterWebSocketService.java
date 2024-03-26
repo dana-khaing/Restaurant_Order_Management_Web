@@ -62,22 +62,15 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
 
     @EventListener
     public void handleOrderCreationEvent(OrderCreationEvent event) {
-        // This will now update only the waiters
         Long orderId = event.getOrderId();
-        Order order = orderService
-                .getOrderById(orderId);
-        logger.debug("Order created: " + order.toString());
-
-        // Update waiters when a new order is created
-        try {
-            if (order != null) {
-                logger.debug("Calling notifyWaiters");
+        Order order = orderService.getOrderById(orderId);
+        if (order != null) {
+            try {
                 notifyWaiters(order);
+            } catch (IOException e) {
+                logger.error("Error notifying waiters", e);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 
     @EventListener
