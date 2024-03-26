@@ -101,7 +101,7 @@ public class OrderController {
         return ResponseEntity.ok(Map.of("orders", orderService.getAllOrdersPaged(pageable)));
     }
 
-    @GetMapping("/fetchAllOrders")
+    @GetMapping("/fetchAll")
     public ResponseEntity<Map<String, ?>> fetchAllOrders() {
         return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders()));
     }

@@ -11,16 +11,13 @@ import com.oaxaca.order_service.service.CustomerWebSocketService;
 import com.oaxaca.order_service.service.KitchenStaffWebSocketService;
 import com.oaxaca.order_service.service.WaiterWebSocketService;
 
-
-
-
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
     @NonNull
-    private WaiterWebSocketService waiterWebSocketHandler; 
+    private WaiterWebSocketService waiterWebSocketHandler;
 
     @Autowired
     @NonNull
@@ -30,13 +27,13 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @NonNull
     private CustomerWebSocketService customerWebSocketHandler;
 
-
-    
-
     @Override
     public void registerWebSocketHandlers(@NonNull WebSocketHandlerRegistry registry) {
-        registry.addHandler(waiterWebSocketHandler, "/waiter-orders").setAllowedOrigins("localhost:3000, http://oaxaca.hopto.org/");
-        registry.addHandler(kitchenStaffWebSocketHandler, "/kitchen-orders").setAllowedOrigins("localhost:3000, http://oaxaca.hopto.org/");
-        registry.addHandler(customerWebSocketHandler, "/customer-orders").setAllowedOrigins("localhost:3000, http://oaxaca.hopto.org/");
+        registry.addHandler(waiterWebSocketHandler, "/waiter-orders").setAllowedOrigins("http://localhost:3000",
+                "http://oaxaca.hopto.org");
+        registry.addHandler(kitchenStaffWebSocketHandler, "/kitchen-orders").setAllowedOrigins("http://localhost:3000",
+                "http://oaxaca.hopto.org");
+        registry.addHandler(customerWebSocketHandler, "/customer-orders").setAllowedOrigins("http://localhost:3000",
+                "http://oaxaca.hopto.org");
     }
 }
