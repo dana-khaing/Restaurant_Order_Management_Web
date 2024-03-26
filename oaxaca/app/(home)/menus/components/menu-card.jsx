@@ -10,6 +10,7 @@ function MenuCard({ menu }) {
       <div className='p-2 flex-1 flex flex-col'>
         <h5 className='text-md font-semibold line-clamp-1'>{name}</h5>
         <span className='text-gray-600 text-sm'>£{price}</span>
+        <p className='text-gray-500 text-sm mb-2'>calories: {calories}</p>
 
         <div className='my-1'>
           {allergens.map((allergen) => (
