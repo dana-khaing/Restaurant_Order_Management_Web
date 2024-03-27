@@ -33,7 +33,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 "http://oaxaca.hopto.org");
         registry.addHandler(kitchenStaffWebSocketHandler, "/kitchen-orders").setAllowedOrigins("http://localhost:3000",
                 "http://oaxaca.hopto.org");
-        registry.addHandler(customerWebSocketHandler, "/customer-orders").setAllowedOrigins("http://localhost:3000",
+        registry.addHandler(customerWebSocketHandler, "/customer-orders/{orderId}").setAllowedOrigins("http://localhost:3000",
                 "http://oaxaca.hopto.org");
     }
 }
