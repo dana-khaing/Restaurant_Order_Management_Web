@@ -19,7 +19,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import AuthHeader from '@/app/custom_components/auth/AuthHeader';
 import AuthBanner from '@/app/custom_components/auth/AuthBanner';
-
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 

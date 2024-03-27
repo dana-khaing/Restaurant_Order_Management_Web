@@ -1,51 +1,67 @@
-import React from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import {
   CardTitle,
   CardDescription,
   CardHeader,
   CardContent,
-  CardFooter,
   Card,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { SERVICE_URLS } from '@/app/constants';
+import clsx from 'clsx';
 
-async function getData(orderId) {
-  try {
-    const response = await fetch(
-      `${SERVICE_URLS.ORDER_SERVICE}/orders/findOrder/${orderId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+export default function OrderConfirmPage({ params }) {
+  const [order, setOrder] = useState(null);
+
+  useEffect(() => {
+    async function getOrder() {
+      try {
+        const response = await fetch(
+          `${SERVICE_URLS.ORDER_SERVICE}/orders/findOrder/${params.id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.json();
+          console.error(errorText);
+          return;
+        }
+
+        const data = await response.json();
+
+        console.log(data);
+        setOrder(data.order);
+      } catch (error) {
+        console.error(error);
       }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.json();
-      console.error(errorText);
-      return;
     }
 
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export default async function OrderConfirmPage({ params }) {
-  const data = await getData(params.id);
-  console.log('Data:', data);
-  console.log('Order items:', data.order.orderItems);
+    getOrder();
+  }, []);
 
   return (
     <section className='p-6'>
       <Card className='mx-auto max-w-3xl bg-white dark:bg-orange-500'>
         <CardHeader>
-          <CardTitle className='text-orange-500'>Order Confirmation</CardTitle>
+          <CardTitle className='text-orange-500 flex justify-between'>
+            <span>Order Confirmation</span>
+            <span
+              className={clsx(
+                order?.orderStatus === 'CANCELLED'
+                  ? 'text-red-600'
+                  : 'text-green-600'
+              )}
+            >
+              {order?.orderStatus}
+            </span>
+          </CardTitle>
           <CardDescription className='text-gray-500 dark:text-gray-400'>
             Thank you for your purchase! Your order is confirmed.
           </CardDescription>
@@ -58,13 +74,13 @@ export default async function OrderConfirmPage({ params }) {
             </div>
             <div className='flex items-center'>
               <div className='font-medium'>Date: </div>
-              <div className='ml-auto'>{data.order.creationDate}</div>
+              <div className='ml-auto'>{order?.creationDate}</div>
             </div>
           </div>
           <Separator className='my-4' />
           <div className='grid gap-2'>
             <div className='grid gap-2'>
-              {data.order.orderItems.map((item, index) => (
+              {order?.orderItems.map((item, index) => (
                 <div key={index} className='grid items-start gap-2'>
                   <img
                     alt={item.name}
@@ -86,13 +102,11 @@ export default async function OrderConfirmPage({ params }) {
             <Separator className='my-2' />
             <div className='flex items-center font-medium'>
               <div>Total</div>
-              <div className='ml-auto'>£{data.order.total.toFixed(2)}</div>
+              <div className='ml-auto'>£{order?.total.toFixed(2)}</div>
             </div>
           </div>
         </CardContent>
-       
       </Card>
     </section>
   );
 }
-
