@@ -1,7 +1,9 @@
 package com.oaxaca.order_service.service;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -11,6 +13,7 @@ import com.oaxaca.order_service.event.*;
 import com.oaxaca.order_service.model.Order;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,6 +36,34 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
 
     public void removeSession(Long orderId) {
         customerSessions.remove(orderId);
+    }
+
+    @Override
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) {
+        // Add customer session
+        URI uri = session.getUri();
+
+        if (uri == null) {
+            return;
+        }
+
+        Long orderId = Long.parseLong(uri.getPath().split("/")[2]);
+        addSession(orderId, session);
+
+    }
+
+    @Override
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
+        // Remove customer session
+
+        URI uri = session.getUri();
+
+        if (uri == null) {
+            return;
+        }
+
+        Long orderId = Long.parseLong(uri.getPath().split("/")[2]);
+        removeSession(orderId);
     }
 
     public Map<Long, WebSocketSession> getSessions() {
@@ -59,7 +90,6 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
         notifyCustomer(event.getOrderId());
     }
 
-   
     void notifyCustomer(Long orderId) {
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
