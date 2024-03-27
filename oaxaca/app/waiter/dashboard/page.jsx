@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
       switch (newOrder.orderStatus) {
         case 'PENDING':
-          newOrders = [newOrder, ...orders];
+          newOrders = [...orders, newOrder];
           break;
         case 'IN_PROGRESS':
         case 'PREPARED':
@@ -78,7 +78,7 @@ export default function DashboardPage() {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [orders]);
 
   if (orders.length === 0) return <WaiterLoadingPage />;
 
