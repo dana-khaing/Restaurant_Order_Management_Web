@@ -53,6 +53,10 @@ export default function DashboardPage() {
           break;
         case 'IN_PROGRESS':
         case 'PREPARED':
+          newOrders = orders.map((order) =>
+            order.id === newOrder.id ? newOrder : order
+          );
+          break;
         case 'DELIVERED':
         case 'COMPLETED':
           newOrders = orders.map((order) =>

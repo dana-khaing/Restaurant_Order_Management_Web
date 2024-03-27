@@ -37,10 +37,10 @@ export default function KitchenHome() {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8086/waiter-orders');
+    const ws = new WebSocket('ws://localhost:8086/kitchen-orders');
 
     ws.onopen = () => {
-      console.log('WebSocket is connected');
+      console.log('WebSocket is connected for kitchen orders');
     };
 
     ws.onmessage = (event) => {
@@ -50,6 +50,7 @@ export default function KitchenHome() {
       switch (newOrder.orderStatus) {
         case 'PENDING':
         case 'IN_PROGRESS':
+          console.log('inside in progress', newOrder);
           newOrders = [newOrder, ...orders];
           break;
         case 'PREPARED':
@@ -74,7 +75,7 @@ export default function KitchenHome() {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [orders]);
 
   return (
     <div className='my-0 flex justify-evenly w-screen'>
@@ -86,7 +87,7 @@ export default function KitchenHome() {
           Order List
         </p>
         <div>
-          <OrderList orders={orders} />
+          <OrderList orders={orders} setOrders={setOrders} />
         </div>
       </div>
     </div>
