@@ -98,7 +98,7 @@ export default function KitchenStaffLoginPage() {
           title: 'Logged in successfully',
           description: 'Redirecting to home page.',
         });
-        router.push('/kitchen_staff/home');
+        router.push('/kitchen');
       } catch (error) {
         console.error('An error occurred:', error);
         toast({
@@ -110,6 +110,8 @@ export default function KitchenStaffLoginPage() {
 
     validateRememberMeToken();
   }, []);
+
+  
 
   async function onSubmit(values) {
     const endpoint = values.remember_me
