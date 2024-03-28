@@ -80,7 +80,10 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://oaxaca.hopto.org")); // replace "*" with your frontend's origin
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://oaxaca.hopto.org")); // replace "*"
+                                                                                                        // with your
+                                                                                                        // frontend's
+                                                                                                        // origin
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true); // this allows cookies to be sent cross-origin
@@ -101,7 +104,8 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/kitchen_staff/login", "/kitchen_staff/register", "kitchen_staff/validate-remember-me").permitAll()
+            .requestMatchers("/kitchen_staff/login", "/kitchen_staff/register", "kitchen_staff/validate-remember-me")
+            .permitAll()
             .anyRequest().authenticated())
         .addFilterBefore(usernamePasswordAuthenticationFilter(), RememberMeAuthenticationFilter.class)
         .rememberMe(rememberMe -> rememberMe.key(rememberMeKey).rememberMeServices(rememberMeServices()))
@@ -115,7 +119,11 @@ public class SecurityConfig {
   KitchenStaffDetailsService userDetailsService(KitchenStaffRepository kitchenStaffRepository) {
     KitchenStaff kitchenStaff = new KitchenStaff("jacky123", passwordEncoder().encode("password"), "Jack", "Brown",
         "chef");
-    kitchenStaffRepository.save(kitchenStaff);
+    if (kitchenStaffRepository.findByUsername(kitchenStaff.getUsername()) != null) {
+      kitchenStaffRepository.save(kitchenStaff);
+
+    }
+
     return new KitchenStaffDetailsService(kitchenStaffRepository);
   }
 

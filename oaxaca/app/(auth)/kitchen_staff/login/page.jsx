@@ -111,6 +111,8 @@ export default function KitchenStaffLoginPage() {
     validateRememberMeToken();
   }, []);
 
+  
+
   async function onSubmit(values) {
     const endpoint = values.remember_me
       ? '/api/auth/kitchen_staff/login/remember-me'
