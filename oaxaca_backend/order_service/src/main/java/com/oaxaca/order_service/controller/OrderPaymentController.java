@@ -6,11 +6,13 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oaxaca.order_service.service.OrderPaymentService;
 
 @RestController
+@RequestMapping("/orderPayment")
 public class OrderPaymentController {
 
     private final OrderPaymentService orderPaymentService;
