@@ -15,11 +15,21 @@ public class WaiterDetailsService implements UserDetailsService {
 
     @Autowired
     private WaiterRepository waiterRepository;
-
+    /**
+     * Constructs a new WaiterDetailsService with the provided repository.
+     * 
+     * @param waiterRepository The repository for waiters.
+     */
     public WaiterDetailsService(WaiterRepository waiterRepository) {
         this.waiterRepository = waiterRepository;
     }
-
+    /**
+     * Loads waiter details by username.
+     * 
+     * @param username The username of the waiter.
+     * @return UserDetails representing the waiter.
+     * @throws UsernameNotFoundException If the username is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

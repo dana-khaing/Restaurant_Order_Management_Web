@@ -41,7 +41,12 @@ public class WaiterSummonRequest {
   public WaiterSummonRequest() {
     
   }
- 
+  /**
+   * Constructs a new WaiterSummonRequest.
+   * 
+   * @param customer The customer associated with the summon request.
+   * @param tableNumber The table number for the summon request.
+   */
   public WaiterSummonRequest(Customer customer, int tableNumber) {
     this.customer = customer;
     this.tableNumber = tableNumber;

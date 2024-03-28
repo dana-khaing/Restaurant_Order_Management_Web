@@ -50,7 +50,19 @@ public class Waiter {
 
     public Waiter() {
     }
-
+    /**
+     * Constructs a Waiter instance with specified attributes.
+     * 
+     * @param username         The username of the waiter.
+     * @param password         The password of the waiter.
+     * @param name             The first name of the waiter.
+     * @param lastname         The last name of the waiter.
+     * @param email            The email of the waiter.
+     * @param managerName      The name of the manager associated with the waiter.
+     * @param restaurantName   The name of the restaurant where the waiter works.
+     * @param restaurantAddress The address of the restaurant where the waiter works.
+     * @param dateOfBirth      The date of birth of the waiter.
+     */
     public Waiter(String username, String password, String name, String lastname, String email, String managerName,
             String restaurantName, String restaurantAddress, LocalDate dateOfBirth) {
         this.username = username;

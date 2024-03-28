@@ -42,7 +42,13 @@ public class Order {
     public Order() {
 
     }
-
+    /**
+     * Constructs an Order instance with specified attributes.
+     * 
+     * @param orderType     The type of the order.
+     * @param orderStatus   The status of the order.
+     * @param customerName  The name of the customer who placed the order.
+     */
     public Order(OrderType orderType, OrderStatus orderStatus, String customerName) {
         this.orderType = orderType;
         this.orderStatus = orderStatus;

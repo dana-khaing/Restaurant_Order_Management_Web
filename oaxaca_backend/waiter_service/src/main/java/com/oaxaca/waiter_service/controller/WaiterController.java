@@ -42,7 +42,12 @@ public class WaiterController {
 
     @Autowired
     private RememberMeServices rememberMeServices;
-
+    /**
+     * Registers a new waiter.
+     * 
+     * @param waiter The details of the waiter to register.
+     * @return ResponseEntity containing a success message if registration is successful, otherwise an error message.
+     */
     @Operation(summary = "Register a new waiter", description = "Registers a new waiter")
     @ApiResponse(responseCode = "200", description = "Waiter created successfully")
     @ApiResponse(responseCode = "400", description = "Waiter creation failed: missing required fields")
@@ -77,6 +82,14 @@ public class WaiterController {
         return ResponseEntity.ok().body(response);
 
     }
+    /**
+     * Logs in a waiter.
+     * 
+     * @param waiter   The credentials of the waiter to log in.
+     * @param request  HTTP servlet request.
+     * @param response HTTP servlet response.
+     * @return ResponseEntity containing a success message if login is successful, otherwise an error message.
+     */
     @Operation(summary = "Login a waiter", description = "Logs in a waiter")
     @ApiResponse(responseCode = "200", description = "Waiter Logged in Successfully")
     @ApiResponse(responseCode = "400", description = "Login failed: Missing details")
@@ -129,6 +142,13 @@ public class WaiterController {
         Authentication request = new UsernamePasswordAuthenticationToken(username, password);
         return authenticationManager.authenticate(request);
     }
+    /**
+     * Validates the remember-me token.
+     * 
+     * @param request  HTTP servlet request.
+     * @param response HTTP servlet response.
+     * @return ResponseEntity containing a success message if the remember-me token is valid, otherwise an error message.
+     */
     @Operation(summary = "Validate remember me", description = "Validates the remember me token")
     @ApiResponse(responseCode = "200", description = "User authenticated with remember-me token")
     @ApiResponse(responseCode = "401", description = "Invalid or missing remember-me token")

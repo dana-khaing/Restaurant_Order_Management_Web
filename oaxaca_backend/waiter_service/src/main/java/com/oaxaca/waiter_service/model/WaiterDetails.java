@@ -10,7 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class WaiterDetails implements UserDetails {
 
     private Waiter waiter;
-
+    /**
+     * Constructs a new WaiterDetails instance.
+     * 
+     * @param waiter The Waiter entity for which UserDetails is created.
+     */
     public WaiterDetails(Waiter waiter) {
         this.waiter = waiter;
     }

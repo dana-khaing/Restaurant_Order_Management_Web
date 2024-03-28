@@ -40,7 +40,12 @@ public class SecurityConfig {
 
     @Value("${rememberMe.key}")
     private String rememberMeKey;
-
+    /**
+     * Configures the authentication manager bean.
+     * 
+     * @param userDetailsService The user details service bean.
+     * @return Authentication manager bean.
+     */
     @Bean
     AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -49,7 +54,11 @@ public class SecurityConfig {
 
         return new ProviderManager(authenticationProvider);
     }
-
+    /**
+     * Configures CORS (Cross-Origin Resource Sharing) settings.
+     * 
+     * @return CorsConfigurationSource bean.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -105,7 +114,13 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    /**
+     * Configures security filter chain with HTTP security configurations.
+     * 
+     * @param http HttpSecurity object to configure security settings.
+     * @return SecurityFilterChain object.
+     * @throws Exception If an error occurs while configuring security settings.
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

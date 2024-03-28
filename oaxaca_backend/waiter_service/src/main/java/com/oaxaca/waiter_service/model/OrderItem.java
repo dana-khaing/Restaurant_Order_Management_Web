@@ -23,7 +23,19 @@ public class OrderItem implements IOrderItem {
 
     public OrderItem() {
     }
-
+    /**
+     * Constructs an OrderItem instance with specified attributes.
+     * 
+     * @param category     The category of the item.
+     * @param name         The name of the item.
+     * @param description  The description of the item.
+     * @param price        The price of the item.
+     * @param allergens    The list of allergens present in the item.
+     * @param calories     The calorie count of the item.
+     * @param productId    The ID of the product associated with the item.
+     * @param quantity     The quantity of the item.
+     * @param imageUrl     The URL of the item's image.
+     */
     public OrderItem(int category, String name, String description, float price,
             List<String> allergens, int calories, Long productId, int quantity, String imageUrl) {
 

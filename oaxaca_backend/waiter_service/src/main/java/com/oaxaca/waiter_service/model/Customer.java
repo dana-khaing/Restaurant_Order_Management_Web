@@ -39,7 +39,17 @@ public class Customer extends User {
 
     public Customer() {
     }
-    
+    /**
+     * Constructs a Customer instance with specified attributes.
+     * 
+     * @param name        The name of the customer.
+     * @param email       The email address of the customer.
+     * @param username    The username of the customer.
+     * @param password    The password of the customer.
+     * @param address     The address of the customer.
+     * @param phone       The phone number of the customer.
+     * @param creditCard  The credit card information of the customer.
+     */
    
 
     public Customer(String name, String email, String username, String password, String address, String phone, String creditCard) {
@@ -51,7 +61,13 @@ public class Customer extends User {
         this.phone = phone;
         this.creditCard = creditCard;
     }
-
+    /**
+     * Constructs a Customer instance with specified attributes.
+     * 
+     * @param email     The email address of the customer.
+     * @param username  The username of the customer.
+     * @param password  The password of the customer.
+     */
     public Customer(String email, String username, String password){
         this.email = email;
         this.username = username;

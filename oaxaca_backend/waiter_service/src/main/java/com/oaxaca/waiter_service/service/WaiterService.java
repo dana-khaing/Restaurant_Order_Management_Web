@@ -16,11 +16,21 @@ public class WaiterService {
 
     public WaiterService() {
     }
-
+    /**
+     * Constructs a new WaiterService with the provided repository.
+     * 
+     * @param waiterRepository The repository for waiters.
+     */
     public WaiterService(WaiterRepository waiterRepository) {
         this.waiterRepository = waiterRepository;
     }
-
+    /**
+     * Creates a new waiter.
+     * 
+     * @param waiter The waiter to create.
+     * @return The created waiter.
+     * @throws WaiterCreationFailedException If waiter creation fails.
+     */
     public Waiter createWaiter(Waiter waiter)  {
         if (waiter == null) {
             throw new WaiterCreationFailedException("Waiter creation failed");
@@ -38,11 +48,21 @@ public class WaiterService {
 
         return waiterRepository.save(waiter);
     }
-
+    /**
+     * Finds a waiter by their ID.
+     * 
+     * @param id The ID of the waiter to find.
+     * @return The waiter if found, else null.
+     */
     public Waiter findWaiterById(Long id) {
         return waiterRepository.findById(id).orElse(null);
     }
-
+    /**
+     * Finds a waiter by their username.
+     * 
+     * @param username The username of the waiter to find.
+     * @return The waiter if found, else null.
+     */
     public Waiter findWaiterByUsername(String username) {
         return waiterRepository.findByUsername(username).orElse(null);
     }
