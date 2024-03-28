@@ -57,7 +57,7 @@ public class OrderPaymentService {
         }
 
         Map<String, Object> chargeParams = new HashMap<>();
-        chargeParams.put("amount", orderToPay.getTotal());
+        chargeParams.put("amount", Math.round(orderToPay.getTotal() * 100));
         chargeParams.put("currency", "gbp");
         chargeParams.put("description", "Order payment");
         chargeParams.put("source", "tok_visa");

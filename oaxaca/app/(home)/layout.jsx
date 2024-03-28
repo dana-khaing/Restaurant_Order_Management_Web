@@ -2,6 +2,7 @@ import { NavList } from './components/nav_list';
 import { fetchCart } from '../actions/cart';
 import Footer from './components/footer';
 import UserProfile from './components/user-profile';
+import { Toaster } from '@/components/ui/toaster';
 
 export default async function HomeLayout({ children }) {
   const cart = await fetchCart();
@@ -13,7 +14,7 @@ export default async function HomeLayout({ children }) {
       <div className='bg-[#EF3C3C] text-white text-lg font-medium flex justify-between items-center p-4'>
         <a href='/'>
           <img
-            src='images/logo_sample.png'
+            src='/images/logo_sample.png'
             alt='logo'
             className=' flex justify-center align-middle w-[10rem] h-[2.5rem] '
           />
@@ -25,6 +26,7 @@ export default async function HomeLayout({ children }) {
       </div>
       {children}
       <Footer />
+      <Toaster />
     </div>
   );
 }

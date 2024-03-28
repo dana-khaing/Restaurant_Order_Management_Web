@@ -80,7 +80,7 @@ export default function OrderConfirmPage({ params }) {
     });
 
     const orderStatusMap = {
-        PENDING: "Preparing",
+        PENDING: "Awaiting Confirmation",
         IN_PROGRESS: "Preparing",
         PREPARED: "Ready",
         DELIVERED: "Delivered",
