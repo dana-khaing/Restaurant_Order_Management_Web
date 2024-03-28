@@ -27,12 +27,22 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-
+    /**
+     * Constructs an OrderService with the given OrderRepository and ApplicationEventPublisher.
+     *
+     * @param orderRepository           The OrderRepository to be used.
+     * @param applicationEventPublisher The ApplicationEventPublisher to be used.
+     */
     public OrderService(OrderRepository orderRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
+    /**
+     * Places an order with the given order details.
+     *
+     * @param orderDetailsDto The details of the order.
+     * @return The placed order.
+     */
     public Order placeOrder(OrderDetailsDto orderDetailsDto) {
 
         if (orderDetailsDto == null || orderDetailsDto.getCart() == null || orderDetailsDto.getCart().getItems() == null
@@ -169,6 +179,12 @@ public class OrderService {
         return orderRepository.findByOrderStatus(orderStatus, pageable);
     }
 
+    /**
+     * Converts a CartItemDto to an OrderItem.
+     *
+     * @param cartDto The CartItemDto to convert.
+     * @return The converted OrderItem.
+     */
     private OrderItem convertToOrderItem(CartItemDto cartDto) {
         OrderItem orderItem = new OrderItem();
         orderItem.setCalories(cartDto.getCalories());

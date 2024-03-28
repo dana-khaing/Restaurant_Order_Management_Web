@@ -9,7 +9,14 @@ public class OrderDetailsDto {
     private OrderType orderType;
 
     private CartDto cart;
-
+    /**
+     * Constructs an {@code OrderDetailsDto} with the specified parameters.
+     *
+     * @param customerName The name of the customer placing the order.
+     * @param tableNumber  The table number where the order is placed.
+     * @param cart         The cart containing items in the order.
+     * @param orderType    The type of the order.
+     */
     public OrderDetailsDto(String customerName, int tableNumber, CartDto cart, String orderType) {
         this.customerName = customerName;
         this.tableNumber = tableNumber;
@@ -20,11 +27,19 @@ public class OrderDetailsDto {
     public OrderDetailsDto() {
        
     }
-
+    /**
+     * Retrieves the name of the customer who placed the order.
+     *
+     * @return The name of the customer.
+     */
     public String getCustomerName() {
         return customerName;
     }
-
+    /**
+     * Sets the name of the customer who placed the order.
+     *
+     * @param customerName The name of the customer.
+     */
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }

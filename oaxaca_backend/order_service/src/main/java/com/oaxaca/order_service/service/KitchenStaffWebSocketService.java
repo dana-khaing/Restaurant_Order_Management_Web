@@ -21,25 +21,46 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private Set<WebSocketSession> sessions;
     private final OrderService orderService;
-
+    /**
+     * Constructs a KitchenStaffWebSocketService with the given ObjectMapper and OrderService.
+     *
+     * @param objectMapper The ObjectMapper to be used for JSON serialization.
+     * @param orderService The OrderService to be used for retrieving order information.
+     */
     public KitchenStaffWebSocketService(ObjectMapper objectMapper, OrderService orderService) {
         this.objectMapper = objectMapper;
         this.sessions = new HashSet<>();
         this.orderService = orderService;
     }
-
+    /**
+     * Adds a WebSocket session.
+     *
+     * @param session The WebSocketSession to be added.
+     */
     void addSession(WebSocketSession session) {
         sessions.add(session);
     }
-
+    /**
+     * Removes a WebSocket session.
+     *
+     * @param session The WebSocketSession to be removed.
+     */
     void removeSession(WebSocketSession session) {
         sessions.remove(session);
     }
-
+    /**
+     * Retrieves all WebSocket sessions.
+     *
+     * @return A set containing all WebSocket sessions.
+     */
     Set<WebSocketSession> getSessions() {
         return sessions;
     }
-
+    /**
+     * Handles the OrderSentToKitchenEvent by notifying kitchen staff about the new order.
+     *
+     * @param event The OrderSentToKitchenEvent to be handled.
+     */
     @EventListener
     void handleOrderSentToKitchenEvent(OrderSentToKitchenEvent event) {
         // Update kitchen staff when a new order is created
@@ -57,7 +78,12 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
         }
 
     }
-
+    /**
+     * Notifies kitchen staff about the given order.
+     *
+     * @param order The order to be notified about.
+     * @throws IOException if there is an error during JSON serialization.
+     */
     void notifyKitchenStaff(@NonNull Order order) throws IOException {
 
         for (WebSocketSession session : sessions) {

@@ -14,11 +14,20 @@ import com.oaxaca.order_service.service.OrderPaymentService;
 public class OrderPaymentController {
 
     private final OrderPaymentService orderPaymentService;
-
+    /**
+     * Constructs an {@code OrderPaymentController} with the specified {@code OrderPaymentService}.
+     *
+     * @param orderPaymentService The service for handling order payments.
+     */
     public OrderPaymentController(OrderPaymentService orderPaymentService) {
         this.orderPaymentService = orderPaymentService;
     }
-
+    /**
+     * Endpoint for initiating payment for an order.
+     *
+     * @param orderId The ID of the order to be paid.
+     * @return A ResponseEntity containing the payment status.
+     */
     @PutMapping("/payOrder/{orderId}")
     public ResponseEntity<Map<String, Object>> payOrder(@PathVariable Long orderId) {
         Map<String, Object> response = new HashMap<>();

@@ -28,12 +28,22 @@ public class OrderPaymentService {
     static {
         Stripe.apiKey = "sk_test_51Ow5wJRvay58z2uef8kWPF5aB2EUhpU5E2F4vcl9qOD9n9CjAy1q68qzb2dCWZhLqlDV5iZC7fnyEwxKZQSHt42300jgs2Po1t";
     }
-
+    /**
+     * Constructs an OrderPaymentService with the given OrderRepository and ApplicationEventPublisher.
+     *
+     * @param orderRepository           The OrderRepository to be used.
+     * @param applicationEventPublisher The ApplicationEventPublisher to be used.
+     */
     public OrderPaymentService(OrderRepository orderRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
+    /**
+     * Processes the payment for the given order.
+     *
+     * @param orderId The ID of the order to be paid.
+     * @return true if the payment was successful, false otherwise.
+     */
     public boolean payOrder(Long orderId) {
         // 1. Validate the payment information
         // 2. Charge the payment method

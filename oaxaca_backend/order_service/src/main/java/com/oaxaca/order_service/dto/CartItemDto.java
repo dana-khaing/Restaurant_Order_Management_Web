@@ -18,7 +18,19 @@ public class CartItemDto implements Serializable {
 
     public CartItemDto() {
     }
-
+    /**
+     * Constructs a {@code CartItemDto} with the specified parameters.
+     *
+     * @param name        The name of the product.
+     * @param description The description of the product.
+     * @param category    The category of the product.
+     * @param price       The price of the product.
+     * @param allergens   The list of allergens present in the product.
+     * @param calories    The number of calories in the product.
+     * @param quantity    The quantity of the product in the cart.
+     * @param imageUrl    The URL of the product's image.
+     * @param productId   The unique identifier of the product.
+     */
     public CartItemDto(String name, String description, int category, float price, List<String> allergens, int calories, int quantity, String imageUrl, Long productId) {
         this.name = name;
         this.description = description;

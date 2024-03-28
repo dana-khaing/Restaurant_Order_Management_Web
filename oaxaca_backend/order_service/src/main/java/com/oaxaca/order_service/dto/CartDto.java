@@ -10,7 +10,12 @@ public class CartDto implements Serializable {
 
     public CartDto() {
     }
-
+    /**
+     * Constructs a {@code CartDto} with the specified ID and items.
+     *
+     * @param id    The ID of the shopping cart.
+     * @param items The list of items in the shopping cart.
+     */
     public CartDto(String id, List<CartItemDto> items) {
         this.id = id;
         this.items = items;

@@ -25,7 +25,11 @@ public class WaiterWebSocketService extends TextWebSocketHandler {
     private Set<WebSocketSession> waiterSessions;
     private final OrderService orderService;
     private final ObjectMapper objectMapper;
-
+    /**
+     * Constructs a WaiterWebSocketService with the given OrderService.
+     *
+     * @param orderService The OrderService to be used.
+     */
     public WaiterWebSocketService(OrderService orderService) {
         this.orderService = orderService;
         this.waiterSessions = new CopyOnWriteArraySet<>();
