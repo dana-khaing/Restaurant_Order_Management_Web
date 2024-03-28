@@ -1,8 +1,10 @@
-"use client";
-import React, { useState, useEffect } from "react";
+'use client';
+import React, { useState, useEffect } from 'react';
 
-export default function Footer({ serverTime }) {
-  const [currentTime, setCurrentTime] = useState(serverTime);
+export default function Footer() {
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString()
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -12,14 +14,14 @@ export default function Footer({ serverTime }) {
   }, []);
 
   return (
-    <div className=" flex justify-center gap-2 items-center h-20 bg-[#5D5252] p-5 text-white font-semibold text-xl">
+    <div className=' flex justify-center gap-2 items-center h-20 bg-[#5D5252] p-5 text-white font-semibold text-xl'>
       <span>Current </span>
       <span>Time</span>
       <span>-</span>
-      <span id="currentTime">
-        {currentTime.split(":").map((segment, index) => (
+      <span id='currentTime'>
+        {currentTime.split(':').map((segment, index) => (
           <span key={index}>
-            {index > 0 && <span className="mx-2">:</span>}
+            {index > 0 && <span className='mx-2'>:</span>}
             {segment}
           </span>
         ))}
