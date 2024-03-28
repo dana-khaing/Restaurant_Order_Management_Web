@@ -1,7 +1,12 @@
-export async function PUT(params) {
+import { cookies } from "next/headers";
+import { SERVICE_URLS } from "@/app/constants";
+
+export async function PUT(request, params) {
     const cookieStore = cookies();
     const JSESSIONID = cookieStore.get("JSESSIONID")?.value;
-    const id = params.id;
+    const id = params.params.id;
+    console.log("ID: ", id )
+    console.log("Params: ", params);
 
     try {
         const response = await fetch(

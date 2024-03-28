@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button"
 
 async function payForOrder (orderId){
     const response = await fetch(
-        `${SERVICE_URLS.ORDER_SERVICE}/orders/payOrder/${orderId}`,
+        `/api/order/${orderId}/pay`,
         {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
