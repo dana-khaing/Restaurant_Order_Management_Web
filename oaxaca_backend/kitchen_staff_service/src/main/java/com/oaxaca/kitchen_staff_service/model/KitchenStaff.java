@@ -31,7 +31,15 @@ public class KitchenStaff {
 
     public KitchenStaff() {
     }
-
+    /**
+     * Constructor for KitchenStaff.
+     *
+     * @param username  The username of the kitchen staff member.
+     * @param password  The password of the kitchen staff member.
+     * @param firstName The first name of the kitchen staff member.
+     * @param lastName  The last name of the kitchen staff member.
+     * @param role      The role of the kitchen staff member.
+     */
     public KitchenStaff(String username, String password, String firstName, String lastName, String role) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -17,6 +17,11 @@ public class KitchenStaffDetailsService implements UserDetailsService{
 
     private KitchenStaffRepository kitchenStaffRepository;
     
+    /**
+     * Constructor for KitchenStaffDetailsService.
+     *
+     * @param kitchenStaffRepository The kitchen staff repository.
+     */
     public KitchenStaffDetailsService(KitchenStaffRepository kitchenStaffRepository) {
         this.kitchenStaffRepository = kitchenStaffRepository;
        
@@ -24,7 +29,13 @@ public class KitchenStaffDetailsService implements UserDetailsService{
 
     public KitchenStaffDetailsService() {
     }
-
+    /**
+     * Loads user details by username.
+     *
+     * @param username The username of the kitchen staff member.
+     * @return The user details.
+     * @throws UsernameNotFoundException If the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         

@@ -10,7 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class KitchenStaffDetails implements UserDetails {
 
     private KitchenStaff kitchenStaff;
-
+    /**
+     * Constructs a KitchenStaffDetails object with the given kitchen staff member.
+     *
+     * @param kitchenStaff The kitchen staff member.
+     */
     public KitchenStaffDetails(KitchenStaff kitchenStaff) {
         this.kitchenStaff = kitchenStaff;
     }
@@ -32,17 +36,29 @@ public class KitchenStaffDetails implements UserDetails {
 
         return kitchenStaff.getUsername();
     }
-
+    /**
+     * Gets the first name of the kitchen staff member.
+     *
+     * @return The first name.
+     */
     public String getFirstName() {
 
         return kitchenStaff.getFirstName();
     }
-
+    /**
+     * Gets the last name of the kitchen staff member.
+     *
+     * @return The last name.
+     */
     public String getLastName() {
 
         return kitchenStaff.getLastName();
     }
-
+    /**
+     * Gets the role of the kitchen staff member.
+     *
+     * @return The role.
+     */
     public String getRole() {
 
         return kitchenStaff.getRole();
