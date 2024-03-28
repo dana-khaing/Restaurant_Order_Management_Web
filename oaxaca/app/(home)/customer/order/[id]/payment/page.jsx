@@ -1,4 +1,4 @@
-
+"use client";
 import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -35,10 +35,10 @@ export default function PaymentPage({params}) {
 
 
   return (
-    <Card className="w-full max-w-3xl p-0">
+    <Card className="w-full ">
       <CardHeader className="bg-white pb-4">
         <div className="space-y-1.5">
-          <CardTitle className="text-2xl font-bold">Order Payment for Oaxaca</CardTitle>
+          <CardTitle className="text-2xl text-orange-500 font-bold">Order Payment for Oaxaca</CardTitle>
           <CardDescription>Please enter your payment information</CardDescription>
         </div>
       </CardHeader>
@@ -105,7 +105,7 @@ export default function PaymentPage({params}) {
         </div>
       </CardContent>
       <CardFooter className="bg-white space-y-4 pt-4">
-        <Button className="w-full" size="lg" type="submit" onClick={payForOrder}>
+        <Button className="w-full bg-orange-500" size="lg" type="submit" onClick={payForOrder}>
           Pay Now
         </Button>
         <Button className="w-full" size="lg" variant="outline" onClick={() => router.push(`/customer/order/${params.id}`)}>

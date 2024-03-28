@@ -7,13 +7,18 @@ import {
     CardHeader,
     CardContent,
     Card,
+    CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { SERVICE_URLS } from "@/app/constants";
+import { Button } from "@/components/ui/button";
 import clsx from "clsx";
+import { useRouter } from 'next/navigation';
 
 export default function OrderConfirmPage({ params }) {
     const [order, setOrder] = useState(null);
+    const router = useRouter();
+
 
     useEffect(() => {
         async function getOrder() {
@@ -47,31 +52,32 @@ export default function OrderConfirmPage({ params }) {
     }, []);
 
     useEffect(() => {
-      const ws  = new WebSocket(`ws://localhost:8086/customer-orders/${params.id}`);
+        const ws = new WebSocket(
+            `ws://localhost:8086/customer-orders/${params.id}`
+        );
 
-      ws.onopen = () => {
-        console.log('Connected to websocket');
-      }
+        ws.onopen = () => {
+            console.log("Connected to websocket");
+        };
 
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        console.log(data);
-        setOrder(data);
-      }
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log(data);
+            setOrder(data);
+        };
 
-      ws.onerror = (error) => {
-        console.error(error);
-      }
+        ws.onerror = (error) => {
+            console.error(error);
+        };
 
-      ws.onclose = () => {
-        console.log('Connection closed');
-      }
+        ws.onclose = () => {
+            console.log("Connection closed");
+        };
 
-      return () => {
-        ws.close();
-      }
-      
-    })
+        return () => {
+            ws.close();
+        };
+    });
 
     return (
         <section className="p-6">
@@ -144,12 +150,14 @@ export default function OrderConfirmPage({ params }) {
                 </CardContent>
                 {order?.orderStatus === "DELIVERED" && (
                     <CardFooter>
-                        <Button
+                        <Button className="bg-orange-500 text-white "
                             onClick={() =>
-                                router.push(`/customer/order/${params.id}/payment`)
+                                router.push(
+                                    `/customer/order/${params.id}/payment`
+                                )
                             }
                             variant="primary"
-                        ></Button>
+                        > Continue to Payment </Button>
                     </CardFooter>
                 )}
             </Card>
