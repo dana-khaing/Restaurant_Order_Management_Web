@@ -46,6 +46,33 @@ export default function OrderConfirmPage({ params }) {
         getOrder();
     }, []);
 
+    useEffect(() => {
+      const ws  = new WebSocket(`ws://localhost:8086/customer-orders/${params.id}`);
+
+      ws.onopen = () => {
+        console.log('Connected to websocket');
+      }
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log(data);
+        setOrder(data);
+      }
+
+      ws.onerror = (error) => {
+        console.error(error);
+      }
+
+      ws.onclose = () => {
+        console.log('Connection closed');
+      }
+
+      return () => {
+        ws.close();
+      }
+      
+    })
+
     return (
         <section className="p-6">
             <Card className="mx-auto max-w-3xl bg-white dark:bg-orange-500">
