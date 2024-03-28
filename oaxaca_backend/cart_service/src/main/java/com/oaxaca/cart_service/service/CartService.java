@@ -8,15 +8,33 @@ import org.springframework.stereotype.Service;
 import com.oaxaca.cart_service.model.Cart;
 import com.oaxaca.cart_service.model.CartItem;
 
+/**
+ * Service class for managing cart operations.
+ */
 @Service
 public class CartService {
 
     private final RedisTemplate<String, Cart> redisTemplate;
+    
+    /**
+     * Constructor for CartService.
+     *
+     * @param redisTemplate The Redis template for accessing Redis data store.
+     */
 
     public CartService(RedisTemplate<String, Cart> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
+    /**
+     * Adds a cart item to the cart.
+     *
+     * @param sessionId The session ID associated with the cart.
+     * @param cart      The cart to which the item is to be added.
+     * @param cartItem  The cart item to be added.
+     * @return The updated cart after adding the item.
+     * @throws IllegalArgumentException If session ID, cart, or cart item is null, or if quantity, product ID, or price is not valid.
+     */
     public Cart addCartItem(String sessionId, Cart cart, CartItem cartItem) {
 
         if (cart == null) {
@@ -60,6 +78,15 @@ public class CartService {
         return cart;
 
     }
+    /**
+     * Deletes a cart item from the cart.
+     *
+     * @param sessionId The session ID associated with the cart.
+     * @param cart      The cart from which the item is to be deleted.
+     * @param productId The ID of the product to be deleted.
+     * @return The updated cart after deleting the item.
+     * @throws IllegalArgumentException If cart is null or if session ID or product ID is not valid.
+     */
 
     public Cart deleteItemCart(String sessionId, Cart cart, int productId) {
 
@@ -80,6 +107,12 @@ public class CartService {
 
         return cart;
     }
+    /**
+     * Fetches the cart associated with the given session ID.
+     *
+     * @param sessionId The session ID associated with the cart.
+     * @return The cart associated with the given session ID, or an empty cart if session ID is null.
+     */
 
     public Cart fetchCart(String sessionId) {
 
@@ -89,6 +122,15 @@ public class CartService {
 
         return (Cart) redisTemplate.opsForValue().get(sessionId);
     }
+    /**
+     * Modifies the quantity of a specific item in the cart.
+     *
+     * @param sessionId The session ID associated with the cart.
+     * @param cart      The cart containing the item to be modified.
+     * @param productId The ID of the product to be modified.
+     * @param quantity  The new quantity for the item.
+     * @throws IllegalArgumentException If cart is null, or if product ID or quantity is not valid.
+     */
 
     @SuppressWarnings("null")
     public void modifyItemQuantity(String sessionId, Cart cart, int productId, int quantity) {
@@ -115,6 +157,12 @@ public class CartService {
         }
 
     }
+    /**
+     * Clears the cart associated with the given session ID.
+     *
+     * @param sessionId The session ID associated with the cart.
+     * @throws IllegalArgumentException If session ID is null.
+     */
 
     public void clearCart(String sessionId) {
 
