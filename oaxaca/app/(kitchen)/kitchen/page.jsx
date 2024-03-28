@@ -44,6 +44,7 @@ export default function KitchenHome() {
     };
 
     ws.onmessage = (event) => {
+      console.log('WebSocket message received kitchen: ', event.data);
       const newOrder = JSON.parse(event.data);
       let newOrders;
 

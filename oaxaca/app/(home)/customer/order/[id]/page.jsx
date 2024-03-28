@@ -62,7 +62,7 @@ export default function OrderConfirmPage({ params }) {
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log(data);
+            console.log("Data Tracking:", data);
             setOrder(data);
         };
 
@@ -79,6 +79,16 @@ export default function OrderConfirmPage({ params }) {
         };
     });
 
+    const orderStatusMap = {
+        PENDING: "Awaiting Confirmation",
+        IN_PROGRESS: "Preparing",
+        PREPARED: "Ready",
+        DELIVERED: "Delivered",
+        COMPLETED: "Completed",
+    };
+
+    
+
     return (
         <section className="p-6">
             <Card className="mx-auto max-w-3xl bg-white dark:bg-orange-500">
@@ -92,7 +102,7 @@ export default function OrderConfirmPage({ params }) {
                                     : "text-green-600"
                             )}
                         >
-                            {order?.orderStatus}
+                            {orderStatusMap[order?.orderStatus]}
                         </span>
                     </CardTitle>
                     <CardDescription className="text-gray-500 dark:text-gray-400">
@@ -163,4 +173,5 @@ export default function OrderConfirmPage({ params }) {
             </Card>
         </section>
     );
-}
+
+                          }
