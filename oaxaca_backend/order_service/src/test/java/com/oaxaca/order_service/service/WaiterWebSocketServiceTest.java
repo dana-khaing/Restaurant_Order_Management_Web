@@ -1,14 +1,25 @@
 package com.oaxaca.order_service.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.io.IOException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oaxaca.order_service.event.OrderCancelledEvent;
 import com.oaxaca.order_service.event.OrderCompletedEvent;
 import com.oaxaca.order_service.event.OrderCreationEvent;
 import com.oaxaca.order_service.event.OrderDeliveredEvent;
@@ -16,206 +27,150 @@ import com.oaxaca.order_service.event.OrderPreparedEvent;
 import com.oaxaca.order_service.event.OrderSentToKitchenEvent;
 import com.oaxaca.order_service.model.Order;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-
-class WaiterWebSocketServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class WaiterWebSocketServiceTest {
 
     @Mock
     private OrderService orderService;
-    @Mock
-    private WebSocketSession session1;
-    @Mock
-    private WebSocketSession session2;
 
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private WebSocketSession webSocketSession;
+
+    @InjectMocks
     private WaiterWebSocketService waiterWebSocketService;
+
     private Order order;
+    private String orderJson = "{\"id\": 1, \"details\": \"Test Order\"}";
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        waiterWebSocketService = new WaiterWebSocketService(orderService);
+    public void setUp() throws JsonProcessingException {
 
-        // Assume orderService.getOrderById always returns a valid Order object for any
-        // ID
         order = new Order();
-        when(orderService.getOrderById(anyLong())).thenReturn(order);
-
-        // Set up WebSocket sessions
-        waiterWebSocketService.addSession(session1);
-        waiterWebSocketService.addSession(session2);
-
-        // Assume the sessions are always open
-        when(session1.isOpen()).thenReturn(true);
-        when(session2.isOpen()).thenReturn(true);
+        order.setId(1L);
+ 
+        waiterWebSocketService.addSession(webSocketSession);
     }
 
-    @SuppressWarnings("null")
     @Test
-    void handleOrderCreationEventSendsMessages() throws IOException {
-        // Given
-        OrderCreationEvent event = new OrderCreationEvent(this, 1L);
-
-        // When
-        waiterWebSocketService.handleOrderCreationEvent(event);
-
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void handleOrderCreationEventIgnoresClosedSessions() throws IOException {
-        // Given
-        OrderCreationEvent event = new OrderCreationEvent(this, 1L);
-        when(session2.isOpen()).thenReturn(false);
-
-        // When
-        waiterWebSocketService.handleOrderCreationEvent(event);
-
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, never()).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void handleOrderCreationEventIgnoresExceptions() throws IOException {
-        // Given
-        OrderCreationEvent event = new OrderCreationEvent(this, 1L);
-        doThrow(new IOException()).when(session2).sendMessage(any(TextMessage.class));
-
-        // When
-        waiterWebSocketService.handleOrderCreationEvent(event);
-
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void handleOrderCreationEventIgnoresNullOrder() throws IOException {
-        // Given
-        OrderCreationEvent event = new OrderCreationEvent(this, 1L);
-        when(orderService.getOrderById(anyLong())).thenReturn(null);
-
-        // When
-        waiterWebSocketService.handleOrderCreationEvent(event);
-
-        // Then
-        verify(session1, never()).sendMessage(any(TextMessage.class));
-        verify(session2, never()).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void handleOrderCompletedEventSendsMessages() throws IOException {
-        // When
-        OrderCompletedEvent event = new OrderCompletedEvent(this, 1L);
-        waiterWebSocketService.handleOrderCompletedEvent(event);
-
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void handleOrderCancelledEventSendsMessages() throws IOException {
-        // When
-        OrderCancelledEvent event = new OrderCancelledEvent(this, 1L);
-        waiterWebSocketService.handleOrderCancelledEvent(event);
-
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void handleOrderDeliveredEventSendsMessages() throws IOException {
-        // When
-        OrderDeliveredEvent event = new OrderDeliveredEvent(this, 1L);
-        waiterWebSocketService.handleOrderDeliveredEvent(event);
-
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
-    }
-
-    @SuppressWarnings("null")
-    @Test
-    void notifyWaitersSendsMessages() throws IOException {
-        // When
+    public void testNotifyWaitersWithValidOrder() throws IOException {
+        when(webSocketSession.isOpen()).thenReturn(true);
+        when(objectMapper.writeValueAsString(order)).thenReturn(orderJson);
         waiterWebSocketService.notifyWaiters(order);
 
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
+        verify(webSocketSession, times(1)).sendMessage(new TextMessage(orderJson));
     }
 
-    @SuppressWarnings("null")
     @Test
-    void handleOrderSentToKitchenEventSendsMessages() throws IOException {
-        // Given
-        OrderSentToKitchenEvent event = new OrderSentToKitchenEvent(this, 1L);
+    public void testNotifyWaitersWithNoSessions() throws Exception {
+        waiterWebSocketService.removeSession(webSocketSession); // No sessions to notify
 
-        // When
+        waiterWebSocketService.notifyWaiters(order);
+
+        verify(webSocketSession, never()).sendMessage(any(TextMessage.class));
+    }
+
+    @Test
+    public void testAfterConnectionEstablishedAddsSession() {
+        // Assume this session is not already added
+        WebSocketSession newSession = mock(WebSocketSession.class);
+        waiterWebSocketService.afterConnectionEstablished(newSession);
+
+        assertTrue(waiterWebSocketService.getSessions().contains(newSession));
+    }
+
+    @Test
+    public void testAfterConnectionClosedRemovesSession() {
+        // First, ensure the session is added
+        waiterWebSocketService.afterConnectionEstablished(webSocketSession);
+        waiterWebSocketService.afterConnectionClosed(webSocketSession, mock(CloseStatus.class));
+
+        assertFalse(waiterWebSocketService.getSessions().contains(webSocketSession));
+    }
+
+    @Test
+    public void testHandleOrderCreationEventNotifiesWaiters() throws IOException {
+        OrderCreationEvent event = new OrderCreationEvent(this, 1L);
+        when(orderService.getOrderById(1L)).thenReturn(order);
+        when(webSocketSession.isOpen()).thenReturn(true);   
+        when(objectMapper.writeValueAsString(order)).thenReturn(orderJson);
+
+        waiterWebSocketService.handleOrderCreationEvent(event);
+
+        verify(orderService, times(1)).getOrderById(1L);
+        verify(webSocketSession, times(1)).sendMessage(new TextMessage(orderJson));
+    }
+
+    @Test
+    public void testHandleOrderInPreparationEventNotifiesWaiters() throws IOException {
+        OrderSentToKitchenEvent event = new OrderSentToKitchenEvent(this, 1L);
+        when(orderService.getOrderById(1L)).thenReturn(order);
+        when(webSocketSession.isOpen()).thenReturn(true);   
+        when(objectMapper.writeValueAsString(order)).thenReturn(orderJson);
+
         waiterWebSocketService.handleOrderSentToKitchenEvent(event);
 
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
-    }
+        verify(orderService, times(1)).getOrderById(1L);
+        verify(webSocketSession, times(1)).sendMessage(new TextMessage(orderJson));
+    } 
 
-    @SuppressWarnings("null")
     @Test
-    void handleOrderPreparedEventSendsMessages() throws IOException {
-        // Given
+    public void testHandleOrderPreparedEventNotifiesWaiters() throws IOException {
         OrderPreparedEvent event = new OrderPreparedEvent(this, 1L);
+        when(orderService.getOrderById(1L)).thenReturn(order);
+        when(webSocketSession.isOpen()).thenReturn(true);   
+        when(objectMapper.writeValueAsString(order)).thenReturn(orderJson);
 
-        // When
         waiterWebSocketService.handleOrderPreparedEvent(event);
 
-        // Then
-        verify(session1, times(1)).sendMessage(any(TextMessage.class));
-        verify(session2, times(1)).sendMessage(any(TextMessage.class));
+        verify(orderService, times(1)).getOrderById(1L);
+        verify(webSocketSession, times(1)).sendMessage(new TextMessage(orderJson));
     }
 
     @Test
-    void removeSessionRemovesSession() {
-        // When
-        waiterWebSocketService.removeSession(session1);
+    public void testHandleOrderDeliveredEventNotifiesWaiters() throws IOException {
+        OrderDeliveredEvent event = new OrderDeliveredEvent(this, 1L);
+        when(orderService.getOrderById(1L)).thenReturn(order);
+        when(webSocketSession.isOpen()).thenReturn(true);   
+        when(objectMapper.writeValueAsString(order)).thenReturn(orderJson);
 
-        // Then
-        assertFalse(waiterWebSocketService.getSessions().contains(session1));
-        assertTrue(waiterWebSocketService.getSessions().contains(session2));
+        waiterWebSocketService.handleOrderDeliveredEvent(event);
+
+        verify(orderService, times(1)).getOrderById(1L);
+        verify(webSocketSession, times(1)).sendMessage(new TextMessage(orderJson));
     }
 
-    @SuppressWarnings("null")
     @Test
-    void notifyWaitersIgnoresNullOrder() throws IOException {
-        // Given
-        Order nullOrder = null;
+    public void testHandleOrderCompletedEventNotifiesWaiters() throws IOException {
+        OrderCompletedEvent event = new OrderCompletedEvent(this, 1L);
+        when(orderService.getOrderById(1L)).thenReturn(order);
+        when(webSocketSession.isOpen()).thenReturn(true);   
+        when(objectMapper.writeValueAsString(order)).thenReturn(orderJson);
 
-        // When
-        waiterWebSocketService.notifyWaiters(nullOrder);
+        waiterWebSocketService.handleOrderCompletedEvent(event);
 
-        // Then
-        verify(session1, never()).sendMessage(any(TextMessage.class));
-        verify(session2, never()).sendMessage(any(TextMessage.class));
+        verify(orderService, times(1)).getOrderById(1L);
+        verify(webSocketSession, times(1)).sendMessage(new TextMessage(orderJson));
     }
 
-   
+    @Test
+    public void testNotifyWaitersWithClosedSession() throws IOException {
+
+        waiterWebSocketService.notifyWaiters(order);
+
+        verify(webSocketSession, never()).sendMessage(any(TextMessage.class));
+    } 
+
+    @Test
+    public void testHandleOrderCreationEventWithNullOrder() throws IOException {
+        OrderCreationEvent event = new OrderCreationEvent(this, 1L);
+        when(orderService.getOrderById(1L)).thenReturn(null);
+
+        waiterWebSocketService.handleOrderCreationEvent(event);
+
+        verify(webSocketSession, never()).sendMessage(any(TextMessage.class));
+    }
 
 }

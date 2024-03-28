@@ -3,15 +3,15 @@
 import WaiterLoadingPage from "@/app/custom_components/waiter/waiter-loading-page";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import {Button} from "@/components/ui/button";
 
 export default function DashboardPage() {
-
     const [orders, setOrders] = useState([]);
 
-    useEffect( () => {
-        async function fetchOrders(page = 1) {
+    useEffect(() => {
+        async function fetchOrders() {
             try {
-                const response = await fetch(`/api/order/fetchAll/${page}`, {
+                const response = await fetch(`/api/order/fetchAll/`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -26,322 +26,225 @@ export default function DashboardPage() {
                 }
 
                 const data = await response.json();
-                const orders = data.orders.content;
-                
-                setOrders(orders);
+                const orders = data.orders;
 
+                setOrders(orders);
             } catch (error) {
                 console.error(error);
             }
-            
         }
 
         fetchOrders();
+    }, []);
 
-        
-    }, []); 
+    useEffect(() => {
+        const ws = new WebSocket("ws://localhost:8086/waiter-orders");
 
-    if(orders.length == 0) return <WaiterLoadingPage />;
+        ws.onopen = () => {
+            console.log("WebSocket is connected");
+        };
 
-    const pendingOrders = orders?.filter((order) => order.status === "pending");
-    const inProgressOrders = orders?.filter(
-        (order) => order.status === "in-progress"
-    );
-    const deliveredOrders = orders?.filter(
-        (order) => order.status === "delivered"
-    );
-    const completedOrders = orders?.filter(
-        (order) => order.status === "completed"
-    );
+        ws.onmessage = (event) => {
+            const newOrder = JSON.parse(event.data);
+            let newOrders;
+
+            switch (newOrder.orderStatus) {
+                case "PENDING":
+                    newOrders = [...orders, newOrder];
+                    break;
+                case "IN_PROGRESS":
+                case "PREPARED":
+                    newOrders = orders.map((order) =>
+                        order.id === newOrder.id ? newOrder : order
+                    );
+                    break;
+                case "DELIVERED":
+                case "COMPLETED":
+                    newOrders = orders.map((order) =>
+                        order.id === newOrder.id ? newOrder : order
+                    );
+                    break;
+                default:
+                    newOrders = [...orders];
+                    break;
+            }
+
+            setOrders(newOrders);
+        };
+
+        ws.onerror = (error) => {
+            console.log("WebSocket error: ", error);
+        };
+
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [orders]);
+
+    if (orders.length === 0) return <WaiterLoadingPage />;
+
+    const orderStatuses = {
+        PENDING: { label: "Pending Orders", color: "bg-yellow-200" },
+        IN_PROGRESS: { label: "In Progress", color: "bg-green-200" },
+        PREPARED: { label: "Prepared Orders", color: "bg-orange-200" },
+        DELIVERED: { label: "Delivered", color: "bg-red-200" },
+        COMPLETED: { label: "Completed Orders", color: "bg-blue-200" },
+    };
+
+    const handleStatusChange = (id, newStatus) => {
+        if (newStatus === "DELIVERED") {
+            handleDeliverOrder(id);
+        }
+
+        const updatedOrders = orders.map((order) =>
+            order.id === id ? { ...order, orderStatus: newStatus } : order
+        );
+        setOrders(updatedOrders);
+    };
+
+    const handleSendToKitchen = async (id) => {
+      console.log("Sending order to kitchen")
+        const response = await fetch(`/api/order/sendOrderToKitchen`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.json();
+            console.error(errorText);
+            return;
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setOrders(
+            orders.map((order) => {
+                if (order.id === id) {
+                    order.orderStatus = "IN_PROGRESS";
+                }
+                return order;
+            })
+        );
+    };
+
+    const handleDeliverOrder = async (id) => {
+        const response = await fetch(`/api/order/${id}/deliver`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            const errorText = await response.json();
+            console.error(errorText);
+            return;
+        }
+
+        const data = await response.json();
+        console.log(data);
+    };
 
     const handleDelete = (id) => {
         setOrders(orders.filter((order) => order.id !== id));
     };
 
-    const sendOrderToKitchen = (id) => {
-        const order = orders.find((order) => order.id === id);
-        order.status = "in-progress";
-        setOrders([...orders]);
-    };
+    // Render action buttons based on order status
+    const renderActions = (order) => {
+        switch (order.orderStatus) {
+            case "PENDING":
+                return (
+                    <Button
+                        className="text-sm bg-transparent font-medium underline text-yellow-700 mr-2" variant={"outline"}
+                        onClick={() => handleSendToKitchen(order.id)}
+                    >
+                        Send to Kitchen
+                    </Button>
+                );
+            case "PREPARED":
+                return (
+                    <Button
+                        className="text-sm bg-transparent font-medium underline text-green-700 mr-2" variant={"outline"}
+                        onClick={() =>
+                            handleStatusChange(order.id, "DELIVERED")
+                        }
+                    >
+                        Deliver Order
+                    </Button>
+                );
+            case "IN_PROGRESS":
 
-    const handleDeliverOrder = (id) => {
-        const order = orders.find((order) => order.id === id);
-        order.status = "delivered";
-        setOrders([...orders]);
-    };
-
-    const handleCompleteOrder = (id) => {
-        const order = orders.find((order) => order.id === id);
-        order.status = "completed";
-        setOrders([...orders]);
+            case "DELIVERED":
+            case "COMPLETED":
+                // No action besides delete for these statuses
+                break;
+            default:
+                return null;
+        }
     };
 
     return (
         <div className="grid grid-cols-1 p-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-yellow-200 p-4 rounded-lg">
-                <h2 className="text-xl font-semibold mb-2">Pending Orders</h2>
-                <p className="text-sm font-medium text-gray-500 mb-4">
-                    {`${pendingOrders?.length} ${
-                        pendingOrders?.length > 1 ? "orders" : "order"
-                    } pending`}
-                </p>
-                <div className="grid grid-cols-1 gap-4">
-                    {pendingOrders?.map((order) => (
-                        <div className="space-y-4" key={order.id}>
-                            <div className="flex items-center space-x-4">
-                                <div className="flex items-center space-x-4">
-                                    <img
-                                        alt="Image"
-                                        className="rounded-full"
-                                        height="40"
-                                        src={order.imageSrc}
-                                        style={{
-                                            aspectRatio: "40/40",
-                                            objectFit: "cover",
-                                        }}
-                                        width="40"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-semibold">
-                                            {`Table ${order.tableNumber}`}
-                                        </span>
-                                        <span className="text-xs text-gray-500">
-                                            {order.customerName}
-                                        </span>
+            {Object.entries(orderStatuses).map(
+                ([statusKey, { label, color }]) => {
+                    const filteredOrders = orders.filter(
+                        (order) => order.orderStatus === statusKey
+                    );
+                    return (
+                        <div
+                            key={statusKey}
+                            className={`${color} p-4 rounded-lg`}
+                        >
+                            <h2 className="text-xl font-semibold mb-2">
+                                {label}
+                            </h2>
+                            <p className="text-sm font-medium text-gray-500 mb-4">
+                                {`${filteredOrders.length} ${
+                                    filteredOrders.length > 1
+                                        ? "orders"
+                                        : "order"
+                                }`}
+                            </p>
+                            <div className="grid grid-cols-1 gap-4">
+                                {filteredOrders.map((order) => (
+                                    <div key={order.id} className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm font-semibold">{`Table ${order.tableNumber} - Order #${order.id}`}</span>
+                                            <Link
+                                                href="#"
+                                                className="text-sm font-medium underline"
+                                            >
+                                                View
+                                            </Link>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs text-gray-500">{`${order.customerName} - ${order.orderItems.length} items`}</span>
+                                            <div>
+                                                {renderActions(order)}
+                                                <button
+                                                    className="text-sm font-medium underline text-red-700"
+                                                    onClick={() =>
+                                                        handleDelete(order.id)
+                                                    }
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <Link
-                                        className="ml-auto text-sm font-medium underline"
-                                        href="#"
-                                    >
-                                        View
-                                    </Link>
-                                    <button
-                                        className="text-sm font-medium underline text-yellow-700"
-                                        onClick={() =>
-                                            sendOrderToKitchen(order.id)
-                                        }
-                                    >
-                                        Send to Kitchen
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <span className="text-sm font-semibold">
-                                    {order.time}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    Order #{order.id}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    {order.items} items
-                                </span>
-                                <button
-                                    className="text-sm font-medium underline text-red-700"
-                                    onClick={() => handleDelete(order.id)}
-                                >
-                                    Delete
-                                </button>
+                                ))}
                             </div>
                         </div>
-                    ))}
-                </div>
-            </div>
-            <div className="bg-green-200 p-4 rounded-lg">
-                <h2 className="text-xl font-semibold mb-2">In Progress</h2>
-                <p className="text-sm font-medium text-gray-500 mb-4">
-                    {`${inProgressOrders?.length} ${
-                        inProgressOrders?.length > 1 ? "orders" : "order"
-                    } being prepared`}
-                </p>
-                <div className="grid grid-cols-1 gap-4">
-                    {inProgressOrders?.map((order) => (
-                        <div key={order.id} className="space-y-4">
-                            <div className="flex items-center text-center space-x-4">
-                                <div className="flex items-center space-x-4">
-                                    <img
-                                        alt="Image"
-                                        className="rounded-full"
-                                        height="40"
-                                        src={order.imageSrc}
-                                        style={{
-                                            aspectRatio: "40/40",
-                                            objectFit: "cover",
-                                        }}
-                                        width="40"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-semibold">
-                                            {`Table ${order.tableNumber}`}
-                                        </span>
-                                        <span className="text-xs text-gray-500">
-                                            {order.customerName}
-                                        </span>
-                                    </div>
-                                    <Link
-                                        className="ml-auto text-sm font-medium underline"
-                                        href="#"
-                                    >
-                                        View
-                                    </Link>
-                                    <button
-                                        className="text-sm font-medium underline text-yellow-700"
-                                        onClick={() =>
-                                            handleDeliverOrder(order.id)
-                                        }
-                                    >
-                                        Deliver order
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <span className="text-sm font-semibold">
-                                    {order.time}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    Order #{order.id}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    {order.items} items
-                                </span>
-                                <button
-                                    className="text-sm font-medium underline text-red-700"
-                                    onClick={() => handleDelete(order.id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className="bg-red-200 p-4 rounded-lg">
-                <h2 className="text-xl font-semibold mb-2">Delivered</h2>
-                <p className="text-sm font-medium text-gray-500 mb-4">
-                    {`${deliveredOrders?.length} ${
-                        deliveredOrders?.length > 1 ? "orders" : "order"
-                    } delivered`}
-                </p>
-                <div className="grid grid-cols-1 gap-4">
-                    {deliveredOrders?.map((order) => (
-                        <div className="space-y-4" key={order.id}>
-                            <div className="flex items-center space-x-4">
-                                <div className="flex items-center space-x-4">
-                                    <img
-                                        alt="Image"
-                                        className="rounded-full"
-                                        height="40"
-                                        src={order.imageSrc}
-                                        style={{
-                                            aspectRatio: "40/40",
-                                            objectFit: "cover",
-                                        }}
-                                        width="40"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-semibold">
-                                            {`Table ${order.tableNumber}`}
-                                        </span>
-                                        <span className="text-xs text-gray-500">
-                                            {order.customerName}
-                                        </span>
-                                    </div>
-                                    <Link
-                                        className="ml-auto text-sm font-medium underline"
-                                        href="#"
-                                    >
-                                        View
-                                    </Link>
-                                    <button
-                                        className="text-sm font-medium underline text-yellow-700"
-                                        onClick={() =>
-                                            handleCompleteOrder(order.id)
-                                        }
-                                    >
-                                        Complete order
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <span className="text-sm font-semibold">
-                                    {order.time}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    Order #{order.id}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    {order.items} items
-                                </span>
-                                <button
-                                    className="text-sm font-medium underline text-red-700"
-                                    onClick={() => handleDelete(order.id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className="bg-blue-200 p-4 rounded-lg">
-                <h2 className="text-xl font-semibold mb-2">Completed Orders</h2>
-                <p className="text-sm font-medium text-gray-500 mb-4">
-                    {`${completedOrders?.length} ${
-                        completedOrders?.length > 1 ? "orders" : "order"
-                    } completed`}
-                </p>
-                <div className="grid grid-cols-1 gap-4">
-                    {completedOrders?.map((order) => (
-                        <div className="space-y-4" key={order.id}>
-                            <div className="flex items-center space-x-4">
-                                <div className="flex items-center space-x-4">
-                                    <img
-                                        alt="Image"
-                                        className="rounded-full"
-                                        height="40"
-                                        src={order.imageSrc}
-                                        style={{
-                                            aspectRatio: "40/40",
-                                            objectFit: "cover",
-                                        }}
-                                        width="40"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-semibold">
-                                            {`Table ${order.tableNumber}`}
-                                        </span>
-                                        <span className="text-xs text-gray-500">
-                                            {order.customerName}
-                                        </span>
-                                    </div>
-                                    <Link
-                                        className="ml-auto text-sm font-medium underline"
-                                        href="#"
-                                    >
-                                        View
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <span className="text-sm font-semibold">
-                                    {order.time}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    Order #{order.id}
-                                </span>
-                                <span className="text-sm font-semibold">
-                                    {order.items} items
-                                </span>
-                                <button
-                                    className="text-sm font-medium underline text-red-700"
-                                    onClick={() => handleDelete(order.id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                    );
+                }
+            )}
         </div>
     );
 }

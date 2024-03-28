@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.oaxaca.order_service.model.Order;
 import com.oaxaca.order_service.service.OrderPaymentService;
 import com.oaxaca.order_service.service.OrderService;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -149,12 +151,8 @@ public class OrderController {
     public ResponseEntity<Map<String, ?>> fetchAllOrders(Pageable pageable) {
         return ResponseEntity.ok(Map.of("orders", orderService.getAllOrdersPaged(pageable)));
     }
-    /**
-     * Endpoint for fetching all orders.
-     *
-     * @return A ResponseEntity containing all orders.
-     */
-    @GetMapping("/fetchAllOrders")
+
+    @GetMapping("/fetchAll")
     public ResponseEntity<Map<String, ?>> fetchAllOrders() {
         return ResponseEntity.ok(Map.of("orders", orderService.getAllOrders()));
     }

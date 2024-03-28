@@ -22,6 +22,7 @@ import com.oaxaca.order_service.model.OrderItem;
 import com.oaxaca.order_service.repository.OrderRepository;
 import com.oaxaca.shared_library.model.order.OrderStatus;
 
+
 @Service
 public class OrderService {
 
@@ -67,9 +68,9 @@ public class OrderService {
 
         order.setTotal(orderItems.stream().mapToDouble(OrderItem::getPrice).sum());
 
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
 
-        applicationEventPublisher.publishEvent(new OrderCreationEvent(this, order.getId()));
+        applicationEventPublisher.publishEvent(new OrderCreationEvent(this, savedOrder.getId()));
 
         return order;
 

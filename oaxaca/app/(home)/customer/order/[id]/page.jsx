@@ -1,124 +1,177 @@
-import React from 'react';
+"use client";
+
+import { useEffect, useState } from "react";
 import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  Card,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { SERVICE_URLS } from '@/app/constants';
+    CardTitle,
+    CardDescription,
+    CardHeader,
+    CardContent,
+    Card,
+    CardFooter,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { SERVICE_URLS } from "@/app/constants";
+import { Button } from "@/components/ui/button";
+import clsx from "clsx";
+import { useRouter } from 'next/navigation';
 
-async function getData(orderId) {
-  try {
-    const response = await fetch(
-      `${SERVICE_URLS.ORDER_SERVICE}/orders/findOrder/${orderId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+export default function OrderConfirmPage({ params }) {
+    const [order, setOrder] = useState(null);
+    const router = useRouter();
 
-    if (!response.ok) {
-      const errorText = await response.json();
-      console.error(errorText);
-      return;
-    }
 
-    const data = await response.json();
+    useEffect(() => {
+        async function getOrder() {
+            try {
+                const response = await fetch(
+                    `${SERVICE_URLS.ORDER_SERVICE}/orders/findOrder/${params.id}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
 
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+                if (!response.ok) {
+                    const errorText = await response.json();
+                    console.error(errorText);
+                    return;
+                }
 
-export default async function OrderConfirmPage({ params }) {
-  const data = await getData(params.id);
-  console.log('Data:', data);
-  console.log('Order items:', data.order.orderItems);
+                const data = await response.json();
 
-  return (
-    <section className='p-6'>
-      <Card className='mx-auto max-w-3xl bg-white dark:bg-orange-500'>
-        <CardHeader>
-          <CardTitle className='text-orange-500'>Order Confirmation</CardTitle>
-          <CardDescription className='text-gray-500 dark:text-gray-400'>
-            Thank you for your purchase! Your order is confirmed.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className='grid gap-2 text-sm'>
-            <div className='flex items-center'>
-              <div className='font-medium'>Order number:</div>
-              <div className='ml-auto'>#{params.id}</div>
-            </div>
-            <div className='flex items-center'>
-              <div className='font-medium'>Date: </div>
-              <div className='ml-auto'>{data.order.creationDate}</div>
-            </div>
-          </div>
-          <Separator className='my-4' />
-          <div className='grid gap-2'>
-            <div className='grid gap-2'>
-              {data.order.orderItems.map((item, index) => (
-                <div key={index} className='grid items-start gap-2'>
-                  <img
-                    alt={item.name}
-                    className='aspect-square rounded-md object-cover'
-                    height='100'
-                    src={item.imageUrl || '/placeholder.svg'}
-                    width='100'
-                  />
-                  <div className='font-medium'>{item.name}</div>
-                  <div className='text-sm text-gray-500 dark:text-gray-400'>
-                    {item.description}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <Separator className='my-4' />
-          <div className='grid gap-2'>
-            <Separator className='my-2' />
-            <div className='flex items-center font-medium'>
-              <div>Total</div>
-              <div className='ml-auto'>£{data.order.total}</div>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <OrderProgress currentStage='Prepared' />
-        </CardFooter>
-      </Card>
-    </section>
-  );
-}
-
-function OrderProgress({ currentStage }) {
-  const stages = ['PENDING', 'IN PROGRESS'];
-
-  return (
-    <div className='grid gap-2'>
-      {stages.map((stage, index) => {
-        let color;
-        if (currentStage === stage) {
-          color = 'text-green-500'; // Current stage color
-        } else if (stages.indexOf(currentStage) > index) {
-          color = 'text-blue-500'; // Completed stage color
-        } else {
-          color = 'text-gray-500'; // Future stage color
+                console.log(data);
+                setOrder(data.order);
+            } catch (error) {
+                console.error(error);
+            }
         }
 
-        return (
-          <div key={index} className={`text-sm ${color} font-bold`}>
-            {stage}
-          </div>
+        getOrder();
+    }, []);
+
+    useEffect(() => {
+        const ws = new WebSocket(
+            `ws://localhost:8086/customer-orders/${params.id}`
         );
-      })}
-    </div>
-  );
-}
+
+        ws.onopen = () => {
+            console.log("Connected to websocket");
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("Data Tracking:", data);
+            setOrder(data);
+        };
+
+        ws.onerror = (error) => {
+            console.error(error);
+        };
+
+        ws.onclose = () => {
+            console.log("Connection closed");
+        };
+
+        return () => {
+            ws.close();
+        };
+    });
+
+    const orderStatusMap = {
+        PENDING: "Awaiting Confirmation",
+        IN_PROGRESS: "Preparing",
+        PREPARED: "Ready",
+        DELIVERED: "Delivered",
+        COMPLETED: "Completed",
+    };
+
+    
+
+    return (
+        <section className="p-6">
+            <Card className="mx-auto max-w-3xl bg-white dark:bg-orange-500">
+                <CardHeader>
+                    <CardTitle className="text-orange-500 flex justify-between">
+                        <span>Order Confirmation</span>
+                        <span
+                            className={clsx(
+                                order?.orderStatus === "CANCELLED"
+                                    ? "text-red-600"
+                                    : "text-green-600"
+                            )}
+                        >
+                            {orderStatusMap[order?.orderStatus]}
+                        </span>
+                    </CardTitle>
+                    <CardDescription className="text-gray-500 dark:text-gray-400">
+                        Thank you for your purchase! Your order is confirmed.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid gap-2 text-sm">
+                        <div className="flex items-center">
+                            <div className="font-medium">Order number:</div>
+                            <div className="ml-auto">#{params.id}</div>
+                        </div>
+                        <div className="flex items-center">
+                            <div className="font-medium">Date: </div>
+                            <div className="ml-auto">{order?.creationDate}</div>
+                        </div>
+                    </div>
+                    <Separator className="my-4" />
+                    <div className="grid gap-2">
+                        <div className="grid gap-2">
+                            {order?.orderItems.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="grid items-start gap-2"
+                                >
+                                    <img
+                                        alt={item.name}
+                                        className="aspect-square rounded-md object-cover"
+                                        height="100"
+                                        src={
+                                            item.imageUrl || "/placeholder.svg"
+                                        }
+                                        width="100"
+                                    />
+                                    <div className="font-medium">
+                                        {item.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                        {item.description}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <Separator className="my-4" />
+                    <div className="grid gap-2">
+                        <Separator className="my-2" />
+                        <div className="flex items-center font-medium">
+                            <div>Total</div>
+                            <div className="ml-auto">
+                                £{order?.total.toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+                {order?.orderStatus === "DELIVERED" && (
+                    <CardFooter>
+                        <Button className="bg-orange-500 text-white "
+                            onClick={() =>
+                                router.push(
+                                    `/customer/order/${params.id}/payment`
+                                )
+                            }
+                            variant="primary"
+                        > Continue to Payment </Button>
+                    </CardFooter>
+                )}
+            </Card>
+        </section>
+    );
+
+                          }

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -21,17 +22,21 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private Set<WebSocketSession> sessions;
     private final OrderService orderService;
+
     /**
-     * Constructs a KitchenStaffWebSocketService with the given ObjectMapper and OrderService.
+     * Constructs a KitchenStaffWebSocketService with the given ObjectMapper and
+     * OrderService.
      *
      * @param objectMapper The ObjectMapper to be used for JSON serialization.
-     * @param orderService The OrderService to be used for retrieving order information.
+     * @param orderService The OrderService to be used for retrieving order
+     *                     information.
      */
     public KitchenStaffWebSocketService(ObjectMapper objectMapper, OrderService orderService) {
         this.objectMapper = objectMapper;
         this.sessions = new HashSet<>();
         this.orderService = orderService;
     }
+
     /**
      * Adds a WebSocket session.
      *
@@ -40,6 +45,7 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
     void addSession(WebSocketSession session) {
         sessions.add(session);
     }
+
     /**
      * Removes a WebSocket session.
      *
@@ -48,6 +54,7 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
     void removeSession(WebSocketSession session) {
         sessions.remove(session);
     }
+
     /**
      * Retrieves all WebSocket sessions.
      *
@@ -56,11 +63,24 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
     Set<WebSocketSession> getSessions() {
         return sessions;
     }
+
+    @Override
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) {
+        addSession(session);
+    }
+
+    @Override
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
+        removeSession(session);
+    }
+
     /**
-     * Handles the OrderSentToKitchenEvent by notifying kitchen staff about the new order.
+     * Handles the OrderSentToKitchenEvent by notifying kitchen staff about the new
+     * order.
      *
      * @param event The OrderSentToKitchenEvent to be handled.
      */
+
     @EventListener
     void handleOrderSentToKitchenEvent(OrderSentToKitchenEvent event) {
         // Update kitchen staff when a new order is created
@@ -78,6 +98,7 @@ public class KitchenStaffWebSocketService extends TextWebSocketHandler {
         }
 
     }
+
     /**
      * Notifies kitchen staff about the given order.
      *
