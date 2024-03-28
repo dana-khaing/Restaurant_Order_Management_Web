@@ -17,8 +17,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
-
-import AuthNav from '@/app/custom_components/auth/AuthNav';
 import AuthHeader from '@/app/custom_components/auth/AuthHeader';
 import AuthBanner from '@/app/custom_components/auth/AuthBanner';
 import {

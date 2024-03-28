@@ -20,10 +20,13 @@ import { Button } from '@/components/ui/button';
 import AuthHeader from '@/app/custom_components/auth/AuthHeader';
 import AuthBanner from '@/app/custom_components/auth/AuthBanner';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '@/app/providers/auth';
 
 export default function WaiterLoginPage() {
   const router = useRouter();
+
+  const { loginUser } = useContext(AuthContext);
 
   const form = useForm({
     defaultValues: {
@@ -61,45 +64,6 @@ export default function WaiterLoginPage() {
     mode: 'onBlur',
   });
 
-  useEffect(() => {
-    async function validateRememberMeToken() {
-      try {
-        const response = await fetch('/api/auth/waiter/login/validate', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
-
-        // First, check if the response is OK
-        if (!response.ok) {
-          const errorText = await response.text(); // Get the error message as text
-          console.error('Error:', errorText);
-          toast({
-            title: 'Sign up failed.',
-            description: 'Please try again.',
-          });
-          return;
-        }
-
-        // Then, safely parse the JSON
-        const data = await response.json();
-        console.log('Success:', data);
-        toast({
-          title: 'Logged in successfully',
-          description: 'Redirecting to home page.',
-        });
-        router.push('/waiter/home');
-      } catch (error) {
-        console.error('An error occurred:', error);
-        toast({
-          title: 'Sign up failed.',
-          description: 'Please try again.',
-        });
-      }
-    }
-
-    validateRememberMeToken();
-  }, []);
-
   async function onSubmit(values) {
     const endpoint = !values.rememberMe
       ? '/api/auth/waiter/login'
@@ -126,11 +90,18 @@ export default function WaiterLoginPage() {
       // Then, safely parse the JSON
       const data = await response.json();
       console.log('Success:', data);
+
+      loginUser({
+        username: values.username,
+        password: values.password,
+        role: 'waiter',
+      });
+
       toast({
         title: 'Logged in successfully',
         description: 'Redirecting to home page.',
       });
-      //	router.push("/waiter/home");
+      router.push('/waiter/dashboard');
     } catch (error) {
       console.error('An error occurred:', error);
       toast({

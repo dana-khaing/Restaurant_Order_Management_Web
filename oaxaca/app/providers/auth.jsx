@@ -6,6 +6,7 @@ import { createContext, useEffect, useState } from 'react';
 export const AuthContext = createContext({
   user: null,
   loginUser: (user) => {},
+  logoutUser: () => {},
 });
 
 export default function AuthProvider({ children }) {
