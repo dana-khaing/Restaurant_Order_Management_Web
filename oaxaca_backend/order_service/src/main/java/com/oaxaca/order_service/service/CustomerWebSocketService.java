@@ -1,5 +1,6 @@
 package com.oaxaca.order_service.service;
 
+import org.slf4j.Logger;
 import org.springframework.context.event.EventListener;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CustomerWebSocketService extends TextWebSocketHandler {
 
     private Map<Long, WebSocketSession> customerSessions;
-    private final OrderService orderService;
     private final ObjectMapper objectMapper;
+    private final OrderService orderService;
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(CustomerWebSocketService.class);
 
-    public CustomerWebSocketService(OrderService orderService) {
+    public CustomerWebSocketService(OrderService orderService, ObjectMapper objectMapper) {
         this.orderService = orderService;
         this.customerSessions = new ConcurrentHashMap<>();
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = objectMapper;
     }
 
     public void addSession(Long orderId, WebSocketSession session) {
@@ -46,8 +48,11 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
         if (uri == null) {
             return;
         }
+        logger.debug("URI: " + uri.toString());
+
 
         Long orderId = Long.parseLong(uri.getPath().split("/")[2]);
+        logger.debug("Customer session established for order: " + orderId);
         addSession(orderId, session);
 
     }
@@ -71,11 +76,6 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
     }
 
     @EventListener
-    public void handleOrderCreationEvent(OrderCreationEvent event) {
-        notifyCustomer(event.getOrderId());
-    }
-
-    @EventListener
     public void handleOrderCompletedEvent(OrderCompletedEvent event) {
         notifyCustomer(event.getOrderId());
     }
@@ -90,11 +90,28 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
         notifyCustomer(event.getOrderId());
     }
 
+    @EventListener
+    public void handleOrderPreparedEvent(OrderPreparedEvent event) {
+        notifyCustomer(event.getOrderId());
+    }
+
+    @EventListener
+    public void handleOrderSentToKitchenEvent(OrderSentToKitchenEvent event) {
+        logger.debug("Order sent to kitchen event" + event.getOrderId());
+        notifyCustomer(event.getOrderId());
+    }
+
+
+
     void notifyCustomer(Long orderId) {
+        logger.debug("Notifying customer");
+
         Order order = orderService.getOrderById(orderId);
         if (order == null) {
             return;
         }
+
+        logger.debug("Order Customer: " + order.toString());
 
         String message;
         try {
@@ -104,10 +121,13 @@ public class CustomerWebSocketService extends TextWebSocketHandler {
             return;
         }
 
+        logger.debug("Message Customer: " + message);
+
         WebSocketSession session = customerSessions.get(orderId);
 
         if (session != null && session.isOpen() && message != null) {
             try {
+                logger.debug("Sending message to customer: " + message);
                 session.sendMessage(new TextMessage(message));
             } catch (IOException e) {
                 e.printStackTrace();

@@ -54,11 +54,7 @@ class CustomerWebSocketServiceTest {
         assertFalse(customerWebSocketService.getSessions().containsKey(1L));
     }
 
-    @Test
-    void handleOrderCreationEvent_NotifiesCustomer() {
-        customerWebSocketService.handleOrderCreationEvent(new OrderCreationEvent(this, 1L));
-        verify(orderService, times(1)).getOrderById(1L);
-    }
+  
 
     @Test
     void handleOrderCompletedEvent_NotifiesCustomer() {
