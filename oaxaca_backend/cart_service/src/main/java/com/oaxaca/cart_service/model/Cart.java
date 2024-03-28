@@ -9,7 +9,9 @@ import org.springframework.data.redis.core.RedisHash;
 
 
 
-
+/**
+ * Represents a shopping cart.
+ */
 @RedisHash("Cart")
 public class Cart implements Serializable{ 
 
@@ -22,6 +24,12 @@ public class Cart implements Serializable{
     public Cart() {
         items = new ArrayList<>();
     }
+    /**
+     * Constructor for Cart.
+     *
+     * @param id    The ID of the cart.
+     * @param items The list of items in the cart.
+     */
 
     public Cart(String id, List<CartItem> items) {
         this.items = items;
@@ -35,10 +43,20 @@ public class Cart implements Serializable{
     public void setId(String id) {
         this.id = id;
     } 
-
+    /**
+     * Get the list of items in the cart.
+     *
+     * @return The list of items in the cart.
+     */
     public List<CartItem> getItems() {
         return items;
     }
+    
+    /**
+     * Set the list of items in the cart.
+     *
+     * @param items The list of items in the cart.
+     */
 
     public void setItems(List<CartItem> items) {
         this.items = items;

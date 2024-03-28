@@ -20,7 +20,9 @@ import com.oaxaca.cart_service.service.CartService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+/**
+ * Controller class for managing cart operations.
+ */
 @RestController
 @RequestMapping("/cart")
 public class CartController {

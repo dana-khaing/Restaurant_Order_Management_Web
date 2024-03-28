@@ -9,6 +9,9 @@ import org.springframework.data.redis.core.RedisHash;
 
 import com.oaxaca.shared_library.model.menu.ICartItem;
 
+/**
+ * Represents an item in the shopping cart.
+ */
 @RedisHash("CartItem")
 public class CartItem implements Serializable, ICartItem {
 
@@ -24,6 +27,19 @@ public class CartItem implements Serializable, ICartItem {
     private String description;
     private String imageUrl;
 
+    /**
+     * Constructor for CartItem.
+     *
+     * @param productName The name of the product.
+     * @param description The description of the product.
+     * @param allergens   The list of allergens associated with the product.
+     * @param calories    The calorie count of the product.
+     * @param category    The category of the product.
+     * @param productId   The unique ID of the product.
+     * @param quantity    The quantity of the product in the cart.
+     * @param price       The price of the product.
+     * @param imageUrl    The URL of the product image.
+     */
     public CartItem(String productName, String description, List<String> allergens, int calories, int category,
             Long productId, int quantity, float price, String imageUrl) {
         this.id = UUID.randomUUID().toString();
