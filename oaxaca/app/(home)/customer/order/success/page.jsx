@@ -1,7 +1,7 @@
 
 import Link from "next/link"
 
-export default function Component() {
+export default function OrderSuccessPage() {
   return (
     <div className="flex flex-col min-h-screen py-10 items-center justify-center text-center gap-4">
       <div className="flex flex-col items-center justify-center gap-2">
